@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.4 2006/09/03 17:13:29 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.5 2006/09/03 17:17:42 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/03 17:13:29 $
+# $Date: 2006/09/03 17:17:42 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -27,7 +27,7 @@ sub new {
     my ( $class, %parameters ) = @_;
 
     my $self = {};
-    bless {}, ref $class || $class;
+    bless $self, ref $class || $class;
     return $self;
 }
 

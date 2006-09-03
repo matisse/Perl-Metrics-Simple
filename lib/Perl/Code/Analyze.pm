@@ -54,7 +54,7 @@ sub analyze_files {
     my ( $self, @dirs_and_files ) = @_;
     my @results = ();
     foreach my $file ( @{ $self->find_files(@dirs_and_files) } ) {
-        push @results, $self->analyze_one_file($file);    
+        push @results, $self->analyze_one_file($file);
     }
     return \@results;
 }
@@ -71,7 +71,11 @@ sub analyze_one_file {
     if ($found_subs) {
         foreach my $sub ( @{$found_subs} ) {
             my $sub_length = $self->get_node_length($sub);
-            push @subs, { name => $sub->name, length => $sub_length };
+            push @subs,
+              {
+                name  => $sub->name,
+                lines => $sub_length,
+              };    
         }
     }
     my $found_packages = $document->find('PPI::Statement::Package');
@@ -83,9 +87,10 @@ sub analyze_one_file {
     }
 
     return {
-        subs     => \@subs,
-        packages => \@packages,
-        lines    => $document->last_element->location->[0],
+        file_path => $path,
+        subs      => \@subs,
+        packages  => \@packages,
+        lines     => $document->last_element->location->[0],
     };
 }
 

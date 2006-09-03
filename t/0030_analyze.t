@@ -1,3 +1,10 @@
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.4 2006/09/03 17:13:29 matisse Exp $
+# $Revision: 1.4 $
+# $Author: matisse $
+# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
+# $Date: 2006/09/03 17:13:29 $
+###############################################################################
+
 use strict;
 use warnings;
 use English qw(-no_match_vars);
@@ -79,26 +86,26 @@ sub _get_test_data {
     my $test_data = {
         'no_packages_nor_subs' => {
             file_path => "$TEST_DIRECTORY/no_packages_nor_subs",
-            lines     => 8,
+            lines     => 14,
             subs      => [],
             packages  => [],
         },
         'package_no_subs.pl' => {
             file_path => "$TEST_DIRECTORY/package_no_subs.pl",
-            lines     => 12,
+            lines     => 19,
             subs      => [],
             packages  => ['Hello::Dolly'],
         },
         'subs_no_package.pl' => {
             file_path => "$TEST_DIRECTORY/subs_no_package.pl",
-            lines     => 11,
+            lines     => 21,
             subs      =>
               [ { name => 'foo', lines => 1 }, { name => 'bar', lines => 5 } ],
             packages => [],
         },
         'Module.pm' => {
             file_path => "$TEST_DIRECTORY/Perl/Code/Analyze/Test/Module.pm",
-            lines     => 26,
+            lines     => 33,
             subs      => [
                 { name => 'new',       lines => 5 },
                 { name => 'args',      lines => 4 },

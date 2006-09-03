@@ -1,52 +1,33 @@
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.4 2006/09/03 17:13:29 matisse Exp $
+# $Revision: 1.4 $
+# $Author: matisse $
+# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
+# $Date: 2006/09/03 17:13:29 $
+###############################################################################
+
 package Perl::Code::Analyze;
 use strict;
 use warnings;
 
 use Carp qw(confess);
 use English qw(-no_match_vars);
+use File::Basename qw(fileparse);
 use File::Find qw(find);
 use PPI;
 use Readonly;
 
-BEGIN {
-    use Exporter ();
-    use vars qw( @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    our $VERSION = '0.01';
-    @ISA = qw(Exporter);
+our $VERSION = '0.01';
 
-    #Give a hoot don't pollute, do not export more than needed by default
-    @EXPORT      = qw();
-    @EXPORT_OK   = qw();
-    %EXPORT_TAGS = ();
-}
-
-Readonly::Scalar my $PERL_FILE_REGEX    => qr/ \. p [LlMm] \Z /xm;
-Readonly::Scalar my $PERL_SHEBANG_REGEX => qr/ perl /xm;
+Readonly::Array my @PERL_FILE_SUFFIXES =>
+  ( qr/ \.pl /xmi, qr/ \.pm /xmi, qr/ \.t /xmi );
+Readonly::Scalar my $PERL_SHEBANG_REGEX => qr/ \A [#] ! .* perl /xm;
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
-
-#################### subroutine header begin ####################
-
-=head2 sample_function
-
- Usage     : How to use this function/method
- Purpose   : What it does
- Returns   : What it returns
- Argument  : What it wants to know
- Throws    : Exceptions and other anomolies
- Comment   : This is a sample subroutine header.
-           : It is polite to include more pod and fewer comments.
-
-See Also   : 
-
-=cut
-
-#################### subroutine header end ####################
 
 sub new {
     my ( $class, %parameters ) = @_;
 
-    my $self = bless( {}, ref($class) || $class );
-
+    my $self = {};
+    bless {}, ref $class || $class;
     return $self;
 }
 
@@ -75,7 +56,7 @@ sub analyze_one_file {
               {
                 name  => $sub->name,
                 lines => $sub_length,
-              };    
+              };
         }
     }
     my $found_packages = $document->find('PPI::Statement::Package');
@@ -90,14 +71,14 @@ sub analyze_one_file {
         file_path => $path,
         subs      => \@subs,
         packages  => \@packages,
-        lines     => $document->last_element->location->[0],
+        lines     => $self->get_node_length($document),
     };
 }
 
 sub get_node_length {
     my ( $self, $node ) = @_;
     my $string = $node->content;
-    my @newlines = ( $string =~ /$ALL_NEWLINES_REGEX/g );
+    my @newlines = ( $string =~ /$ALL_NEWLINES_REGEX/mxg );
     return scalar @newlines + 1;
 }
 
@@ -109,16 +90,18 @@ sub find_files {
             confess "Path '$path' is not readable!";
         }
     }
-    my @found = $self->list_files(@directories_and_files);
+    my @found = $self->list_perl_files(@directories_and_files);
     return \@found;
 }
 
-sub list_files {
+sub list_perl_files {
     my ( $self, @dirs ) = @_;
     my @files;
 
     my $wanted = sub {
-        push @files, $_ if $self->is_perl_file($_);
+        if ( $self->is_perl_file($_) ) {
+            push @files, $_;
+        }    
     };
 
     for (@dirs) {
@@ -133,10 +116,15 @@ sub list_files {
 sub is_perl_file {
     my ( $self, $path ) = @_;
     return if ( !-f $path );
-    return 1 if $path =~ $PERL_FILE_REGEX;
+    my ( $name, $path_part, $suffix ) = fileparse( $path, @PERL_FILE_SUFFIXES );
+    if ( length $suffix ) {
+        return 1;
+    }
+
     open my $fh, '<',
       $path || confess "Could not open '$path' for reading: $OS_ERROR";
     my $first_line = <$fh>;
+    close $fh;
     return 1 if $first_line =~ $PERL_SHEBANG_REGEX;
     return;
 }
@@ -170,6 +158,31 @@ Blah blah blah.
 
 =head1 USAGE
 
+
+
+=head2 new
+
+ Usage     : How to use this function/method
+ Purpose   : What it does
+ Returns   : What it returns
+ Argument  : What it wants to know
+ Throws    : Exceptions and other anomolies
+ Comment   : This is a sample subroutine header.
+           : It is polite to include more pod and fewer comments.
+
+See Also   : 
+
+=head2 analyze_files
+
+=head2 analyze_one_file
+
+=head2 find_files
+
+=head2 get_node_length
+
+=head2 list_perl_files
+
+=head2 is_perl_file
 
 
 =head1 BUGS

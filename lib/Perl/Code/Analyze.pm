@@ -50,6 +50,15 @@ sub new {
     return $self;
 }
 
+sub analyze_files {
+    my ( $self, @dirs_and_files ) = @_;
+    my @results = ();
+    foreach my $file ( @{ $self->find_files(@dirs_and_files) } ) {
+        push @results, $self->analyze_one_file($file);    
+    }
+    return \@results;
+}
+
 sub analyze_one_file {
     my ( $self, $path ) = @_;
     if ( !-r $path ) {
@@ -81,8 +90,8 @@ sub analyze_one_file {
 }
 
 sub get_node_length {
-    my ($self,$node) = @_;
-    my $string =  $node->content;
+    my ( $self, $node ) = @_;
+    my $string = $node->content;
     my @newlines = ( $string =~ /$ALL_NEWLINES_REGEX/g );
     return scalar @newlines + 1;
 }

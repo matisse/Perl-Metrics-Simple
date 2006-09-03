@@ -25,7 +25,7 @@ sub test_find_files {
 
     my $expected_list = [
         "$TEST_DIRECTORY/Perl/Code/Analyze/Test/Module.pm",
-        "$TEST_DIRECTORY/a_sample_script",
+        "$TEST_DIRECTORY/no_packages_nor_subs",
         "$TEST_DIRECTORY/package_no_subs.pl",
         "$TEST_DIRECTORY/subs_no_package.pl",
     ];    

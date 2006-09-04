@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.2 2006/09/03 17:13:29 matisse Exp $
-# $Revision: 1.2 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.3 2006/09/04 01:40:36 matisse Exp $
+# $Revision: 1.3 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v $
-# $Date: 2006/09/03 17:13:29 $
+# $Date: 2006/09/04 01:40:36 $
 ###############################################################################
 
 # This is a comment. I love comments.
@@ -19,7 +19,7 @@ sub new {
     return bless $self, $class;
 }
 
-sub args {
+sub foo {
     my ($self) = @_;
     return $self->{_args};
 }    
@@ -29,5 +29,5 @@ sub say_hello {
     my ($self) = @_;
     return print "Hello Dolly\n";
 }
-
+package Perl::Code::Analyze::Test::Module; # back to original package
 1;

@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.5 2006/09/03 17:17:42 matisse Exp $
-# $Revision: 1.5 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.6 2006/09/04 01:40:36 matisse Exp $
+# $Revision: 1.6 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/03 17:17:42 $
+# $Date: 2006/09/04 01:40:36 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -14,6 +14,7 @@ use English qw(-no_match_vars);
 use File::Basename qw(fileparse);
 use File::Find qw(find);
 use PPI;
+use Perl::Code::Analyze::Analysis;
 use Readonly;
 
 our $VERSION = '0.01';
@@ -37,7 +38,8 @@ sub analyze_files {
     foreach my $file ( @{ $self->find_files(@dirs_and_files) } ) {
         push @results, $self->analyze_one_file($file);
     }
-    return \@results;
+    my $analysis = Perl::Code::Analyze::Analysis->new( \@results );
+    return $analysis;
 }
 
 sub analyze_one_file {
@@ -61,18 +63,25 @@ sub analyze_one_file {
     }
     my $found_packages = $document->find('PPI::Statement::Package');
     my @packages       = ();
+    my %seen_packages  = ();
     if ($found_packages) {
+      PACKAGE:
         foreach my $package ( @{$found_packages} ) {
+            $seen_packages{$package}++;    
+            if ( $seen_packages{$package} > 1 ) {
+                next PACKAGE;
+            }
             push @packages, $package->namespace();
         }
     }
 
-    return {
+    my $results_hash = {
         file_path => $path,
         subs      => \@subs,
         packages  => \@packages,
         lines     => $self->get_node_length($document),
     };
+    return $results_hash;
 }
 
 sub get_node_length {
@@ -95,19 +104,23 @@ sub find_files {
 }
 
 sub list_perl_files {
-    my ( $self, @dirs ) = @_;
+    my ( $self, @paths ) = @_;
     my @files;
 
     my $wanted = sub {
         if ( $self->is_perl_file($_) ) {
             push @files, $_;
-        }    
+        }
     };
 
-    for (@dirs) {
-        my $base = $_;
-        if ( -d $base ) {
-            find( { wanted => $wanted, no_chdir => 1 }, $base );
+    foreach my $path (@paths) {
+        if ( -d $path ) {
+            find( { wanted => $wanted, no_chdir => 1 }, $path );
+        }
+        elsif ( -f $path ) {
+            if ( $self->is_perl_file($path) ) {
+                push @files, $path;
+            }
         }
     }
     return sort @files;

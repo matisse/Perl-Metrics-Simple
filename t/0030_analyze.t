@@ -1,14 +1,16 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.5 2006/09/04 01:40:36 matisse Exp $
-# $Revision: 1.5 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.6 2006/09/05 15:04:42 matisse Exp $
+# $Revision: 1.6 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2006/09/04 01:40:36 $
+# $Date: 2006/09/05 15:04:42 $
 ###############################################################################
 
 use strict;
 use warnings;
 use English qw(-no_match_vars);
 use FindBin qw($Bin);
+use lib "$Bin/lib";
+use Perl::Code::Analyze::TestData;
 use Readonly;
 use Test::More tests => 15;
 
@@ -23,15 +25,18 @@ test_analysis();
 exit;
 
 sub set_up {
-    my $analyzer = Perl::Code::Analyze->new();
+    my $analyzer  = Perl::Code::Analyze->new();
+    my $test_data =
+      Perl::Code::Analyze::TestData->new( test_directory => $TEST_DIRECTORY )
+      ->get_test_data;    
+    return ( $analyzer, $test_data );
 }
 
 sub test_analyze_one_file {
-    my $analyzer = set_up();
+    my ( $analyzer, $test_data ) = set_up();
 
-    my $no_package_no_sub_expected_result =
-      _get_test_data()->{'package_no_subs.pl'};
-    my $analysis =
+    my $no_package_no_sub_expected_result = $test_data->{'package_no_subs.pl'};
+    my $analysis                          =
       $analyzer->analyze_one_file(
         $no_package_no_sub_expected_result->{'file_path'} );
     is_deeply(
@@ -41,7 +46,7 @@ sub test_analyze_one_file {
     );
 
     my $has_package_no_subs_expected_result =
-      _get_test_data()->{'package_no_subs.pl'};
+      $test_data->{'package_no_subs.pl'};
     my $new_analysis =
       $analyzer->analyze_one_file(
         $has_package_no_subs_expected_result->{'file_path'} );
@@ -51,13 +56,13 @@ sub test_analyze_one_file {
         'analyze_one_file() with one packages, no subs.'
     );
 
-    my $has_subs_expected_result = _get_test_data()->{'subs_no_package.pl'};
+    my $has_subs_expected_result = $test_data->{'subs_no_package.pl'};
     my $has_subs_analysis        =
       $analyzer->analyze_one_file( $has_subs_expected_result->{'file_path'} );
     is_deeply( $has_subs_analysis, $has_subs_expected_result,
         'analyze_one_file() with subs and no package.' );
 
-    my $has_subs_and_package_expected_result = _get_test_data()->{'Module.pm'};
+    my $has_subs_and_package_expected_result = $test_data->{'Module.pm'};
     my $subs_and_package_analysis            =
       $analyzer->analyze_one_file(
         $has_subs_and_package_expected_result->{'file_path'} );
@@ -69,43 +74,41 @@ sub test_analyze_one_file {
 }
 
 sub test_analyze_files {
-    my $analyzer = set_up();
+    my ( $analyzer, $test_data ) = set_up();
 
     my $analysis_of_one_file =
-      $analyzer->analyze_files( _get_test_data()->{'Module.pm'}->{file_path} );
+      $analyzer->analyze_files( $test_data->{'Module.pm'}->{file_path} );
     isa_ok( $analysis_of_one_file, 'Perl::Code::Analyze::Analysis' );
-    my $expected_from_one_file = [ _get_test_data()->{'Module.pm'}, ];
+    my $expected_from_one_file = [ $test_data->{'Module.pm'}, ];
     is_deeply( $analysis_of_one_file->data, $expected_from_one_file,
         'analyze_files() when given a single file path.' );
 
     my $analysis = $analyzer->analyze_files($TEST_DIRECTORY);
     my $expected = [
-        _get_test_data()->{'Module.pm'},
-        _get_test_data()->{'no_packages_nor_subs'},
-        _get_test_data()->{'package_no_subs.pl'},
-        _get_test_data()->{'subs_no_package.pl'},
+        $test_data->{'Module.pm'},
+        $test_data->{'no_packages_nor_subs'},
+        $test_data->{'package_no_subs.pl'},
+        $test_data->{'subs_no_package.pl'},
     ];
     is_deeply( $analysis->data, $expected,
         'analyze_files() given a directory path.' );
 }
 
 sub test_analysis {
-    my $analyzer = set_up();
+    my ( $analyzer, $test_data ) = set_up();
     my $analysis = $analyzer->analyze_files($TEST_DIRECTORY);
 
     my $expected_lines;
-    map { $expected_lines += _get_test_data()->{$_}->{lines} }
-      keys %{ _get_test_data() };
-    is(
-        $analysis->lines, $expected_lines,    
-        'analysis->lines() returns correct number'
-    );
+    map { $expected_lines += $test_data->{$_}->{lines} }
+      keys %{$test_data};
+    is( $analysis->lines, $expected_lines,
+        'analysis->lines() returns correct number' );
 
     my @expected_files = (
-        _get_test_data()->{'Module.pm'}->{file_path},
-        _get_test_data()->{'no_packages_nor_subs'}->{file_path},
-        _get_test_data()->{'package_no_subs.pl'}->{file_path},
-        _get_test_data()->{'subs_no_package.pl'}->{file_path},
+        $test_data->{'Module.pm'}->{file_path},
+        $test_data->{'no_packages_nor_subs'}->{file_path},
+        $test_data->{'package_no_subs.pl'}->{file_path},
+        $test_data->{'subs_no_package.pl'}->{file_path},
     );
     is_deeply( $analysis->files, \@expected_files,
         'analysis->files() contains expected files.' );
@@ -145,41 +148,3 @@ sub test_analysis {
     return 1;
 }
 
-sub _get_test_data {
-    my $test_data = bless {
-        'no_packages_nor_subs' => {
-            file_path => "$TEST_DIRECTORY/no_packages_nor_subs",
-            lines     => 14,
-            subs      => [],
-            packages  => [],
-        },
-        'package_no_subs.pl' => {
-            file_path => "$TEST_DIRECTORY/package_no_subs.pl",
-            lines     => 19,
-            subs      => [],
-            packages  => ['Hello::Dolly'],
-        },
-        'subs_no_package.pl' => {
-            file_path => "$TEST_DIRECTORY/subs_no_package.pl",
-            lines     => 22,
-            subs      =>
-              [ { name => 'foo', lines => 1 }, { name => 'bar', lines => 5 } ],
-            packages => [],
-        },
-        'Module.pm' => {
-            file_path => "$TEST_DIRECTORY/Perl/Code/Analyze/Test/Module.pm",
-            lines     => 33,
-            subs      => [
-                { name => 'new',       lines => 5 },
-                { name => 'foo',       lines => 4 },
-                { name => 'say_hello', lines => 4 },
-            ],
-            packages => [
-                'Perl::Code::Analyze::Test::Module',
-                'Perl::Code::Analyze::Test::Module::InnerClass'
-            ],
-        },
-      },
-      'Perl::Code::Analyze::Analysis';
-    return $test_data;
-}

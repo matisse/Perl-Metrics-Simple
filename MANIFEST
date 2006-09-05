@@ -11,6 +11,7 @@ README
 t/001_load.t
 t/0020_find_files.t
 t/0030_analyze.t
+t/lib/Perl/Code/Analyze/TestData.pm
 t/test_files/no_packages_nor_subs
 t/test_files/not_a_perl_file
 t/test_files/package_no_subs.pl

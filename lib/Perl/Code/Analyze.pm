@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.6 2006/09/04 01:40:36 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.7 2006/09/05 15:34:27 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/04 01:40:36 $
+# $Date: 2006/09/05 15:34:27 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -138,8 +138,7 @@ sub is_perl_file {
       $path || confess "Could not open '$path' for reading: $OS_ERROR";
     my $first_line = <$fh>;
     close $fh;
-    return 1 if $first_line =~ $PERL_SHEBANG_REGEX;
-    return;
+    $first_line ? return $first_line =~ $PERL_SHEBANG_REGEX : return;
 }
 
 1;

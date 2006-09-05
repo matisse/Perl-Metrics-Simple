@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.6 2006/09/05 15:04:42 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.7 2006/09/05 15:34:27 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2006/09/05 15:04:42 $
+# $Date: 2006/09/05 15:34:27 $
 ###############################################################################
 
 use strict;
@@ -28,7 +28,7 @@ sub set_up {
     my $analyzer  = Perl::Code::Analyze->new();
     my $test_data =
       Perl::Code::Analyze::TestData->new( test_directory => $TEST_DIRECTORY )
-      ->get_test_data;    
+      ->get_test_data;
     return ( $analyzer, $test_data );
 }
 
@@ -131,12 +131,12 @@ sub test_analysis {
         'analysis->package_count returns correct number.'
     );
 
-    my @expected_subs = qw(
-      new
-      foo
-      say_hello
-      foo
-      bar
+    my @expected_subs = (
+      { name => 'new',       lines => 5 },
+      { name => 'foo',       lines => 4 },
+      { name => 'say_hello', lines => 4 },
+      { name => 'foo', lines => 1 },
+      { name => 'bar', lines => 5 },
     );
     is_deeply( $analysis->subs, \@expected_subs,
         'analysis->subs() returns expected list.' );

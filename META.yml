@@ -1,0 +1,8 @@
+--- #YAML:1.0
+name: Perl-Code-Analyze
+version: 0.01
+author:
+
+abstract: Count packages, subs, lines, etc. of many files.
+license: perl
+generated_by: Module::Build version 0.2612, without YAML.pm

@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v 1.1 2006/09/04 01:40:36 matisse Exp $
-# $Revision: 1.1 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v 1.2 2006/09/05 15:34:27 matisse Exp $
+# $Revision: 1.2 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v $
-# $Date: 2006/09/04 01:40:36 $
+# $Date: 2006/09/05 15:34:27 $
 ###############################################################################
 
 package Perl::Code::Analyze::Analysis;
@@ -94,7 +94,7 @@ sub _init {
             push @packages, $package;
         }
         foreach my $sub ( @{ $result->{subs} } ) {
-            push @subs, $sub->{name};
+            push @subs, $sub;
         }
     }
     $Files{$self}    = \@files;

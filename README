@@ -1,15 +1,48 @@
-pod2text Perl::Code::Analyze.pm > README
+NAME
+    Perl::Code::Analyze - Count packages, subs, lines, etc. of many files.
 
-If this is still here it means the programmer was too lazy to create the readme file.
+SYNOPSIS
+      use Perl::Code::Analyze;
+      blah blah blah
 
-You can create it now by using the command shown above from this directory.
+DESCRIPTION
+    Stub documentation for this module was created by ExtUtils::ModuleMaker.
+    It looks like the author of the extension was negligent enough to leave
+    the stub unedited.
 
-At the very least you should be able to use this set of instructions
-to install the module...
+    Blah blah blah.
 
-perl Build.PL
-./Build
-./Build test
-./Build install
+USAGE
+    blah blah
 
-If you are on a windows box you should use 'nmake' rather than 'make'.
+CLASS METHODS
+  new
+    Blah blah
+
+OBJECT METHODS
+  analyze_files
+  analyze_one_file
+  find_files
+  get_node_length
+  list_perl_files
+  measure_complexity
+  is_perl_file
+BUGS
+SUPPORT
+AUTHOR
+        Matisse Enzer
+        CPAN ID: MATISSE
+        Eigenstate Consulting, LLC
+        matisse@eigenstate.net
+        http://www.eigenstate.net/
+
+COPYRIGHT
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
+    The full text of the license can be found in the LICENSE file included
+    with this module.
+
+SEE ALSO
+    perl(1).
+

@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.9 2006/09/06 04:57:57 matisse Exp $
-# $Revision: 1.9 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.10 2006/09/06 14:21:23 matisse Exp $
+# $Revision: 1.10 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/06 04:57:57 $
+# $Date: 2006/09/06 14:21:23 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -201,19 +201,15 @@ Blah blah blah.
 
 =head1 USAGE
 
+blah blah
 
+=head1 CLASS METHODS
 
 =head2 new
 
- Usage     : How to use this function/method
- Purpose   : What it does
- Returns   : What it returns
- Argument  : What it wants to know
- Throws    : Exceptions and other anomolies
- Comment   : This is a sample subroutine header.
-           : It is polite to include more pod and fewer comments.
+Blah blah
 
-See Also   : 
+=head1 OBJECT METHODS
 
 =head2 analyze_files
 

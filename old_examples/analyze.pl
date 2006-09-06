@@ -13,8 +13,12 @@ my $file_count    = $analysis->file_count;
 my $package_count = $analysis->package_count;
 my $sub_count     = $analysis->sub_count;
 my $lines         = $analysis->lines;
-my ( $min_lines, $max_lines, $average_lines ) =
-  _get_min_max_average( $analysis->subs, 'lines' );  
+my %lines = ();
+@lines{'min', 'max', 'average'} =
+  _get_min_max_average( $analysis->subs, 'lines' );
+my %complexity = ();
+@complexity{'min', 'max', 'average'} =
+  _get_min_max_average( $analysis->subs, 'mccabe_complexity' );  
     
 print <<"EOS";
 
@@ -22,9 +26,12 @@ perl files:    $file_count
 lines:         $lines
 packages:      $package_count
 subs:          $sub_count
-min. sub size: $min_lines lines
-max. sub size: $max_lines lines
-avg. sub size: $average_lines lines
+min. sub size: $lines{min} lines
+max. sub size: $lines{max} lines
+avg. sub size: $lines{average} lines
+min. sub complexity: $complexity{min}
+max. sub complexity: $complexity{max}
+avg. sub complexity: $complexity{average}
 
 EOS
 

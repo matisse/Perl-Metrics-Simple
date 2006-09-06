@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.4 2006/09/06 04:44:16 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.5 2006/09/06 18:08:38 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2006/09/06 04:44:16 $
+# $Date: 2006/09/06 18:08:38 $
 ###############################################################################
 
 use Module::Build;
@@ -14,8 +14,7 @@ Module::Build->new(
     license     => 'perl',
     requires    => {
         'Readonly'            => 1.03,
-        'PPI'                 => 1.115,    
-        'Perl::Critic::Utils' => 0.17,
+        'PPI'                 => 1.113,    
     },
     build_requires => { 'Module::Build' => 0.2612, },
 )->create_build_script;

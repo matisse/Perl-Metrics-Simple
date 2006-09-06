@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.10 2006/09/06 14:21:23 matisse Exp $
-# $Revision: 1.10 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.11 2006/09/06 18:08:38 matisse Exp $
+# $Revision: 1.11 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/06 14:21:23 $
+# $Date: 2006/09/06 18:08:38 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -15,7 +15,6 @@ use File::Basename qw(fileparse);
 use File::Find qw(find);
 use PPI;
 use Perl::Code::Analyze::Analysis;
-use Perl::Critic::Utils;
 use Readonly;
 
 our $VERSION = '0.011';
@@ -28,11 +27,11 @@ Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 Readonly::Array our @LOGIC_OPERATORS =>    
   qw( && || ||= &&= or and xor ? <<= >>= );
 Readonly::Hash our %LOGIC_OPERATORS =>
-  Perl::Critic::Utils::hashify(@LOGIC_OPERATORS);
+  hashify(@LOGIC_OPERATORS);
 
 Readonly::Array our @LOGIC_KEYWORDS => qw( if else elsif unless until while );
 Readonly::Hash our %LOGIC_KEYWORDS  =>
-  Perl::Critic::Utils::hashify(@LOGIC_KEYWORDS);
+  hashify(@LOGIC_KEYWORDS);
 
 sub new {
     my ( $class, %parameters ) = @_;
@@ -170,6 +169,36 @@ sub is_perl_file {
     my $first_line = <$fh>;
     close $fh;
     $first_line ? return $first_line =~ $PERL_SHEBANG_REGEX : return;
+}
+
+#-------------------------------------------------------------------------
+# Copied from
+# http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
+sub hashify {
+    return map { $_ => 1 } @_;
+}
+
+#-------------------------------------------------------------------------
+# Copied from
+# http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
+sub is_hash_key {
+    my $elem = shift;
+    return if !$elem;
+
+    #Check curly-brace style: $hash{foo} = bar;
+    my $parent = $elem->parent();
+    return if !$parent;
+    my $grandparent = $parent->parent();
+    return if !$grandparent;
+    return 1 if $grandparent->isa('PPI::Structure::Subscript');
+
+
+    #Check declarative style: %hash = (foo => bar);
+    my $sib = $elem->snext_sibling();
+    return if !$sib;
+    return 1 if $sib->isa('PPI::Token::Operator') && $sib eq '=>';
+
+    return;
 }
 
 1;

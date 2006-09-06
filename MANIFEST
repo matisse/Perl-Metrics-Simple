@@ -1,3 +1,5 @@
+.cvsignore
+.project
 Build.PL
 Changes
 examples/analyze.pl

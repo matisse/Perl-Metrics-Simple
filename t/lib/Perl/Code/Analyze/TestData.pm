@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v 1.1 2006/09/05 15:04:42 matisse Exp $
-# $Revision: 1.1 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v 1.2 2006/09/06 04:41:32 matisse Exp $
+# $Revision: 1.2 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v $
-# $Date: 2006/09/05 15:04:42 $
+# $Date: 2006/09/06 04:41:32 $
 ###############################################################################
 
 package Perl::Code::Analyze::TestData;
@@ -16,6 +16,7 @@ use Readonly;
 our $VERSION = '0.01';
 
 my %TestData = ();
+
 sub new {
     my ( $class, %parameters ) = @_;
     my $self = {};
@@ -34,7 +35,7 @@ sub make_test_data {
     my $test_directory = shift;
     if ( !-d $test_directory ) {
         confess "test_directory '$test_directory' not found! ";
-    }    
+    }
     my $test_data = bless {
         'no_packages_nor_subs' => {
             file_path => "$test_directory/no_packages_nor_subs",
@@ -51,17 +52,20 @@ sub make_test_data {
         'subs_no_package.pl' => {
             file_path => "$test_directory/subs_no_package.pl",
             lines     => 22,
-            subs      =>
-              [ { name => 'foo', lines => 1 }, { name => 'bar', lines => 5 } ],
+            subs      => [
+                { name => 'foo', lines => 1, mccabe_complexity => 1, },
+                { name => 'bar', lines => 5, mccabe_complexity => 1, }
+            ],
             packages => [],
         },
         'Module.pm' => {
             file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
-            lines     => 33,
+            lines     => 40,
             subs      => [
-                { name => 'new',       lines => 5 },
-                { name => 'foo',       lines => 4 },
-                { name => 'say_hello', lines => 4 },
+                { name => 'new',       lines => 5, mccabe_complexity => 1, },
+                { name => 'foo',       lines => 4, mccabe_complexity => 1, },
+                { name => 'say_hello', lines => 9, mccabe_complexity => 4, }
+                ,    
             ],
             packages => [
                 'Perl::Code::Analyze::Test::Module',
@@ -70,7 +74,7 @@ sub make_test_data {
         },
       },
       'Perl::Code::Analyze::Analysis';
-      return $test_data;
+    return $test_data;
 }
 1;
 __END__

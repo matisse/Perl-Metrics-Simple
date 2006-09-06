@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.7 2006/09/05 15:34:27 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.8 2006/09/06 04:41:32 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/05 15:34:27 $
+# $Date: 2006/09/06 04:41:32 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -15,6 +15,7 @@ use File::Basename qw(fileparse);
 use File::Find qw(find);
 use PPI;
 use Perl::Code::Analyze::Analysis;
+use Perl::Critic::Utils;
 use Readonly;
 
 our $VERSION = '0.01';
@@ -23,6 +24,15 @@ Readonly::Array my @PERL_FILE_SUFFIXES =>
   ( qr/ \.pl /xmi, qr/ \.pm /xmi, qr/ \.t /xmi );
 Readonly::Scalar my $PERL_SHEBANG_REGEX => qr/ \A [#] ! .* perl /xm;
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
+
+Readonly::Array our @LOGIC_OPERATORS =>    
+  qw( && || ||= &&= or and xor ? <<= >>= );
+Readonly::Hash our %LOGIC_OPERATORS =>
+  Perl::Critic::Utils::hashify(@LOGIC_OPERATORS);
+
+Readonly::Array our @LOGIC_KEYWORDS => qw( if else elsif unless until while );
+Readonly::Hash our %LOGIC_KEYWORDS  =>
+  Perl::Critic::Utils::hashify(@LOGIC_KEYWORDS);
 
 sub new {
     my ( $class, %parameters ) = @_;
@@ -56,8 +66,9 @@ sub analyze_one_file {
             my $sub_length = $self->get_node_length($sub);
             push @subs,
               {
-                name  => $sub->name,
-                lines => $sub_length,
+                name              => $sub->name,
+                lines             => $sub_length,
+                mccabe_complexity => $self->measure_complexity($sub),
               };
         }
     }
@@ -67,7 +78,7 @@ sub analyze_one_file {
     if ($found_packages) {
       PACKAGE:
         foreach my $package ( @{$found_packages} ) {
-            $seen_packages{$package}++;    
+            $seen_packages{$package}++;
             if ( $seen_packages{$package} > 1 ) {
                 next PACKAGE;
             }
@@ -124,6 +135,26 @@ sub list_perl_files {
         }
     }
     return sort @files;
+}
+
+sub measure_complexity {
+    my $self  = shift;
+    my $elem  = shift;
+    my $count = 1;
+
+    # Count up all the logic keywords, weed out hash keys
+    my $keywords_ref = $elem->find('PPI::Token::Word');
+    if ($keywords_ref) {   # should always be true due to "sub" keyword, I think
+        my @filtered = grep { !is_hash_key($_) } @{$keywords_ref};
+        $count += grep { exists $LOGIC_KEYWORDS{$_} } @filtered;
+    }
+
+    # Count up all the logic operators
+    my $operators_ref = $elem->find('PPI::Token::Operator');
+    if ($operators_ref) {
+        $count += grep { exists $LOGIC_OPERATORS{$_} } @{$operators_ref};
+    }
+    return $count;
 }
 
 sub is_perl_file {

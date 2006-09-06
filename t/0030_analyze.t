@@ -1,14 +1,14 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.7 2006/09/05 15:34:27 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.8 2006/09/06 04:41:32 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2006/09/05 15:34:27 $
+# $Date: 2006/09/06 04:41:32 $
 ###############################################################################
 
 use strict;
 use warnings;
 use English qw(-no_match_vars);
-use FindBin qw($Bin);
+use FindBin qw($Bin);    
 use lib "$Bin/lib";
 use Perl::Code::Analyze::TestData;
 use Readonly;
@@ -131,15 +131,17 @@ sub test_analysis {
         'analysis->package_count returns correct number.'
     );
 
-    my @expected_subs = (
-      { name => 'new',       lines => 5 },
-      { name => 'foo',       lines => 4 },
-      { name => 'say_hello', lines => 4 },
-      { name => 'foo', lines => 1 },
-      { name => 'bar', lines => 5 },
-    );
+    my @expected_subs = ();
+    foreach my $test_file ( sort keys %{$test_data} ) {
+        my @subs = @{ $test_data->{$test_file}->{subs} };
+        if ( scalar @subs ) {
+            push @expected_subs, @subs;
+        }
+    }
+
     is_deeply( $analysis->subs, \@expected_subs,
         'analysis->subs() returns expected list.' );
+
     is(
         $analysis->sub_count,
         scalar @expected_subs,

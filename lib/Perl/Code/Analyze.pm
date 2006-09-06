@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.8 2006/09/06 04:41:32 matisse Exp $
-# $Revision: 1.8 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.9 2006/09/06 04:57:57 matisse Exp $
+# $Revision: 1.9 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/06 04:41:32 $
+# $Date: 2006/09/06 04:57:57 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -18,7 +18,7 @@ use Perl::Code::Analyze::Analysis;
 use Perl::Critic::Utils;
 use Readonly;
 
-our $VERSION = '0.01';
+our $VERSION = '0.011';
 
 Readonly::Array my @PERL_FILE_SUFFIXES =>
   ( qr/ \.pl /xmi, qr/ \.pm /xmi, qr/ \.t /xmi );
@@ -224,6 +224,8 @@ See Also   :
 =head2 get_node_length
 
 =head2 list_perl_files
+
+=head2 measure_complexity
 
 =head2 is_perl_file
 

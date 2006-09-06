@@ -1,15 +1,15 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.11 2006/09/06 18:08:38 matisse Exp $
-# $Revision: 1.11 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.12 2006/09/06 21:13:18 matisse Exp $
+# $Revision: 1.12 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/06 18:08:38 $
+# $Date: 2006/09/06 21:13:18 $
 ###############################################################################
 
 package Perl::Code::Analyze;
 use strict;
 use warnings;
 
-use Carp qw(confess);
+use Carp qw(cluck confess);
 use English qw(-no_match_vars);
 use File::Basename qw(fileparse);
 use File::Find qw(find);
@@ -22,6 +22,7 @@ our $VERSION = '0.011';
 Readonly::Array my @PERL_FILE_SUFFIXES =>
   ( qr/ \.pl /xmi, qr/ \.pm /xmi, qr/ \.t /xmi );
 Readonly::Scalar my $PERL_SHEBANG_REGEX => qr/ \A [#] ! .* perl /xm;
+Readonly::Scalar my $DOT_FILE_REGEX     => qr/ \A [.] /xm;
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 
 Readonly::Array our @LOGIC_OPERATORS =>    
@@ -57,6 +58,10 @@ sub analyze_one_file {
         confess "Path '$path' is not readable!";
     }
     my $document = PPI::Document->new( $path, readonly => 1 );
+    if ( ! defined $document ) {
+        cluck "Could not make a PPI document from '$path'";
+        return;
+    }
     $document->index_locations();
     my @subs       = ();
     my $found_subs = $document->find('PPI::Statement::Sub');
@@ -65,6 +70,7 @@ sub analyze_one_file {
             my $sub_length = $self->get_node_length($sub);
             push @subs,
               {
+                file_path              => $path,
                 name              => $sub->name,
                 lines             => $sub_length,
                 mccabe_complexity => $self->measure_complexity($sub),
@@ -160,6 +166,7 @@ sub is_perl_file {
     my ( $self, $path ) = @_;
     return if ( !-f $path );
     my ( $name, $path_part, $suffix ) = fileparse( $path, @PERL_FILE_SUFFIXES );
+    return if $name =~ $DOT_FILE_REGEX;
     if ( length $suffix ) {
         return 1;
     }

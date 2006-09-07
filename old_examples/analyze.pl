@@ -1,4 +1,10 @@
 #!/usr/bin/perl
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v 1.6 2006/09/07 03:45:42 matisse Exp $
+# $Revision: 1.6 $
+# $Author: matisse $
+# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v $
+# $Date: 2006/09/07 03:45:42 $
+###############################################################################
 
 use strict;
 use warnings;

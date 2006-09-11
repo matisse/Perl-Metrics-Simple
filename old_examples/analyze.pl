@@ -1,9 +1,9 @@
 #!/usr/bin/perl
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v 1.6 2006/09/07 03:45:42 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v 1.7 2006/09/11 22:28:51 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v $
-# $Date: 2006/09/07 03:45:42 $
+# $Date: 2006/09/11 22:28:51 $
 ###############################################################################
 
 use strict;
@@ -11,6 +11,8 @@ use warnings;
 use Data::Dumper;
 use Perl::Code::Analyze;
 use Statistics::Basic::StdDev;
+use Statistics::Basic::Mean;
+use Statistics::Basic::Median;
 
 my $analzyer = Perl::Code::Analyze->new;
 
@@ -28,13 +30,18 @@ my %lines = ();
 $lines{average} =
     sprintf '%.2f', Statistics::Basic::Mean->new($lines{counts})->query;
 
+$lines{median} =
+    sprintf '%.2f', Statistics::Basic::Median->new($lines{counts})->query;
+
 my %complexity = ();
 @complexity{'min', 'max', 'scores'} =
   _get_min_max_values( $analysis->subs, 'mccabe_complexity' );  
 $complexity{average} =
    sprintf '%.2f', Statistics::Basic::Mean->new($complexity{scores})->query;
     
-my $standard_deviation =
+$complexity{median} =
+    sprintf '%.2f', Statistics::Basic::Median->new($lines{counts})->query;
+$complexity{standard_deviation} =
   sprintf '%.2f',
   Statistics::Basic::StdDev->new($complexity{scores},$sub_count)->query;
 
@@ -51,13 +58,15 @@ subs:            $sub_count
 min. sub size:   $lines{min} lines
 max. sub size:   $lines{max} lines
 avg. sub size:   $lines{average} lines
+median:          $lines{median}
 
 McCabe Complexity
 -----------------
 min:             $complexity{min}
 max:             $complexity{max}
 avg:             $complexity{average}
-std. deviation:  $standard_deviation
+median:          $complexity{median}
+std. deviation:  $complexity{standard_deviation}
 
 EOS
 

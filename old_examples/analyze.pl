@@ -1,9 +1,9 @@
 #!/usr/bin/perl
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v 1.7 2006/09/11 22:28:51 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v 1.8 2006/09/11 22:33:18 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v $
-# $Date: 2006/09/11 22:28:51 $
+# $Date: 2006/09/11 22:33:18 $
 ###############################################################################
 
 use strict;
@@ -40,7 +40,8 @@ $complexity{average} =
    sprintf '%.2f', Statistics::Basic::Mean->new($complexity{scores})->query;
     
 $complexity{median} =
-    sprintf '%.2f', Statistics::Basic::Median->new($lines{counts})->query;
+    sprintf '%.2f',
+    Statistics::Basic::Median->new($complexity{scores},$sub_count)->query;
 $complexity{standard_deviation} =
   sprintf '%.2f',
   Statistics::Basic::StdDev->new($complexity{scores},$sub_count)->query;

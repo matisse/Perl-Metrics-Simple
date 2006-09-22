@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.12 2006/09/06 21:13:18 matisse Exp $
-# $Revision: 1.12 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.13 2006/09/22 14:50:04 matisse Exp $
+# $Revision: 1.13 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/06 21:13:18 $
+# $Date: 2006/09/22 14:50:04 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -66,16 +66,7 @@ sub analyze_one_file {
     my @subs       = ();
     my $found_subs = $document->find('PPI::Statement::Sub');
     if ($found_subs) {
-        foreach my $sub ( @{$found_subs} ) {
-            my $sub_length = $self->get_node_length($sub);
-            push @subs,
-              {
-                file_path              => $path,
-                name              => $sub->name,
-                lines             => $sub_length,
-                mccabe_complexity => $self->measure_complexity($sub),
-              };
-        }
+        @subs = @{ $self->_iterate_over_subs($found_subs, $path) };
     }
     my $found_packages = $document->find('PPI::Statement::Package');
     my @packages       = ();
@@ -208,7 +199,28 @@ sub is_hash_key {
     return;
 }
 
+sub _iterate_over_subs {
+    my $self       = shift;
+    my $found_subs = shift;
+    my $path       = shift;
+
+    my @subs       = ();
+
+    foreach my $sub ( @{$found_subs} ) {
+        my $sub_length = $self->get_node_length($sub);
+        push @subs,
+          {
+            file_path         => $path,
+            name              => $sub->name,
+            lines             => $sub_length,
+            mccabe_complexity => $self->measure_complexity($sub),
+          };
+    }
+    return \@subs;
+}
+
 1;
+
 __END__
 
 #################### main pod documentation begin ###################

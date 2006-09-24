@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.4 2006/09/06 04:41:32 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.5 2006/09/24 16:22:35 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v $
-# $Date: 2006/09/06 04:41:32 $
+# $Date: 2006/09/24 16:22:35 $
 ###############################################################################
 
 # This is a comment. I love comments.
@@ -20,6 +20,9 @@ sub new {
 
 sub foo {
     my ($self) = @_;
+    foreach my $thing ( @{ $self->{_args} } ) {
+        $self->say_hello($thing);
+    }
     return $self->{_args};
 }
 

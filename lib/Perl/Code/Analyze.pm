@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.13 2006/09/22 14:50:04 matisse Exp $
-# $Revision: 1.13 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.14 2006/09/24 16:22:35 matisse Exp $
+# $Revision: 1.14 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/22 14:50:04 $
+# $Date: 2006/09/24 16:22:35 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -25,14 +25,13 @@ Readonly::Scalar my $PERL_SHEBANG_REGEX => qr/ \A [#] ! .* perl /xm;
 Readonly::Scalar my $DOT_FILE_REGEX     => qr/ \A [.] /xm;
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 
-Readonly::Array our @LOGIC_OPERATORS =>    
+Readonly::Array our @LOGIC_OPERATORS =>
   qw( && || ||= &&= or and xor ? <<= >>= );
-Readonly::Hash our %LOGIC_OPERATORS =>
-  hashify(@LOGIC_OPERATORS);
+Readonly::Hash our %LOGIC_OPERATORS => hashify(@LOGIC_OPERATORS);
 
-Readonly::Array our @LOGIC_KEYWORDS => qw( if else elsif unless until while );
-Readonly::Hash our %LOGIC_KEYWORDS  =>
-  hashify(@LOGIC_KEYWORDS);
+Readonly::Array our @LOGIC_KEYWORDS =>
+  qw( for foreach if else elsif unless until while );
+Readonly::Hash our %LOGIC_KEYWORDS => hashify(@LOGIC_KEYWORDS);
 
 sub new {
     my ( $class, %parameters ) = @_;
@@ -58,7 +57,7 @@ sub analyze_one_file {
         confess "Path '$path' is not readable!";
     }
     my $document = PPI::Document->new( $path, readonly => 1 );
-    if ( ! defined $document ) {
+    if ( !defined $document ) {
         cluck "Could not make a PPI document from '$path'";
         return;
     }
@@ -66,7 +65,7 @@ sub analyze_one_file {
     my @subs       = ();
     my $found_subs = $document->find('PPI::Statement::Sub');
     if ($found_subs) {
-        @subs = @{ $self->_iterate_over_subs($found_subs, $path) };
+        @subs = @{ $self->_iterate_over_subs( $found_subs, $path ) };
     }
     my $found_packages = $document->find('PPI::Statement::Package');
     my @packages       = ();
@@ -187,9 +186,8 @@ sub is_hash_key {
     my $parent = $elem->parent();
     return if !$parent;
     my $grandparent = $parent->parent();
-    return if !$grandparent;
+    return   if !$grandparent;
     return 1 if $grandparent->isa('PPI::Structure::Subscript');
-
 
     #Check declarative style: %hash = (foo => bar);
     my $sib = $elem->snext_sibling();
@@ -204,7 +202,7 @@ sub _iterate_over_subs {
     my $found_subs = shift;
     my $path       = shift;
 
-    my @subs       = ();
+    my @subs = ();
 
     foreach my $sub ( @{$found_subs} ) {
         my $sub_length = $self->get_node_length($sub);
@@ -250,6 +248,20 @@ Blah blah blah.
 =head1 USAGE
 
 blah blah
+
+=head1 PACKAGE PROPERTIES
+
+Readonly values:
+
+Used to measure mccabe_complexity, each occurance adds 1:
+
+    Readonly::Array our @LOGIC_OPERATORS =>
+      qw( && || ||= &&= or and xor ? <<= >>= );
+    Readonly::Hash our %LOGIC_OPERATORS => hashify(@LOGIC_OPERATORS);
+    
+    Readonly::Array our @LOGIC_KEYWORDS =>
+      qw( for foreach if else elsif unless until while );
+    Readonly::Hash our %LOGIC_KEYWORDS => hashify(@LOGIC_KEYWORDS);
 
 =head1 CLASS METHODS
 
@@ -301,7 +313,15 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-perl(1).
+=over 4
+
+=item L<PPI>
+
+=item L<Perl::Critic>
+
+=item http://en.wikipedia.org/wiki/Cyclomatic_complexity
+
+=back
 
 =cut
 

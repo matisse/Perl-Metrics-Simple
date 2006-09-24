@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v 1.3 2006/09/06 21:13:18 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v 1.4 2006/09/24 16:22:35 matisse Exp $
+# $Revision: 1.4 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v $
-# $Date: 2006/09/06 21:13:18 $
+# $Date: 2006/09/24 16:22:35 $
 ###############################################################################
 
 package Perl::Code::Analyze::TestData;
@@ -45,7 +45,7 @@ sub make_test_data {
         },
         'package_no_subs.pl' => {
             file_path => "$test_directory/package_no_subs.pl",
-            lines     => 19,
+            lines     => 22,
             subs      => [],
             packages  => ['Hello::Dolly'],
         },
@@ -60,10 +60,10 @@ sub make_test_data {
         },
         'Module.pm' => {
             file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
-            lines     => 40,
+            lines     => 43,
             subs      => [
                 { name => 'new',       lines => 5, mccabe_complexity => 1,file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm", },
-                { name => 'foo',       lines => 4, mccabe_complexity => 1,file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm", },
+                { name => 'foo',       lines => 7, mccabe_complexity => 2,file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm", },
                 { name => 'say_hello', lines => 9, mccabe_complexity => 4,file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm", }
                 ,    
             ],

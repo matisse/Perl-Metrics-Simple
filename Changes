@@ -1,5 +1,9 @@
 Revision history for Perl module Perl::Code::Analyze
 
+Sun Sep 24 11:53:10 PDT 2006
+    - 'for' and 'foreach' count towards complexity score.
+    - measureing length and complexity of 'main' - which is the document - subs.
+
 0.011 Wed Sep  6 07:17:32 PDT 2006
     - Added mccabe complexity
     

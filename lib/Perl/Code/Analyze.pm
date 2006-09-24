@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.14 2006/09/24 16:22:35 matisse Exp $
-# $Revision: 1.14 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.15 2006/09/24 19:18:06 matisse Exp $
+# $Revision: 1.15 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/24 16:22:35 $
+# $Date: 2006/09/24 19:18:06 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -10,6 +10,7 @@ use strict;
 use warnings;
 
 use Carp qw(cluck confess);
+use Data::Dumper;
 use English qw(-no_match_vars);
 use File::Basename qw(fileparse);
 use File::Find qw(find);
@@ -17,7 +18,7 @@ use PPI;
 use Perl::Code::Analyze::Analysis;
 use Readonly;
 
-our $VERSION = '0.011';
+our $VERSION = '0.012';
 
 Readonly::Array my @PERL_FILE_SUFFIXES =>
   ( qr/ \.pl /xmi, qr/ \.pm /xmi, qr/ \.t /xmi );
@@ -62,32 +63,42 @@ sub analyze_one_file {
         return;
     }
     $document->index_locations();
-    my @subs       = ();
-    my $found_subs = $document->find('PPI::Statement::Sub');
-    if ($found_subs) {
-        @subs = @{ $self->_iterate_over_subs( $found_subs, $path ) };
-    }
-    my $found_packages = $document->find('PPI::Statement::Package');
-    my @packages       = ();
-    my %seen_packages  = ();
-    if ($found_packages) {
-      PACKAGE:
-        foreach my $package ( @{$found_packages} ) {
-            $seen_packages{$package}++;
-            if ( $seen_packages{$package} > 1 ) {
-                next PACKAGE;
-            }
-            push @packages, $package->namespace();
-        }
-    }
+    my $packages = _get_packages($document);
 
+    my @sub_analysis = ();
+    my $sub_elements = $document->find('PPI::Statement::Sub');
+    if ($sub_elements) {
+        @sub_analysis = @{ $self->_iterate_over_subs( $sub_elements, $path ) };
+    }
+    my $main = $self->analyze_main( $document, $sub_elements, \@sub_analysis );
     my $results_hash = {
         file_path => $path,
-        subs      => \@subs,
-        packages  => \@packages,
+        main      => $main,
+        subs      => \@sub_analysis,
+        packages  => $packages,
         lines     => $self->get_node_length($document),
     };
     return $results_hash;
+}
+
+sub analyze_main {
+    my $self         = shift;
+    my $document     = shift;
+    my $sub_elements = shift || [];
+    my $sub_analysis = shift || [];
+
+    my $lines = $self->get_node_length($document);
+    foreach my $sub ( @{$sub_analysis} ) {
+        $lines -= $sub->{lines};
+    }
+    my $document_without_subs = $document->clone;
+    $document_without_subs->prune('PPI::Statement::Sub');
+    my $complexity = $self->measure_complexity($document_without_subs);
+    my $results    = {
+        lines             => $lines,
+        mccabe_complexity => $complexity,
+    };
+    return $results;
 }
 
 sub get_node_length {
@@ -217,6 +228,25 @@ sub _iterate_over_subs {
     return \@subs;
 }
 
+sub _get_packages {
+    my $document = shift;
+
+    my $found_packages = $document->find('PPI::Statement::Package');
+    my @packages       = ();
+    my %seen_packages  = ();
+    if ($found_packages) {
+      PACKAGE:
+        foreach my $package ( @{$found_packages} ) {
+            $seen_packages{$package}++;
+            if ( $seen_packages{$package} > 1 ) {
+                next PACKAGE;
+            }
+            push @packages, $package->namespace();
+        }
+    }
+    return \@packages;
+}
+
 1;
 
 __END__
@@ -281,7 +311,18 @@ Blah blah
 
 =head2 list_perl_files
 
-=head2 measure_complexity
+=head2 measure_complexity($PPI_node)
+
+Attempts to measure the cyclomatic complexity of a chunk of code.
+
+Takes a L<PPI::Node> and returns the total number of
+logic keywords and logic operators. plus 1. See the C<PACKAGE PROPERTIES> section
+for a list.
+
+See also: http://en.wikipedia.org/wiki/Cyclomatic_complexity
+
+The code for this method was copied from 
+L<Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity>
 
 =head2 is_perl_file
 

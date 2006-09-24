@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v 1.4 2006/09/24 16:22:35 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v 1.5 2006/09/24 19:18:06 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v $
-# $Date: 2006/09/24 16:22:35 $
+# $Date: 2006/09/24 19:18:06 $
 ###############################################################################
 
 package Perl::Code::Analyze::TestData;
@@ -40,32 +40,68 @@ sub make_test_data {
         'no_packages_nor_subs' => {
             file_path => "$test_directory/no_packages_nor_subs",
             lines     => 14,
+            main      => { lines => 14, mccabe_complexity => 1, },
             subs      => [],
             packages  => [],
         },
         'package_no_subs.pl' => {
             file_path => "$test_directory/package_no_subs.pl",
             lines     => 22,
-            subs      => [],
-            packages  => ['Hello::Dolly'],
+            main      => {
+                lines             => 22,
+                mccabe_complexity => 2,
+            },
+            subs => [
+
+            ],
+            packages => ['Hello::Dolly'],
         },
         'subs_no_package.pl' => {
             file_path => "$test_directory/subs_no_package.pl",
             lines     => 22,
+            main      => { lines => 16, mccabe_complexity => 2, },
             subs      => [
-                { name => 'foo', lines => 1, mccabe_complexity => 1,file_path => "$test_directory/subs_no_package.pl", },
-                { name => 'bar', lines => 5, mccabe_complexity => 1,file_path => "$test_directory/subs_no_package.pl", }
+                {
+                    name              => 'foo',
+                    lines             => 1,
+                    mccabe_complexity => 1,
+                    file_path         => "$test_directory/subs_no_package.pl",
+                },
+                {
+                    name              => 'bar',
+                    lines             => 5,
+                    mccabe_complexity => 1,
+                    file_path         => "$test_directory/subs_no_package.pl",
+                }
             ],
             packages => [],
         },
         'Module.pm' => {
             file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
             lines     => 43,
+            main      => { lines => 22, mccabe_complexity => 1, },
             subs      => [
-                { name => 'new',       lines => 5, mccabe_complexity => 1,file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm", },
-                { name => 'foo',       lines => 7, mccabe_complexity => 2,file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm", },
-                { name => 'say_hello', lines => 9, mccabe_complexity => 4,file_path => "$test_directory/Perl/Code/Analyze/Test/Module.pm", }
-                ,    
+                {
+                    name              => 'new',
+                    lines             => 5,
+                    mccabe_complexity => 1,
+                    file_path         =>
+                      "$test_directory/Perl/Code/Analyze/Test/Module.pm",
+                },
+                {
+                    name              => 'foo',
+                    lines             => 7,
+                    mccabe_complexity => 2,
+                    file_path         =>
+                      "$test_directory/Perl/Code/Analyze/Test/Module.pm",
+                },
+                {
+                    name              => 'say_hello',
+                    lines             => 9,
+                    mccabe_complexity => 4,
+                    file_path         =>
+                      "$test_directory/Perl/Code/Analyze/Test/Module.pm",
+                },
             ],
             packages => [
                 'Perl::Code::Analyze::Test::Module',

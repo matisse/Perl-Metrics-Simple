@@ -1,15 +1,15 @@
 #!/usr/bin/perl
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/subs_no_package.pl,v 1.3 2006/09/04 01:40:36 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/subs_no_package.pl,v 1.4 2006/09/24 19:18:06 matisse Exp $
+# $Revision: 1.4 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/subs_no_package.pl,v $
-# $Date: 2006/09/04 01:40:36 $
+# $Date: 2006/09/24 19:18:06 $
 ###############################################################################
 
 use strict;
 use warnings;
 
-print "Hello world.\n";
+print "Hello world.\n" if ( @ARGV );
 
 my $code_ref = sub { print "Hi there\n"; }; # Will not be counted
 exit;

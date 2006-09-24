@@ -1,13 +1,14 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.8 2006/09/06 04:41:32 matisse Exp $
-# $Revision: 1.8 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.9 2006/09/24 19:18:06 matisse Exp $
+# $Revision: 1.9 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2006/09/06 04:41:32 $
+# $Date: 2006/09/24 19:18:06 $
 ###############################################################################
 
 use strict;
 use warnings;
 use English qw(-no_match_vars);
+use Data::Dumper;
 use FindBin qw($Bin);    
 use lib "$Bin/lib";
 use Perl::Code::Analyze::TestData;
@@ -35,7 +36,7 @@ sub set_up {
 sub test_analyze_one_file {
     my ( $analyzer, $test_data ) = set_up();
 
-    my $no_package_no_sub_expected_result = $test_data->{'package_no_subs.pl'};
+    my $no_package_no_sub_expected_result = $test_data->{'no_packages_nor_subs'};
     my $analysis                          =
       $analyzer->analyze_one_file(
         $no_package_no_sub_expected_result->{'file_path'} );
@@ -60,7 +61,7 @@ sub test_analyze_one_file {
     my $has_subs_analysis        =
       $analyzer->analyze_one_file( $has_subs_expected_result->{'file_path'} );
     is_deeply( $has_subs_analysis, $has_subs_expected_result,
-        'analyze_one_file() with subs and no package.' );
+        'analyze_one_file() subs_no_package.pl' );
 
     my $has_subs_and_package_expected_result = $test_data->{'Module.pm'};
     my $subs_and_package_analysis            =
@@ -147,6 +148,7 @@ sub test_analysis {
         scalar @expected_subs,
         'analysis->subs_count returns correct number.'
     );
+    
     return 1;
 }
 

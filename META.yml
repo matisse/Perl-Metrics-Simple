@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Perl-Code-Analyze
-version: 0.01
+version: 0.012
 author:
 
 abstract: Count packages, subs, lines, etc. of many files.

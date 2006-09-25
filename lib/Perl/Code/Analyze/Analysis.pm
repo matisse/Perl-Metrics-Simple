@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v 1.2 2006/09/05 15:34:27 matisse Exp $
-# $Revision: 1.2 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v 1.3 2006/09/25 15:17:54 matisse Exp $
+# $Revision: 1.3 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v $
-# $Date: 2006/09/05 15:34:27 $
+# $Date: 2006/09/25 15:17:54 $
 ###############################################################################
 
 package Perl::Code::Analyze::Analysis;
@@ -17,7 +17,9 @@ our $VERSION = '0.01';
 
 my %AnalysisData = ();
 my %Files        = ();
+my %FileStats    = ();
 my %Lines        = ();
+my %Main         = ();
 my %Packages     = ();
 my %Subs         = ();
 
@@ -57,7 +59,7 @@ sub file_count {
 sub lines {
     my $self = shift;
     return $Lines{$self};
-}    
+}
 
 sub packages {
     my ($self) = @_;
@@ -67,6 +69,16 @@ sub packages {
 sub package_count {
     my $self = shift;
     return scalar @{ $self->packages };
+}
+
+sub file_stats {
+    my $self = shift;
+    return $FileStats{$self};
+}
+
+sub main_stats {
+    my $self = shift;
+    return $Main{$self};
 }
 
 sub subs {
@@ -87,9 +99,19 @@ sub _init {
     my @packages = ();
     my $lines    = 0;
     my @subs;
+    my @file_stats = ();
+    my %main_stats = ( lines => 0, mccabe_complexity => 0 );
     foreach my $result ( @{ $self->data() } ) {
         $lines += $result->{lines};
+        if ( exists $result->{main_stats} ) {
+            my $main_for_this_file = $result->{main_stats};
+            $main_stats{lines} += $main_for_this_file->{lines} || 0;
+            $main_stats{mccabe_complexity} +=
+              $main_for_this_file->{mccabe_complexity} || 0;
+        }
         push @files, $result->{file_path};
+        push @file_stats,
+          { path => $result->{file_path}, main_stats => $result->{main_stats} };
         foreach my $package ( @{ $result->{packages} } ) {
             push @packages, $package;
         }
@@ -97,10 +119,12 @@ sub _init {
             push @subs, $sub;
         }
     }
-    $Files{$self}    = \@files;
-    $Packages{$self} = \@packages;
-    $Lines{$self}    = $lines;
-    $Subs{$self}     = \@subs;
+    $FileStats{$self} = \@file_stats;
+    $Files{$self}     = \@files;
+    $Main{$self}      = \%main_stats;
+    $Packages{$self}  = \@packages;
+    $Lines{$self}     = $lines;
+    $Subs{$self}      = \@subs;
     return 1;
 }
 1;
@@ -118,43 +142,65 @@ Perl::Code::Analyze::Analysis - Contains anaylsis results.
 =head1 SYNOPSIS
 
 This is the class of objects returned by the I<analyze_files>
-and I<analyze_one_file> methods of the B<Perl::Code::Analyze> class.
+method of the B<Perl::Code::Analyze> class.
 
+Normally you would not create objects of this class directly, instead you
+get them by calling the I<analyze_files> method on a B<Perl::Code::Analyze>
+object.
 
 =head1 DESCRIPTION
-
-Stub documentation for this module was created by ExtUtils::ModuleMaker.
-It looks like the author of the extension was negligent enough
-to leave the stub unedited.
-
-Blah blah blah.
 
 
 =head1 USAGE
 
-
-
 =head2 new
 
- Usage     : How to use this function/method
- Purpose   : What it does
- Returns   : What it returns
- Argument  : What it wants to know
- Throws    : Exceptions and other anomolies
- Comment   : This is a sample subroutine header.
-           : It is polite to include more pod and fewer comments.
+  $analysis = Perl::Code::Analyze::Analsys->new( $array_of_data )
 
-See Also   : 
+Takes an arrayref of data and returns a new  Perl::Code::Analyze::Analysis
+object.
 
 =head2 data
 
+The raw data for the analysis. This is the arryref you passed
+as athe argument to new();
+
 =head2 files
+
+Arrayref of file paths, in the order they were encountered.
 
 =head2 file_count
 
 =head2 lines
 
 Total lines in all files, including comments.
+
+=head2 main_stats
+
+Returns a hashref of data based the I<main> code in all files, that is,
+on the code minus all named subroutines.
+
+  {
+    lines             => 723,
+    mccabe_complexity => 45
+  }
+
+=head2 file_stats
+
+Returns an arrayref of hashrefs, each entry is for one analyzed file,
+in the order they were encountered. The I<main_stats> slot in the hashref
+is for all the code in the file B<outside of> any named subroutines.
+
+   [
+      {
+        path => '/path/to/file',
+        main_stats => {
+                        lines             => 23,
+                        mccabe_complexity => 3,
+                       },
+        },
+        ...
+   ]
 
 =head2 packages
 

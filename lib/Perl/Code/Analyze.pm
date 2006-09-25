@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.15 2006/09/24 19:18:06 matisse Exp $
-# $Revision: 1.15 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.16 2006/09/25 15:17:54 matisse Exp $
+# $Revision: 1.16 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/24 19:18:06 $
+# $Date: 2006/09/25 15:17:54 $
 ###############################################################################
 
 package Perl::Code::Analyze;
@@ -46,14 +46,16 @@ sub analyze_files {
     my ( $self, @dirs_and_files ) = @_;
     my @results = ();
     foreach my $file ( @{ $self->find_files(@dirs_and_files) } ) {
-        push @results, $self->analyze_one_file($file);
+        push @results, $self->analyze_one_file( $file, 'results_as_hash' );
     }
     my $analysis = Perl::Code::Analyze::Analysis->new( \@results );
     return $analysis;
 }
 
 sub analyze_one_file {
-    my ( $self, $path ) = @_;
+    my $self        = shift;
+    my $path        = shift;
+    my $return_type = shift || 'Perl::Code::Analyze::Analysis';
     if ( !-r $path ) {
         confess "Path '$path' is not readable!";
     }
@@ -72,12 +74,13 @@ sub analyze_one_file {
     }
     my $main = $self->analyze_main( $document, $sub_elements, \@sub_analysis );
     my $results_hash = {
-        file_path => $path,
-        main      => $main,
-        subs      => \@sub_analysis,
-        packages  => $packages,
-        lines     => $self->get_node_length($document),
+        file_path  => $path,
+        main_stats => $main,
+        subs       => \@sub_analysis,
+        packages   => $packages,
+        lines      => $self->get_node_length($document),
     };
+
     return $results_hash;
 }
 

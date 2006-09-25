@@ -1,19 +1,19 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.9 2006/09/24 19:18:06 matisse Exp $
-# $Revision: 1.9 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.10 2006/09/25 15:17:54 matisse Exp $
+# $Revision: 1.10 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2006/09/24 19:18:06 $
+# $Date: 2006/09/25 15:17:54 $
 ###############################################################################
 
 use strict;
 use warnings;
 use English qw(-no_match_vars);
 use Data::Dumper;
-use FindBin qw($Bin);    
+use FindBin qw($Bin);
 use lib "$Bin/lib";
 use Perl::Code::Analyze::TestData;
 use Readonly;
-use Test::More tests => 15;
+use Test::More tests => 17;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
@@ -26,18 +26,19 @@ test_analysis();
 exit;
 
 sub set_up {
-    my $analyzer  = Perl::Code::Analyze->new();
-    my $test_data =
-      Perl::Code::Analyze::TestData->new( test_directory => $TEST_DIRECTORY )
-      ->get_test_data;
-    return ( $analyzer, $test_data );
+    my $analyzer         = Perl::Code::Analyze->new();
+    my $test_data_object =
+      Perl::Code::Analyze::TestData->new( test_directory => $TEST_DIRECTORY );
+    return ( $analyzer, $test_data_object );
 }
 
 sub test_analyze_one_file {
-    my ( $analyzer, $test_data ) = set_up();
+    my ( $analyzer, $test_data_object ) = set_up();
+    my $test_data = $test_data_object->get_test_data;
 
-    my $no_package_no_sub_expected_result = $test_data->{'no_packages_nor_subs'};
-    my $analysis                          =
+    my $no_package_no_sub_expected_result =
+      $test_data->{'no_packages_nor_subs'};
+    my $analysis =
       $analyzer->analyze_one_file(
         $no_package_no_sub_expected_result->{'file_path'} );
     is_deeply(
@@ -75,8 +76,8 @@ sub test_analyze_one_file {
 }
 
 sub test_analyze_files {
-    my ( $analyzer, $test_data ) = set_up();
-
+    my ( $analyzer, $test_data_object ) = set_up();
+    my $test_data            = $test_data_object->get_test_data;
     my $analysis_of_one_file =
       $analyzer->analyze_files( $test_data->{'Module.pm'}->{file_path} );
     isa_ok( $analysis_of_one_file, 'Perl::Code::Analyze::Analysis' );
@@ -96,7 +97,9 @@ sub test_analyze_files {
 }
 
 sub test_analysis {
-    my ( $analyzer, $test_data ) = set_up();
+    my ( $analyzer, $test_data_object ) = set_up();
+    my $test_data = $test_data_object->get_test_data;
+
     my $analysis = $analyzer->analyze_files($TEST_DIRECTORY);
 
     my $expected_lines;
@@ -148,7 +151,14 @@ sub test_analysis {
         scalar @expected_subs,
         'analysis->subs_count returns correct number.'
     );
-    
+
+    my $expected_main_stats = $test_data_object->get_main_stats;
+    is_deeply( $analysis->main_stats, $expected_main_stats,
+        'analysis->main_stats returns expected data.' );
+
+    my $expected_file_stats = $test_data_object->get_file_stats;
+    is_deeply( $analysis->file_stats, $expected_file_stats,
+        'analysis->file_stats returns expected data.' );
     return 1;
 }
 

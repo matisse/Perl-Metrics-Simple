@@ -1,11 +1,11 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v 1.6 2006/09/25 15:17:54 matisse Exp $
-# $Revision: 1.6 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/lib/Perl/Code/Analyze/Attic/TestData.pm,v $
-# $Date: 2006/09/25 15:17:54 $
+# $Header$
+# $Revision$
+# $Author$
+# $Source$
+# $Date$
 ###############################################################################
 
-package Perl::Code::Analyze::TestData;
+package Perl::Metrics::Simple::TestData;
 use strict;
 use warnings;
 
@@ -141,12 +141,12 @@ sub make_test_data {
                 },
             ],
             packages => [
-                'Perl::Code::Analyze::Test::Module',
-                'Perl::Code::Analyze::Test::Module::InnerClass'
+                'Perl::Metrics::Simple::Test::Module',
+                'Perl::Metrics::Simple::Test::Module::InnerClass'
             ],
         },
       },
-      'Perl::Code::Analyze::Analysis';
+      'Perl::Metrics::Simple::Analysis';
     return $test_data;
 }
 1;

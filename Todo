@@ -1,4 +1,4 @@
-TODO list for Perl module Perl::Code::Analyze
+TODO list for Perl module Perl::Metrics::Simple
 
 - Add percentile-ranking for subroutine size and complexity,
   and/or list top-10 largest, and top-10 most complex subs.

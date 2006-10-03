@@ -1,4 +1,4 @@
-Revision history for Perl module Perl::Code::Analyze
+Revision history for Perl module Perl::Metrics::Simple
 
 Sun Sep 24 11:53:10 PDT 2006
     - 'for' and 'foreach' count towards complexity score.

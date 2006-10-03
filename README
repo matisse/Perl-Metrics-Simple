@@ -1,8 +1,8 @@
 NAME
-    Perl::Code::Analyze - Count packages, subs, lines, etc. of many files.
+    Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 
 SYNOPSIS
-      use Perl::Code::Analyze;
+      use Perl::Metrics::Simple;
       blah blah blah
 
 DESCRIPTION

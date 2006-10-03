@@ -1,11 +1,11 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v 1.16 2006/09/25 15:17:54 matisse Exp $
-# $Revision: 1.16 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.1 2006/10/03 03:53:08 matisse Exp $
+# $Revision: 1.1 $
 # $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Attic/Analyze.pm,v $
-# $Date: 2006/09/25 15:17:54 $
+# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
+# $Date: 2006/10/03 03:53:08 $
 ###############################################################################
 
-package Perl::Code::Analyze;
+package Perl::Metrics::Simple;
 use strict;
 use warnings;
 
@@ -15,7 +15,7 @@ use English qw(-no_match_vars);
 use File::Basename qw(fileparse);
 use File::Find qw(find);
 use PPI;
-use Perl::Code::Analyze::Analysis;
+use Perl::Metrics::Simple::Analysis;
 use Readonly;
 
 our $VERSION = '0.012';
@@ -48,14 +48,14 @@ sub analyze_files {
     foreach my $file ( @{ $self->find_files(@dirs_and_files) } ) {
         push @results, $self->analyze_one_file( $file, 'results_as_hash' );
     }
-    my $analysis = Perl::Code::Analyze::Analysis->new( \@results );
+    my $analysis = Perl::Metrics::Simple::Analysis->new( \@results );
     return $analysis;
 }
 
 sub analyze_one_file {
     my $self        = shift;
     my $path        = shift;
-    my $return_type = shift || 'Perl::Code::Analyze::Analysis';
+    my $return_type = shift || 'Perl::Metrics::Simple::Analysis';
     if ( !-r $path ) {
         confess "Path '$path' is not readable!";
     }
@@ -261,11 +261,11 @@ __END__
 
 =head1 NAME
 
-Perl::Code::Analyze - Count packages, subs, lines, etc. of many files.
+Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 
 =head1 SYNOPSIS
 
-  use Perl::Code::Analyze;
+  use Perl::Metrics::Simple;
   blah blah blah
 
 

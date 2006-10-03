@@ -1,22 +1,22 @@
 #!/usr/bin/perl
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v 1.9 2006/10/03 03:47:56 matisse Exp $
-# $Revision: 1.9 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v 1.10 2006/10/03 03:53:08 matisse Exp $
+# $Revision: 1.10 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/old_examples/Attic/analyze.pl,v $
-# $Date: 2006/10/03 03:47:56 $
+# $Date: 2006/10/03 03:53:08 $
 ###############################################################################
 
 use strict;
 use warnings;
 use Data::Dumper;
-use Perl::Code::Analyze;
+use Perl::Metrics::Simple;
 use Pod::Usage;
 use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
 pod2usage( -verbose => 1 ) if ( !@ARGV );
-my $analzyer = Perl::Code::Analyze->new;
+my $analzyer = Perl::Metrics::Simple->new;
 
 my $IMPROBABLY_LARGE_NUMBER = 999_999_999_999;
 

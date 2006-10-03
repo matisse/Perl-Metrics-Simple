@@ -1,11 +1,11 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v 1.3 2006/09/25 15:17:54 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.1 2006/10/03 03:53:08 matisse Exp $
+# $Revision: 1.1 $
 # $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Code/Analyze/Attic/Analysis.pm,v $
-# $Date: 2006/09/25 15:17:54 $
+# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
+# $Date: 2006/10/03 03:53:08 $
 ###############################################################################
 
-package Perl::Code::Analyze::Analysis;
+package Perl::Metrics::Simple::Analysis;
 use strict;
 use warnings;
 
@@ -137,15 +137,15 @@ __END__
 
 =head1 NAME
 
-Perl::Code::Analyze::Analysis - Contains anaylsis results.
+Perl::Metrics::Simple::Analysis - Contains anaylsis results.
 
 =head1 SYNOPSIS
 
 This is the class of objects returned by the I<analyze_files>
-method of the B<Perl::Code::Analyze> class.
+method of the B<Perl::Metrics::Simple> class.
 
 Normally you would not create objects of this class directly, instead you
-get them by calling the I<analyze_files> method on a B<Perl::Code::Analyze>
+get them by calling the I<analyze_files> method on a B<Perl::Metrics::Simple>
 object.
 
 =head1 DESCRIPTION
@@ -155,9 +155,9 @@ object.
 
 =head2 new
 
-  $analysis = Perl::Code::Analyze::Analsys->new( $array_of_data )
+  $analysis = Perl::Metrics::Simple::Analsys->new( $array_of_data )
 
-Takes an arrayref of data and returns a new  Perl::Code::Analyze::Analysis
+Takes an arrayref of data and returns a new  Perl::Metrics::Simple::Analysis
 object.
 
 =head2 data

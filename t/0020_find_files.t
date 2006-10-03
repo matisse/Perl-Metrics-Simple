@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v 1.3 2006/09/03 17:13:29 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v 1.4 2006/10/03 03:53:08 matisse Exp $
+# $Revision: 1.4 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v $
-# $Date: 2006/09/03 17:13:29 $
+# $Date: 2006/10/03 03:53:08 $
 ###############################################################################
 use strict;
 use warnings;
@@ -13,14 +13,14 @@ use Test::More tests => 3;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
-BEGIN { use_ok('Perl::Code::Analyze'); }
+BEGIN { use_ok('Perl::Metrics::Simple'); }
 
 test_find_files();
 
 exit;
 
 sub set_up {
-    my $analyzer = Perl::Code::Analyze->new();
+    my $analyzer = Perl::Metrics::Simple->new();
 }
 
 sub test_find_files {

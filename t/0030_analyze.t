@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.10 2006/09/25 15:17:54 matisse Exp $
-# $Revision: 1.10 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.11 2006/10/03 03:53:08 matisse Exp $
+# $Revision: 1.11 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2006/09/25 15:17:54 $
+# $Date: 2006/10/03 03:53:08 $
 ###############################################################################
 
 use strict;
@@ -11,13 +11,13 @@ use English qw(-no_match_vars);
 use Data::Dumper;
 use FindBin qw($Bin);
 use lib "$Bin/lib";
-use Perl::Code::Analyze::TestData;
+use Perl::Metrics::Simple::TestData;
 use Readonly;
 use Test::More tests => 17;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
-BEGIN { use_ok('Perl::Code::Analyze'); }
+BEGIN { use_ok('Perl::Metrics::Simple'); }
 
 test_analyze_one_file();
 test_analyze_files();
@@ -26,9 +26,9 @@ test_analysis();
 exit;
 
 sub set_up {
-    my $analyzer         = Perl::Code::Analyze->new();
+    my $analyzer         = Perl::Metrics::Simple->new();
     my $test_data_object =
-      Perl::Code::Analyze::TestData->new( test_directory => $TEST_DIRECTORY );
+      Perl::Metrics::Simple::TestData->new( test_directory => $TEST_DIRECTORY );
     return ( $analyzer, $test_data_object );
 }
 
@@ -80,7 +80,7 @@ sub test_analyze_files {
     my $test_data            = $test_data_object->get_test_data;
     my $analysis_of_one_file =
       $analyzer->analyze_files( $test_data->{'Module.pm'}->{file_path} );
-    isa_ok( $analysis_of_one_file, 'Perl::Code::Analyze::Analysis' );
+    isa_ok( $analysis_of_one_file, 'Perl::Metrics::Simple::Analysis' );
     my $expected_from_one_file = [ $test_data->{'Module.pm'}, ];
     is_deeply( $analysis_of_one_file->data, $expected_from_one_file,
         'analyze_files() when given a single file path.' );
@@ -123,8 +123,8 @@ sub test_analysis {
     );
 
     my @expected_packages = (
-        'Perl::Code::Analyze::Test::Module',
-        'Perl::Code::Analyze::Test::Module::InnerClass',
+        'Perl::Metrics::Simple::Test::Module',
+        'Perl::Metrics::Simple::Test::Module::InnerClass',
         'Hello::Dolly',
     );
     is_deeply( $analysis->packages, \@expected_packages,

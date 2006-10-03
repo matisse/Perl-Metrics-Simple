@@ -1,0 +1,9 @@
+blib
+.cvsignore
+.project
+.includepath
+.bak
+.svn
+_build
+Build
+CVS

@@ -1,22 +1,19 @@
-.cvsignore
-.project
-Build.PL
 Changes
 examples/analyze.pl
-lib/Perl/Code/Analyze.pm
-lib/Perl/Code/Analyze/Analysis.pm
+lib/Perl/Metrics/Simple.pm
+lib/Perl/Metrics/Simple/Analysis.pm
 LICENSE
 MANIFEST			This list of files
-MANIFEST.skip
+MANIFEST.SKIP
+META.yml
 README
 t/001_load.t
 t/0020_find_files.t
 t/0030_analyze.t
-t/lib/Perl/Code/Analyze/TestData.pm
+t/lib/Perl/Metrics/Simple/TestData.pm
 t/test_files/no_packages_nor_subs
 t/test_files/not_a_perl_file
 t/test_files/package_no_subs.pl
 t/test_files/Perl/Code/Analyze/Test/Module.pm
 t/test_files/subs_no_package.pl
 Todo
-META.yml

@@ -1,13 +1,13 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.5 2006/09/24 16:22:35 matisse Exp $
-# $Revision: 1.5 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.6 2006/10/03 03:53:08 matisse Exp $
+# $Revision: 1.6 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v $
-# $Date: 2006/09/24 16:22:35 $
+# $Date: 2006/10/03 03:53:08 $
 ###############################################################################
 
 # This is a comment. I love comments.
 
-package Perl::Code::Analyze::Test::Module;
+package Perl::Metrics::Simple::Test::Module;
 
 use strict;
 use warnings;
@@ -26,7 +26,7 @@ sub foo {
     return $self->{_args};
 }
 
-package Perl::Code::Analyze::Test::Module::InnerClass;
+package Perl::Metrics::Simple::Test::Module::InnerClass;
 
 sub say_hello {
     my ( $self, $name ) = @_;
@@ -38,5 +38,5 @@ sub say_hello {
     }    
 }
 
-package Perl::Code::Analyze::Test::Module;    # back to original package
+package Perl::Metrics::Simple::Test::Module;    # back to original package
 1;

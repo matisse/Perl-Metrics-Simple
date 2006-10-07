@@ -1,5 +1,9 @@
 TODO list for Perl module Perl::Metrics::Simple
 
+- Change the analyze_one_file method to return an object.
+
+- Make the example script get installed - but change the name
+
 - Documentation
 
 - Maybe put statistics methods in Simple.pm ?

@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.1 2006/10/03 03:53:08 matisse Exp $
-# $Revision: 1.1 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.2 2006/10/07 00:44:59 matisse Exp $
+# $Revision: 1.2 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/10/03 03:53:08 $
+# $Date: 2006/10/07 00:44:59 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -18,9 +18,9 @@ use PPI;
 use Perl::Metrics::Simple::Analysis;
 use Readonly;
 
-our $VERSION = '0.012';
+our $VERSION = '0.013';
 
-Readonly::Array my @PERL_FILE_SUFFIXES =>
+Readonly::Array our @PERL_FILE_SUFFIXES =>
   ( qr/ \.pl /xmi, qr/ \.pm /xmi, qr/ \.t /xmi );
 Readonly::Scalar my $PERL_SHEBANG_REGEX => qr/ \A [#] ! .* perl /xm;
 Readonly::Scalar my $DOT_FILE_REGEX     => qr/ \A [.] /xm;
@@ -56,6 +56,7 @@ sub analyze_one_file {
     my $self        = shift;
     my $path        = shift;
     my $return_type = shift || 'Perl::Metrics::Simple::Analysis';
+    # TODO: make this method return an object?
     if ( !-r $path ) {
         confess "Path '$path' is not readable!";
     }
@@ -266,21 +267,142 @@ Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 =head1 SYNOPSIS
 
   use Perl::Metrics::Simple;
-  blah blah blah
-
+  $file_count    = $analysis->file_count;
+  $package_count = $analysis->package_count;
+  $sub_count     = $analysis->sub_count;
+  $lines         = $analysis->lines;
+  $main_stats    = $analysis->main_stats;
+  $file_stats    = $analysis->file_stats;
 
 =head1 DESCRIPTION
 
-Stub documentation for this module was created by ExtUtils::ModuleMaker.
-It looks like the author of the extension was negligent enough
-to leave the stub unedited.
 
-Blah blah blah.
 
 
 =head1 USAGE
 
-blah blah
+  use Perl::Metrics::Simple;
+  my $analzyer = Perl::Metrics::Simple->new;
+  my $analysis = $analzyer->analyze_files(@ARGV);
+
+=head1 EXAMPLE SCRIPT
+
+    use strict;
+    use warnings;
+    use Data::Dumper;
+    use Perl::Metrics::Simple;
+    use Pod::Usage;
+    use Statistics::Basic::StdDev;
+    use Statistics::Basic::Mean;
+    use Statistics::Basic::Median;
+    
+    pod2usage( -verbose => 1 ) if ( !@ARGV );
+    my $analzyer = Perl::Metrics::Simple->new;
+    
+    my $IMPROBABLY_LARGE_NUMBER = 999_999_999_999;
+    
+    my $analysis = $analzyer->analyze_files(@ARGV);
+    
+    my $file_count    = $analysis->file_count;
+    my $package_count = $analysis->package_count;
+    my $sub_count     = $analysis->sub_count;
+    my $lines         = $analysis->lines;
+    my $main_stats    = $analysis->main_stats;
+    my $file_stats    = $analysis->file_stats;
+    
+    my %lines = ();
+    @lines{ 'min', 'max', 'counts' } =
+      _get_min_max_values( $analysis->subs, 'lines' );
+    $lines{average} = sprintf '%.2f',
+      Statistics::Basic::Mean->new( $lines{counts} )->query;
+    
+    $lines{median} = sprintf '%.2f',
+      Statistics::Basic::Median->new( $lines{counts} )->query;
+    
+    my %complexity = ();
+    @complexity{ 'min', 'max', 'scores' } =
+      _get_min_max_values( $analysis->subs, 'mccabe_complexity' );
+    $complexity{average} = sprintf '%.2f',
+      Statistics::Basic::Mean->new( $complexity{scores} )->query;
+    
+    $complexity{median} = sprintf '%.2f',
+      Statistics::Basic::Median->new( $complexity{scores}, $sub_count )->query;
+    $complexity{standard_deviation} = sprintf '%.2f',
+      Statistics::Basic::StdDev->new( $complexity{scores}, $sub_count )->query;
+    
+    my %main_complexity = ();
+    $main_complexity{average} = sprintf '%.2f',
+      $main_stats->{mccabe_complexity} / $file_count;
+    @main_complexity{ 'min', 'max', 'scores' } =
+      _get_min_max_values( $analysis->subs, 'mccabe_complexity' );
+    $main_complexity{median} = sprintf '%.2f',
+      Statistics::Basic::Median->new( $main_complexity{scores}, $file_count )->query;
+    $main_complexity{standard_deviation} = sprintf '%.2f',
+      Statistics::Basic::StdDev->new( $main_complexity{scores}, $file_count )->query;
+    
+    print <<"EOS";
+    
+    Perl Files:      $file_count
+    
+    Line Counts
+    -----------
+    lines:           $lines
+    packages:        $package_count
+    subs:            $sub_count
+    all main code:   $main_stats->{lines}
+    
+    min. sub size:   $lines{min} lines
+    max. sub size:   $lines{max} lines
+    avg. sub size:   $lines{average} lines
+    median sub size: $lines{median}
+    
+    McCabe Complexity
+    -----------------
+    min. main:    $main_complexity{min}
+    max. main:    $main_complexity{max}
+    median main:  $main_complexity{median}
+    average main: $main_complexity{average}
+    
+    subs:
+    min:             $complexity{min}
+    max:             $complexity{max}
+    avg:             $complexity{average}
+    median:          $complexity{median}
+    std. deviation:  $complexity{standard_deviation}
+    
+    EOS
+    
+    my @sorted_subs = sort _by_complexity(), @{ $analysis->subs };
+    print join( "\t", 'complexity', 'sub', 'path', 'size' ), "\n";
+    foreach my $sub (@sorted_subs) {
+        my %sub_hash = %{$sub};
+        print join( "\t",
+            @sub_hash{ 'mccabe_complexity', 'name', 'file_path', 'lines' } ),
+          "\n";
+    }
+    
+    exit;
+    
+    sub _by_complexity {
+        return $b->{mccabe_complexity} <=> $a->{mccabe_complexity};
+    }
+    
+    sub _get_min_max_values {
+        my $nodes    = shift;
+        my $hash_key = shift;
+        my @values   = ();
+        my $min      = $IMPROBABLY_LARGE_NUMBER;
+        my $max      = 0;
+        foreach my $node ( @{$nodes} ) {
+            my $value = $node->{$hash_key};
+            $max = $value > $max ? $value : $max;
+            $min = $value < $min ? $value : $min;
+            push @values, $value;
+        }
+    
+        return ( $min, $max, \@values );
+    }
+    __END__
 
 =head1 PACKAGE PROPERTIES
 
@@ -304,7 +426,10 @@ Blah blah
 
 =head1 OBJECT METHODS
 
-=head2 analyze_files
+=head2 analyze_files( @files_and_or_dirs )
+
+Takes an array of files and or directory paths and returns
+a L<Perl::Metrics::Simple::Analysis> object.
 
 =head2 analyze_one_file
 
@@ -327,16 +452,31 @@ See also: http://en.wikipedia.org/wiki/Cyclomatic_complexity
 The code for this method was copied from 
 L<Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity>
 
-=head2 is_perl_file
+=head2 is_perl_file($path)
 
+Takes a path to a file and returns true if the file appears to be a Perl file,
+otherwise returns false.
+
+If the file name does not match any of @Perl::Metrics::Simple::PERL_FILE_SUFFIXES
+then the file is opened for reading and the first line examined for a a Perl
+'shebang' line. An exception is thrown if the file cannot be opened in this case.
 
 =head1 BUGS
 
-
+None reported yet :-)
+See: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
 
 =head1 SUPPORT
 
+Via CPAN:
 
+=head2 Disussion Forum
+
+http://www.cpanforum.com/dist/Perl-Metrics-Simple
+
+=head2 Bug Reports
+
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
 
 =head1 AUTHOR
 

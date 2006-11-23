@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.6 2006/10/03 03:53:08 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.7 2006/11/23 22:25:48 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v $
-# $Date: 2006/10/03 03:53:08 $
+# $Date: 2006/11/23 22:25:48 $
 ###############################################################################
 
 # This is a comment. I love comments.
@@ -22,6 +22,8 @@ sub foo {
     my ($self) = @_;
     foreach my $thing ( @{ $self->{_args} } ) {
         $self->say_hello($thing);
+        next if ( $thing eq 'goodbye' );
+        last if ( $thing eq 'bailout' );
     }
     return $self->{_args};
 }

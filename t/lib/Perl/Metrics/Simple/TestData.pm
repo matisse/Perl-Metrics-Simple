@@ -59,7 +59,7 @@ sub get_file_stats {
     foreach my $file_name (@ORDER_OF_FILES) {
         my $hash                    = $test_data->{$file_name};
         my $stats_hash_for_one_file = {
-            path       => $hash->{file_path},
+            path       => $hash->{path},
             main_stats => $hash->{main_stats},
         };
         push @file_stats, $stats_hash_for_one_file;
@@ -75,18 +75,18 @@ sub make_test_data {
     }
     my $test_data = bless {
         'no_packages_nor_subs' => {
-            file_path  => "$test_directory/no_packages_nor_subs",
+            path       => "$test_directory/no_packages_nor_subs",
             lines      => 14,
             main_stats => { lines => 14, mccabe_complexity => 1, },
             subs       => [],
             packages   => [],
         },
         'package_no_subs.pl' => {
-            file_path  => "$test_directory/package_no_subs.pl",
-            lines      => 22,
+            path       => "$test_directory/package_no_subs.pl",
+            lines      => 24,
             main_stats => {
-                lines             => 22,
-                mccabe_complexity => 2,
+                lines             => 24,
+                mccabe_complexity => 3,
             },
             subs => [
 
@@ -94,7 +94,7 @@ sub make_test_data {
             packages => ['Hello::Dolly'],
         },
         'subs_no_package.pl' => {
-            file_path  => "$test_directory/subs_no_package.pl",
+            path       => "$test_directory/subs_no_package.pl",
             lines      => 22,
             main_stats => { lines => 16, mccabe_complexity => 2, },
             subs       => [
@@ -102,42 +102,39 @@ sub make_test_data {
                     name              => 'foo',
                     lines             => 1,
                     mccabe_complexity => 1,
-                    file_path         => "$test_directory/subs_no_package.pl",
+                    path              => "$test_directory/subs_no_package.pl",
                 },
                 {
                     name              => 'bar',
                     lines             => 5,
                     mccabe_complexity => 1,
-                    file_path         => "$test_directory/subs_no_package.pl",
+                    path              => "$test_directory/subs_no_package.pl",
                 }
             ],
             packages => [],
         },
         'Module.pm' => {
-            file_path  => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
-            lines      => 43,
+            path       => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
+            lines      => 45,
             main_stats => { lines => 22, mccabe_complexity => 1, },
             subs       => [
                 {
                     name              => 'new',
                     lines             => 5,
                     mccabe_complexity => 1,
-                    file_path         =>
-                      "$test_directory/Perl/Code/Analyze/Test/Module.pm",
+                    path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
                 },
                 {
                     name              => 'foo',
-                    lines             => 7,
-                    mccabe_complexity => 2,
-                    file_path         =>
-                      "$test_directory/Perl/Code/Analyze/Test/Module.pm",
+                    lines             => 9,
+                    mccabe_complexity => 6,
+                    path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
                 },
                 {
                     name              => 'say_hello',
                     lines             => 9,
                     mccabe_complexity => 4,
-                    file_path         =>
-                      "$test_directory/Perl/Code/Analyze/Test/Module.pm",
+                    path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
                 },
             ],
             packages => [

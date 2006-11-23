@@ -2,12 +2,14 @@ Changes
 examples/analyze.pl
 lib/Perl/Metrics/Simple.pm
 lib/Perl/Metrics/Simple/Analysis.pm
+lib/Perl/Metrics/Simple/Analysis/File.pm
 Build.PL
 LICENSE
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 README
+bin/countperl
 t/001_load.t
 t/0020_find_files.t
 t/0030_analyze.t

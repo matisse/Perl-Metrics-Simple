@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.1 2006/10/03 03:53:08 matisse Exp $
-# $Revision: 1.1 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.2 2006/11/23 22:25:48 matisse Exp $
+# $Revision: 1.2 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/10/03 03:53:08 $
+# $Date: 2006/11/23 22:25:48 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -13,7 +13,7 @@ use Carp qw(confess);
 use English qw(-no_match_vars);
 use Readonly;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my %AnalysisData = ();
 my %Files        = ();
@@ -25,14 +25,7 @@ my %Subs         = ();
 
 sub new {
     my ( $class, $analysis_data ) = @_;
-    if (
-        !(
-                $analysis_data
-            and ref $analysis_data
-            and ref $analysis_data eq 'ARRAY'
-        )
-      )
-    {
+    if ( !is_ref( $analysis_data, 'ARRAY' ) ) {
         confess 'Did not supply an arryref of analysis data.';
     }
     my $self = {};
@@ -95,38 +88,43 @@ sub _init {
     my ( $self, $analysis_data ) = @_;
     $AnalysisData{$self} = $analysis_data;
 
-    my @files    = ();
+    my @all_files    = ();
     my @packages = ();
     my $lines    = 0;
-    my @subs;
+    my @subs     = ();
     my @file_stats = ();
     my %main_stats = ( lines => 0, mccabe_complexity => 0 );
-    foreach my $result ( @{ $self->data() } ) {
-        $lines += $result->{lines};
-        if ( exists $result->{main_stats} ) {
-            my $main_for_this_file = $result->{main_stats};
-            $main_stats{lines} += $main_for_this_file->{lines} || 0;
-            $main_stats{mccabe_complexity} +=
-              $main_for_this_file->{mccabe_complexity} || 0;
-        }
-        push @files, $result->{file_path};
+
+    foreach my $file ( @{ $self->data() } ) {
+        $lines += $file->lines;
+        $main_stats{lines}             += $file->main_stats->{lines};
+        $main_stats{mccabe_complexity} +=
+          $file->main_stats->{mccabe_complexity};
+        push @all_files, $file->path;
         push @file_stats,
-          { path => $result->{file_path}, main_stats => $result->{main_stats} };
-        foreach my $package ( @{ $result->{packages} } ) {
-            push @packages, $package;
-        }
-        foreach my $sub ( @{ $result->{subs} } ) {
-            push @subs, $sub;
-        }
+          { path => $file->path, main_stats => $file->main_stats };
+        push @packages, @{ $file->packages };
+        push @subs, @{ $file->subs };
     }
+
     $FileStats{$self} = \@file_stats;
-    $Files{$self}     = \@files;
+    $Files{$self}     = \@all_files;
     $Main{$self}      = \%main_stats;
     $Packages{$self}  = \@packages;
     $Lines{$self}     = $lines;
     $Subs{$self}      = \@subs;
     return 1;
 }
+
+sub is_ref {
+    my $thing = shift;
+    my $type  = shift;
+    my $ref   = ref $thing;
+    return if !$ref;
+    return if ( $ref ne $type );
+    return $ref;
+}
+
 1;
 __END__
 
@@ -210,7 +208,7 @@ Unique packages found in code.
 
 =head2 subs
 
-Array ref containing names of all naed subroutines,
+Array ref containing names of all named subroutines,
 in the order encounted.
 
 =head2 sub_count

@@ -1,15 +1,16 @@
 #!/usr/bin/perl
 
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.1 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.1 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.2 2006/11/24 04:23:43 matisse Exp $
+# $Revision: 1.2 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v $
-# $Date: 2006/11/23 22:25:48 $
+# $Date: 2006/11/24 04:23:43 $
 ###############################################################################
 
 use strict;
 use warnings;
 use Data::Dumper;
+use lib '../lib';
 use Perl::Metrics::Simple;
 use Pod::Usage;
 use Statistics::Basic::StdDev;
@@ -18,8 +19,6 @@ use Statistics::Basic::Median;
 
 pod2usage( -verbose => 1 ) if ( !@ARGV );
 my $analzyer = Perl::Metrics::Simple->new;
-
-my $IMPROBABLY_LARGE_NUMBER = 999_999_999_999;
 
 my $analysis = $analzyer->analyze_files(@ARGV);
 
@@ -30,65 +29,42 @@ my $lines         = $analysis->lines;
 my $main_stats    = $analysis->main_stats;
 my $file_stats    = $analysis->file_stats;
 
-my %lines = ();
-@lines{ 'min', 'max', 'counts' } =
-  _get_min_max_values( $analysis->subs, 'lines' );
-$lines{average} = sprintf '%.2f',
-  Statistics::Basic::Mean->new( $lines{counts} )->query;
-
-$lines{median} = sprintf '%.2f',
-  Statistics::Basic::Median->new( $lines{counts} )->query;
-
-my %complexity = ();
-@complexity{ 'min', 'max', 'scores' } =
-  _get_min_max_values( $analysis->subs, 'mccabe_complexity' );
-$complexity{average} = sprintf '%.2f',
-  Statistics::Basic::Mean->new( $complexity{scores} )->query;
-
-$complexity{median} = sprintf '%.2f',
-  Statistics::Basic::Median->new( $complexity{scores}, $sub_count )->query;
-$complexity{standard_deviation} = sprintf '%.2f',
-  Statistics::Basic::StdDev->new( $complexity{scores}, $sub_count )->query;
-
-my %main_complexity = ();
-$main_complexity{average} = sprintf '%.2f',
-  $main_stats->{mccabe_complexity} / $file_count;
-@main_complexity{ 'min', 'max', 'scores' } =
-  _get_min_max_values( $analysis->subs, 'mccabe_complexity' );
-$main_complexity{median} = sprintf '%.2f',
-  Statistics::Basic::Median->new( $main_complexity{scores}, $file_count )->query;
-$main_complexity{standard_deviation} = sprintf '%.2f',
-  Statistics::Basic::StdDev->new( $main_complexity{scores}, $file_count )->query;
+my $summary_stats = $analysis->summary_stats;
 
 print <<"EOS";
 
-Perl Files:      $file_count
+Perl files found:                $file_count
 
-Line Counts
------------
-lines:           $lines
-packages:        $package_count
-subs:            $sub_count
-all main code:   $main_stats->{lines}
+Counts
+------
+total lines:          $lines
+lines of main code:   $main_stats->{lines}
+packages found:       $package_count
+subs/methods:         $sub_count
 
-min. sub size:   $lines{min} lines
-max. sub size:   $lines{max} lines
-avg. sub size:   $lines{average} lines
-median sub size: $lines{median}
+Subroutine/Method Size
+----------------------
+min:                  $summary_stats->{sub_length}->{min} lines
+max:                  $summary_stats->{sub_length}->{max} lines
+mean:                 $summary_stats->{sub_length}->{mean} lines
+std. deviation:       $summary_stats->{sub_length}->{standard_deviation}
+median:               $summary_stats->{sub_length}->{median}
 
 McCabe Complexity
 -----------------
-min. main:    $main_complexity{min}
-max. main:    $main_complexity{max}
-median main:  $main_complexity{median}
-average main: $main_complexity{average}
+Main code:
+min:                  $summary_stats->{main_complexity}->{min}
+max                   $summary_stats->{main_complexity}->{max}
+mean:                 $summary_stats->{main_complexity}->{median}
+std. deviation:       $summary_stats->{main_complexity}->{standard_deviation}
+median:               $summary_stats->{main_complexity}->{median}
 
-subs:
-min:             $complexity{min}
-max:             $complexity{max}
-avg:             $complexity{average}
-median:          $complexity{median}
-std. deviation:  $complexity{standard_deviation}
+Subroutines/Methods:
+min:                  $summary_stats->{sub_complexity}->{min}
+max:                  $summary_stats->{sub_complexity}->{max}
+avg:                  $summary_stats->{sub_complexity}->{median}
+std. deviation:       $summary_stats->{sub_complexity}->{standard_deviation}
+median:               $summary_stats->{sub_complexity}->{median}
 
 EOS
 
@@ -97,29 +73,13 @@ print join( "\t", 'complexity', 'sub', 'path', 'size' ), "\n";
 foreach my $sub (@sorted_subs) {
     my %sub_hash = %{$sub};
     print join( "\t",
-        @sub_hash{ 'mccabe_complexity', 'name', 'file_path', 'lines' } ),
+        @sub_hash{ 'mccabe_complexity', 'name', 'path', 'lines' } ),
       "\n";
 }
 
 exit;
 
 sub _by_complexity {
-    return $b->{mccabe_complexity} <=> $a->{mccabe_complexity};
-}
-
-sub _get_min_max_values {
-    my $nodes    = shift;
-    my $hash_key = shift;
-    my @values   = ();
-    my $min      = $IMPROBABLY_LARGE_NUMBER;
-    my $max      = 0;
-    foreach my $node ( @{$nodes} ) {
-        my $value = $node->{$hash_key};
-        $max = $value > $max ? $value : $max;
-        $min = $value < $min ? $value : $min;
-        push @values, $value;
-    }
-
-    return ( $min, $max, \@values );
+    $b->{mccabe_complexity} <=> $a->{mccabe_complexity};
 }
 __END__

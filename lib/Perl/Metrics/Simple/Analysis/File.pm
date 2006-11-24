@@ -1,14 +1,13 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.1 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.1 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.2 2006/11/24 04:23:43 matisse Exp $
+# $Revision: 1.2 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/11/23 22:25:48 $
+# $Date: 2006/11/24 04:23:43 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
 use strict;
 use warnings;
-
 
 use Carp qw(cluck confess);
 use Data::Dumper;
@@ -21,7 +20,7 @@ our $VERSION = '0.001';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 Readonly::Array our @LOGIC_OPERATORS    =>
-  qw( && || ||= &&= or and xor ? <<= >>= );
+  qw( ! && || ||= &&= or and xor not ? <<= >>= );
 Readonly::Hash our %LOGIC_OPERATORS => hashify(@LOGIC_OPERATORS);
 
 Readonly::Array our @LOGIC_KEYWORDS =>
@@ -46,12 +45,11 @@ sub new {
 sub _init {
     my ( $self, %parameters ) = @_;
     $Path{$self} = $parameters{path};
+
     my $path = $self->path;
-    if ( !$path ) {
-        confess "Missing 'path' value in parameters.";
-    }
+
     if ( !-r $path ) {
-        confess "Path '$path' is not readable!";
+        confess "Path '$path' is missing or not readable!";
     }
 
     my $document = PPI::Document->new( $path, readonly => 1 );
@@ -76,7 +74,7 @@ sub _init {
 }
 
 sub all_counts {
-    my $self = shift;
+    my $self       = shift;
     my $stats_hash = {
         path       => $self->path,
         lines      => $self->lines,
@@ -90,8 +88,8 @@ sub all_counts {
 sub analyze_main {
     my $self         = shift;
     my $document     = shift;
-    my $sub_elements = shift || [];
-    my $sub_analysis = shift || [];
+    my $sub_elements = shift;
+    my $sub_analysis = shift;
 
     my $lines = $self->get_node_length($document);
     foreach my $sub ( @{$sub_analysis} ) {
@@ -160,22 +158,22 @@ sub measure_complexity {
 sub _get_packages {
     my $document = shift;
 
-    my $found_packages = $document->find('PPI::Statement::Package');
-    return [] if ( !Perl::Metrics::Simple::Analysis::is_ref( $found_packages, 'ARRAY' ) );
+    my @unique_packages = ();
+    my $found_packages  = $document->find('PPI::Statement::Package');
 
-    my @packages       = ();
-    my %seen_packages  = ();
+    return \@unique_packages
+      if (
+        !Perl::Metrics::Simple::Analysis::is_ref( $found_packages, 'ARRAY' ) );
 
-  PACKAGE:
+    my %seen_packages = ();
+
     foreach my $package ( @{$found_packages} ) {
-        $seen_packages{$package}++;
-        if ( $seen_packages{$package} > 1 ) {
-            next PACKAGE;
-        }
-        push @packages, $package->namespace();
+        $seen_packages{ $package->namespace() }++;
     }
 
-    return \@packages;
+    @unique_packages = sort keys %seen_packages;
+
+    return \@unique_packages;
 }
 
 sub _iterate_over_subs {
@@ -183,8 +181,9 @@ sub _iterate_over_subs {
     my $found_subs = shift;
     my $path       = shift;
 
-    return [] if ( !Perl::Metrics::Simple::Analysis::is_ref( $found_subs, 'ARRAY' ) );
-    
+    return []
+      if ( !Perl::Metrics::Simple::Analysis::is_ref( $found_subs, 'ARRAY' ) );
+
     my @subs = ();
 
     foreach my $sub ( @{$found_subs} ) {
@@ -213,7 +212,7 @@ sub hashify {
 sub is_hash_key {
     my $ppi_elem = shift;
     eval {
-        my $parent = $ppi_elem->parent();
+        my $parent      = $ppi_elem->parent();
         my $grandparent = $parent->parent();
         undef $grandparent;
         return 1 if $grandparent->isa('PPI::Structure::Subscript');

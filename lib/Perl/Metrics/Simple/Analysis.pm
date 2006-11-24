@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.2 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.2 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.3 2006/11/24 04:23:43 matisse Exp $
+# $Revision: 1.3 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/11/23 22:25:48 $
+# $Date: 2006/11/24 04:23:43 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -12,6 +12,9 @@ use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
 use Readonly;
+use Statistics::Basic::StdDev;
+use Statistics::Basic::Mean;
+use Statistics::Basic::Median;
 
 our $VERSION = '0.02';
 
@@ -22,6 +25,7 @@ my %Lines        = ();
 my %Main         = ();
 my %Packages     = ();
 my %Subs         = ();
+my %SummaryStats = ();
 
 sub new {
     my ( $class, $analysis_data ) = @_;
@@ -74,6 +78,11 @@ sub main_stats {
     return $Main{$self};
 }
 
+sub summary_stats {
+    my $self = shift;
+    return $SummaryStats{$self};
+}
+
 sub subs {
     my ($self) = @_;
     return $Subs{$self};
@@ -84,19 +93,35 @@ sub sub_count {
     return scalar @{ $self->subs };
 }
 
+sub _get_min_max_values {
+    my $nodes    = shift;
+    my $hash_key = shift;
+    if ( !is_ref( $nodes, 'ARRAY' ) ) {
+        confess("Didn't get an ARRAY ref, got '$nodes' instead");
+    }
+    my @sorted_values = sort numerically map $_->{$hash_key}, @{$nodes};
+    my $min           = $sorted_values[0];
+    my $max           = $sorted_values[-1];
+    return ( $min, $max, \@sorted_values );
+}
+
+sub numerically {
+    $a <=> $b;
+}
+
 sub _init {
     my ( $self, $analysis_data ) = @_;
     $AnalysisData{$self} = $analysis_data;
 
-    my @all_files    = ();
-    my @packages = ();
-    my $lines    = 0;
-    my @subs     = ();
+    my @all_files  = ();
+    my @packages   = ();
+    my $lines      = 0;
+    my @subs       = ();
     my @file_stats = ();
     my %main_stats = ( lines => 0, mccabe_complexity => 0 );
 
     foreach my $file ( @{ $self->data() } ) {
-        $lines += $file->lines;
+        $lines                         += $file->lines;
         $main_stats{lines}             += $file->main_stats->{lines};
         $main_stats{mccabe_complexity} +=
           $file->main_stats->{mccabe_complexity};
@@ -104,16 +129,70 @@ sub _init {
         push @file_stats,
           { path => $file->path, main_stats => $file->main_stats };
         push @packages, @{ $file->packages };
-        push @subs, @{ $file->subs };
+        push @subs,     @{ $file->subs };
     }
 
-    $FileStats{$self} = \@file_stats;
-    $Files{$self}     = \@all_files;
-    $Main{$self}      = \%main_stats;
-    $Packages{$self}  = \@packages;
-    $Lines{$self}     = $lines;
-    $Subs{$self}      = \@subs;
+    $FileStats{$self}    = \@file_stats;
+    $Files{$self}        = \@all_files;
+    $Main{$self}         = \%main_stats;
+    $Packages{$self}     = \@packages;
+    $Lines{$self}        = $lines;
+    $Subs{$self}         = \@subs;
+    $SummaryStats{$self} = $self->_make_summary_stats;
     return 1;
+}
+
+sub _make_summary_stats {
+    my $self          = shift;
+    my $summary_stats = {
+        sub_length      => $self->_summary_stats_sub_length,
+        sub_complexity  => $self->_summary_stats_sub_complexity,
+        main_complexity => $self->_summary_stats_main_complexity,
+    };
+    return $summary_stats;
+}
+
+sub _summary_stats_sub_length {
+    my $self = shift;
+
+    my %sub_length = ();
+
+    @sub_length{ 'min', 'max', 'sorted_values' } =
+      _get_min_max_values( $self->subs, 'lines' );
+
+    @sub_length{ 'mean', 'median', 'standard_deviation' } =
+       _get_mean_median_std_dev($sub_length{sorted_values});
+
+    return \%sub_length;
+}
+
+sub _summary_stats_sub_complexity {
+    my $self = shift;
+
+    my %sub_complexity = ();
+
+    @sub_complexity{ 'min', 'max', 'sorted_values' } =
+      _get_min_max_values( $self->subs, 'mccabe_complexity' );
+
+    @sub_complexity{ 'mean', 'median', 'standard_deviation' } =
+       _get_mean_median_std_dev($sub_complexity{sorted_values});
+
+    return \%sub_complexity;
+}
+
+sub _summary_stats_main_complexity {
+    my $self = shift;
+
+    my %main_complexity = ();
+
+    my @main_stats = map $_->{main_stats}, @{ $self->file_stats };
+    @main_complexity{ 'min', 'max', 'sorted_values' } =
+      _get_min_max_values( \@main_stats, 'mccabe_complexity' );
+
+    @main_complexity{ 'mean', 'median', 'standard_deviation' } =
+       _get_mean_median_std_dev($main_complexity{sorted_values});
+
+    return \%main_complexity;
 }
 
 sub is_ref {
@@ -125,13 +204,27 @@ sub is_ref {
     return $ref;
 }
 
+sub _get_mean_median_std_dev {
+    my $values = shift;
+    my $count = scalar @{$values};
+
+    my $mean = sprintf '%.2f',
+      Statistics::Basic::Mean->new( $values )->query;
+
+    my $median = sprintf '%.2f',
+      Statistics::Basic::Median->new( $values )->query;
+
+    my $standard_deviation = sprintf '%.2f',
+      Statistics::Basic::StdDev->new( $values,
+        $count )->query;
+
+    return ($mean,$median,$standard_deviation);
+}
+
 1;
 __END__
 
 #################### main pod documentation begin ###################
-## Below is the stub of documentation for your module. 
-## You better edit it!
-
 
 =head1 NAME
 

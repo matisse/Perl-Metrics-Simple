@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.7 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.8 2006/11/24 04:23:43 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2006/11/23 22:25:48 $
+# $Date: 2006/11/24 04:23:43 $
 ###############################################################################
 
 use Module::Build;
@@ -18,4 +18,5 @@ Module::Build->new(
         'Statistics::Basic'   => 0.42, 
     },
     build_requires => { 'Module::Build' => 0.2612, },
+    script_files   => { 'bin/countperl' => 1, },
 )->create_build_script;

@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.3 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.4 2006/11/24 04:23:43 matisse Exp $
+# $Revision: 1.4 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/11/23 22:25:48 $
+# $Date: 2006/11/24 04:23:43 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -16,6 +16,7 @@ use File::Basename qw(fileparse);
 use File::Find qw(find);
 use PPI;
 use Perl::Metrics::Simple::Analysis;
+use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
 our $VERSION = '0.02';
@@ -25,13 +26,9 @@ Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;
 Readonly::Scalar my $DOT_FILE_REGEX      => qr/ \A [.] /xm;
 
 sub new {
-    my ( $class, @args ) = @_;
-
+    my ( $class) = @_;
     my $self = {};
     bless $self, ref $class || $class;
-    if (@args) {
-        $self->analyze_files(@args);
-    }
     return $self;
 }
 

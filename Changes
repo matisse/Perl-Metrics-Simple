@@ -1,5 +1,12 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.20
+  Refactored much code into new Perl::Metrics::Simple::Analysis::File
+  Added summary_stats() method to Perl::Metrics::Simple::Analysis
+     provides min/max/mean/median/standard_deviation info.
+  Added  '!' and  'not' to list of logic operators.
+  Installs new script 'countperl' which creates report in text format.
+
 0.14
   Added 'last', 'next', and 'goto' to list of things that count for complexity.
   Moved example script from pod in Simple.pm into installed script: bin/countperl

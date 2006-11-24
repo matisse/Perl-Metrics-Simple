@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.8 2006/11/24 04:23:43 matisse Exp $
-# $Revision: 1.8 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.9 2006/11/24 16:29:07 matisse Exp $
+# $Revision: 1.9 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2006/11/24 04:23:43 $
+# $Date: 2006/11/24 16:29:07 $
 ###############################################################################
 
 use Module::Build;
@@ -15,7 +15,8 @@ Module::Build->new(
     requires    => {
         'Readonly'            => 1.03,
         'PPI'                 => 1.113,
-        'Statistics::Basic'   => 0.42, 
+        'Statistics::Basic'   => 0.42,
+        'Pod::Usage'          => 0,
     },
     build_requires => { 'Module::Build' => 0.2612, },
     script_files   => { 'bin/countperl' => 1, },

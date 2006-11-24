@@ -1,5 +1,4 @@
 Changes
-examples/analyze.pl
 lib/Perl/Metrics/Simple.pm
 lib/Perl/Metrics/Simple/Analysis.pm
 lib/Perl/Metrics/Simple/Analysis/File.pm

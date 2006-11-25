@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.4 2006/11/24 04:23:43 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.5 2006/11/25 21:35:03 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/11/24 04:23:43 $
+# $Date: 2006/11/25 21:35:03 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -26,7 +26,7 @@ Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;
 Readonly::Scalar my $DOT_FILE_REGEX      => qr/ \A [.] /xm;
 
 sub new {
-    my ( $class) = @_;
+    my ($class) = @_;
     my $self = {};
     bless $self, ref $class || $class;
     return $self;
@@ -61,8 +61,8 @@ sub list_perl_files {
     my @files;
 
     my $wanted = sub {
-        if ( $self->is_perl_file($_) ) {
-            push @files, $_;
+        if ( $self->is_perl_file($File::Find::name) ) {
+            push @files, $File::Find::name;
         }
     };
 
@@ -86,8 +86,11 @@ sub is_perl_file {
 sub _has_perl_shebang {
     my $path = shift;
 
-    open my $fh, '<',
-      $path || confess "Could not open '$path' for reading: $OS_ERROR";
+    open my $fh, '<', $path;
+    if ( !-r $fh ) {
+        cluck "Could not open '$path' for reading: $OS_ERROR";
+        return;
+    }
     my $first_line = <$fh>;
     close $fh;
     return if ( !$first_line );
@@ -154,6 +157,10 @@ Used to measure mccabe_complexity, each occurance adds 1:
 =head2 new
 
 Blah blah
+
+=head2 is_perl_file
+
+Takes a path and returns true if the target is a Perl file.
 
 =head1 OBJECT METHODS
 

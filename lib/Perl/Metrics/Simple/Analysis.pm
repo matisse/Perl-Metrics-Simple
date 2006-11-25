@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.3 2006/11/24 04:23:43 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.4 2006/11/25 21:32:16 matisse Exp $
+# $Revision: 1.4 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/11/24 04:23:43 $
+# $Date: 2006/11/25 21:32:16 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -207,7 +207,9 @@ sub is_ref {
 sub _get_mean_median_std_dev {
     my $values = shift;
     my $count = scalar @{$values};
-
+    if ( $count < 1 ) {
+        return;
+    }
     my $mean = sprintf '%.2f',
       Statistics::Basic::Mean->new( $values )->query;
 

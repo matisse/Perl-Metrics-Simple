@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.2 2006/11/24 04:23:43 matisse Exp $
-# $Revision: 1.2 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.3 2006/11/25 00:19:54 matisse Exp $
+# $Revision: 1.3 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/11/24 04:23:43 $
+# $Date: 2006/11/25 00:19:54 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -214,7 +214,6 @@ sub is_hash_key {
     eval {
         my $parent      = $ppi_elem->parent();
         my $grandparent = $parent->parent();
-        undef $grandparent;
         return 1 if $grandparent->isa('PPI::Structure::Subscript');
         my $sib = $ppi_elem->snext_sibling();
         return 1 if $sib->isa('PPI::Token::Operator') && $sib eq '=>';

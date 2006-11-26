@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.5 2006/11/25 21:35:03 matisse Exp $
-# $Revision: 1.5 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.6 2006/11/26 02:47:10 matisse Exp $
+# $Revision: 1.6 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/11/25 21:35:03 $
+# $Date: 2006/11/26 02:47:10 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -61,8 +61,8 @@ sub list_perl_files {
     my @files;
 
     my $wanted = sub {
-        if ( $self->is_perl_file($File::Find::name) ) {
-            push @files, $File::Find::name;
+        if ( $self->is_perl_file($File::Find::name) ) { ## no critic ProhibitPackageVars
+            push @files, $File::Find::name;             ## no critic ProhibitPackageVars
         }
     };
 
@@ -121,6 +121,10 @@ Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
   $lines         = $analysis->lines;
   $main_stats    = $analysis->main_stats;
   $file_stats    = $analysis->file_stats;
+
+=head1 VERSION
+
+This is VERSION 0.02.
 
 =head1 DESCRIPTION
 
@@ -199,7 +203,7 @@ If the file name does not match any of @Perl::Metrics::Simple::PERL_FILE_SUFFIXE
 then the file is opened for reading and the first line examined for a a Perl
 'shebang' line. An exception is thrown if the file cannot be opened in this case.
 
-=head1 BUGS
+=head1 BUGS AND LIMITATIONS
 
 None reported yet :-)
 See: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
@@ -224,7 +228,7 @@ http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
     matisse@eigenstate.net
     http://www.eigenstate.net/
 
-=head1 COPYRIGHT
+=head1 LICENSE AND COPYRIGHT
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

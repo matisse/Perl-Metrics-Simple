@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.3 2006/11/25 00:19:54 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.4 2006/11/26 02:47:10 matisse Exp $
+# $Revision: 1.4 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/11/25 00:19:54 $
+# $Date: 2006/11/26 02:47:10 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -211,14 +211,21 @@ sub hashify {
 # http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
 sub is_hash_key {
     my $ppi_elem = shift;
-    eval {
+
+    my $is_hash_key = eval {
         my $parent      = $ppi_elem->parent();
         my $grandparent = $parent->parent();
-        return 1 if $grandparent->isa('PPI::Structure::Subscript');
+        if ($grandparent->isa('PPI::Structure::Subscript') ) {
+            return 1;
+        }
         my $sib = $ppi_elem->snext_sibling();
-        return 1 if $sib->isa('PPI::Token::Operator') && $sib eq '=>';
+        if ($sib->isa('PPI::Token::Operator') && $sib eq '=>' ) {
+            return 1;
+        }
+        return;
     };
-    return;
+
+    return $is_hash_key;
 }
 
 1;
@@ -227,18 +234,44 @@ __END__
 
 =head1 NAME
 
-Perl::Metrics::Simple::Analsys::File - Does Something Useful
+Perl::Metrics::Simple::Analysis::File - Methods analyzing a single file.
 
 =head1 SYNOPSIS
 
-  use Perl::Metrics::Simple::Analsys::File;
-  my $object = Perl::Metrics::Simple::Analsys::File->new(file => 'path/to/file');
+  use Perl::Metrics::Simple::Analysis::File;
+  my $object = Perl::Metrics::Simple::Analysis::File->new(file => 'path/to/file');
+
+=head1 VERSION
+
+This is VERSION 0.02.
+
+=head1 DESCRIPTION
+
+A B<Perl::Metrics::Simple::Analysis::File> object is created by
+B<Perl::Metrics::Simple> for each file analyzed. These objects are aggregated into
+a B<Perl::Metrics::Simple::Analysis> object by B<Perl::Metrics::Simple>.
+
+In general you will not use this calss directly, instead you will use
+B<Perl::Metrics::Simple>, but there's no harm in exposing the various methods
+this class provides.
 
 =head1 CLASS METHODS
 
 =head2 new
 
+Takes named parameters, current only the I<path> parameter is recognized:
+
+  my $file_results = BPerl::Metrics::Simple::Analysis::File->new( path => $path );
+
+Returns a new B<Perl::Metrics::Simple::Analysis::File> object which has been
+populated with the results of analyzing the file at I<path>.
+
+Throws an exception if the I<path> is missing or unreadable.
+
+
 =head1 OBJECT METHODS
+
+Call on an object.
 
 =head2 all_counts
 
@@ -252,9 +285,117 @@ Takes no arguments and returns a hashref of all counts:
         packages   => $self->packages,
     }
 
+=head2 analyze_main
+
+Takes a B<PPI> document and an arrayref of B<PPI::Statement::Sub> objects
+and returns a hashref with information about the 'main' (non-subroutine)
+portions of the document:
+
+  {
+    lines             => $lines,      # line count outside subs
+    mccabe_complexity => $complexity, # cyclomatic complexity of all non-sub areas
+  };
+
+=head2 get_node_length
+
+Takes a B<PPI> node and returns a count of the newlines it
+contains. B<PPI> norm,ailizes line endings to newlines so
+CR/LF, CR and LF all come out the same.
+
+
+=head2 lines
+
+=head2 main_stats
+
+=head2 measure_complexity
+
+Takes a B<PPI> element and measures the Mccabe Complexity
+(aka Cyclomatic Complexity) of the code. The complexity count is 1 plus
+1 for each logic keyword or operator:
+
+Logic operators:
+
+ ! && || ||= &&= or and xor not ? <<= >>=
+
+Logic keywords:
+
+ for foreach goto if else elsif last next unless until while
+
+=head2 packages
+
+Arrayref of unique packages found in the file.
+
+=head2 path
+
+Path to the file.
+
+=head2 subs
+
+Count of subroutines found.
+
+=head1 STATIC PACKAGE SUBROUTINES
+
+Utility subs used internally, but not harm in exposing them for now.
+
+=head2 Perl::Metrics::Simple::Analysis::File::hashify
+
+Takes an array and returns a hash using the array values
+as the keys and with the values all set to 1.
+
+=head2 Perl::Metrics::Simple::Analysis::File::is_hash_key
+
+Takes a B<PPI::Element> and returns true if the element is a hash key,
+for example C<foo> and C<bar> are hash keys in the following:
+
+  { foo => 123, bar => $a }
+ 
+Returns true if 
+Copied and somehwat simplified from
+http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
+See L<Perl::Critic::Utils>.
+
+=head1 BUGS AND LIMITATIONS
+
+None reported yet ;-)
+
+=head1 DEPENDENCIES
+
+=over 4
+
+=item L<Readonly>
+
+=item L<Statistics::Basic>
+
+=back
+
+=head1 SUPPORT
+
+Via CPAN:
+
+=head2 Disussion Forum
+
+http://www.cpanforum.com/dist/Perl-Metrics-Simple
+
+=head2 Bug Reports
+
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
+
 =head1 AUTHOR
 
-matisse
+    Matisse Enzer
+    CPAN ID: MATISSE
+    Eigenstate Consulting, LLC
+    matisse@eigenstate.net
+    http://www.eigenstate.net/
+
+=head1 LICENSE AND COPYRIGHT
+
+This program is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.
+
+The full text of the license can be found in the
+LICENSE file included with this module.
+
 
 =cut
 

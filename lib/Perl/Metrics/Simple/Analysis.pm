@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.4 2006/11/25 21:32:16 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.5 2006/11/26 02:47:10 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/11/25 21:32:16 $
+# $Date: 2006/11/26 02:47:10 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -99,14 +99,14 @@ sub _get_min_max_values {
     if ( !is_ref( $nodes, 'ARRAY' ) ) {
         confess("Didn't get an ARRAY ref, got '$nodes' instead");
     }
-    my @sorted_values = sort numerically map $_->{$hash_key}, @{$nodes};
+    my @sorted_values = sort numerically map { $_->{$hash_key} } @{$nodes};
     my $min           = $sorted_values[0];
     my $max           = $sorted_values[-1];
     return ( $min, $max, \@sorted_values );
 }
 
 sub numerically {
-    $a <=> $b;
+    return $a <=> $b;
 }
 
 sub _init {
@@ -161,7 +161,7 @@ sub _summary_stats_sub_length {
       _get_min_max_values( $self->subs, 'lines' );
 
     @sub_length{ 'mean', 'median', 'standard_deviation' } =
-       _get_mean_median_std_dev($sub_length{sorted_values});
+      _get_mean_median_std_dev( $sub_length{sorted_values} );
 
     return \%sub_length;
 }
@@ -175,7 +175,7 @@ sub _summary_stats_sub_complexity {
       _get_min_max_values( $self->subs, 'mccabe_complexity' );
 
     @sub_complexity{ 'mean', 'median', 'standard_deviation' } =
-       _get_mean_median_std_dev($sub_complexity{sorted_values});
+      _get_mean_median_std_dev( $sub_complexity{sorted_values} );
 
     return \%sub_complexity;
 }
@@ -185,12 +185,12 @@ sub _summary_stats_main_complexity {
 
     my %main_complexity = ();
 
-    my @main_stats = map $_->{main_stats}, @{ $self->file_stats };
+    my @main_stats = map { $_->{main_stats} } @{ $self->file_stats };
     @main_complexity{ 'min', 'max', 'sorted_values' } =
       _get_min_max_values( \@main_stats, 'mccabe_complexity' );
 
     @main_complexity{ 'mean', 'median', 'standard_deviation' } =
-       _get_mean_median_std_dev($main_complexity{sorted_values});
+      _get_mean_median_std_dev( $main_complexity{sorted_values} );
 
     return \%main_complexity;
 }
@@ -206,21 +206,18 @@ sub is_ref {
 
 sub _get_mean_median_std_dev {
     my $values = shift;
-    my $count = scalar @{$values};
+    my $count  = scalar @{$values};
     if ( $count < 1 ) {
         return;
     }
-    my $mean = sprintf '%.2f',
-      Statistics::Basic::Mean->new( $values )->query;
+    my $mean = sprintf '%.2f', Statistics::Basic::Mean->new($values)->query;
 
-    my $median = sprintf '%.2f',
-      Statistics::Basic::Median->new( $values )->query;
+    my $median = sprintf '%.2f', Statistics::Basic::Median->new($values)->query;
 
     my $standard_deviation = sprintf '%.2f',
-      Statistics::Basic::StdDev->new( $values,
-        $count )->query;
+      Statistics::Basic::StdDev->new( $values, $count )->query;
 
-    return ($mean,$median,$standard_deviation);
+    return ( $mean, $median, $standard_deviation );
 }
 
 1;
@@ -240,6 +237,10 @@ method of the B<Perl::Metrics::Simple> class.
 Normally you would not create objects of this class directly, instead you
 get them by calling the I<analyze_files> method on a B<Perl::Metrics::Simple>
 object.
+
+=head1 VERSION
+
+This is VERSION 0.02.
 
 =head1 DESCRIPTION
 
@@ -263,6 +264,8 @@ as athe argument to new();
 Arrayref of file paths, in the order they were encountered.
 
 =head2 file_count
+
+How many Perl files were found.
 
 =head2 lines
 
@@ -297,9 +300,11 @@ is for all the code in the file B<outside of> any named subroutines.
 
 =head2 packages
 
-Unique packages found in code.
+Arrayref of unique packages found in code.
 
-=head2 packge_count
+=head2 package_count
+
+How many unique packages found.
 
 =head2 subs
 
@@ -308,9 +313,33 @@ in the order encounted.
 
 =head2 sub_count
 
-=head1 BUGS
+How many subroutines found.
+
+=head1 BUGS AND LIMITATIONS
+
+None reported yet ;-)
+
+=head1 DEPENDENCIES
+
+=over 4
+
+=item L<Readonly>
+
+=item L<Statistics::Basic>
+
+=back
 
 =head1 SUPPORT
+
+Via CPAN:
+
+=head2 Disussion Forum
+
+http://www.cpanforum.com/dist/Perl-Metrics-Simple
+
+=head2 Bug Reports
+
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
 
 =head1 AUTHOR
 
@@ -320,7 +349,7 @@ in the order encounted.
     matisse@eigenstate.net
     http://www.eigenstate.net/
 
-=head1 COPYRIGHT
+=head1 LICENSE AND COPYRIGHT
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.4 2006/11/26 02:47:10 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.5 2006/11/26 06:47:43 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/11/26 02:47:10 $
+# $Date: 2006/11/26 06:47:43 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -16,7 +16,7 @@ use Perl::Metrics::Simple::Analysis;
 use PPI;
 use Readonly;
 
-our $VERSION = '0.001';
+our $VERSION = '0.021';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 Readonly::Array our @LOGIC_OPERATORS    =>
@@ -337,12 +337,16 @@ Count of subroutines found.
 
 Utility subs used internally, but not harm in exposing them for now.
 
-=head2 Perl::Metrics::Simple::Analysis::File::hashify
+=head2 hashify
+
+ %hash = Perl::Metrics::Simple::Analysis::File::hashify(@list);
 
 Takes an array and returns a hash using the array values
 as the keys and with the values all set to 1.
 
-=head2 Perl::Metrics::Simple::Analysis::File::is_hash_key
+=head2 is_hash_key
+
+ $boolean = Perl::Metrics::Simple::Analysis::File::is_hash_key($ppi_element);
 
 Takes a B<PPI::Element> and returns true if the element is a hash key,
 for example C<foo> and C<bar> are hash keys in the following:

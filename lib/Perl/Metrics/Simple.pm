@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.6 2006/11/26 02:47:10 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.7 2006/11/26 06:47:43 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/11/26 02:47:10 $
+# $Date: 2006/11/26 06:47:43 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -19,7 +19,7 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.02';
+our $VERSION = '0.021';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
 Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;
@@ -140,21 +140,6 @@ Installs a a script called B<countperl>.
 =head1 USAGE
 
 TODO: Fill in.
-
-
-=head1 PACKAGE PROPERTIES
-
-Readonly values:
-
-Used to measure mccabe_complexity, each occurance adds 1:
-
-    Readonly::Array our @LOGIC_OPERATORS =>
-      qw( && || ||= &&= or and xor ? <<= >>= );
-    Readonly::Hash our %LOGIC_OPERATORS => hashify(@LOGIC_OPERATORS);
-    
-    Readonly::Array our @LOGIC_KEYWORDS =>
-      qw( for foreach goto if else elsif last next unless until while );
-    Readonly::Hash our %LOGIC_KEYWORDS => hashify(@LOGIC_KEYWORDS);
 
 =head1 CLASS METHODS
 

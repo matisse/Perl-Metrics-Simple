@@ -1,5 +1,10 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.021 - Sat Nov 25 22:46:23 PST 2006
+ Mostly changes to improve Kwalitee. See http://cpants.perl.org/kwalitee.html
+ Added pod.
+ Added tests for Pod and Pod coverage.
+
 0.02
   Refactored much code into new Perl::Metrics::Simple::Analysis::File
   Added summary_stats() method to Perl::Metrics::Simple::Analysis

@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.5 2006/11/26 02:47:10 matisse Exp $
-# $Revision: 1.5 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.6 2006/11/26 06:47:43 matisse Exp $
+# $Revision: 1.6 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/11/26 02:47:10 $
+# $Date: 2006/11/26 06:47:43 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -16,7 +16,7 @@ use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
-our $VERSION = '0.02';
+our $VERSION = '0.021';
 
 my %AnalysisData = ();
 my %Files        = ();
@@ -99,13 +99,13 @@ sub _get_min_max_values {
     if ( !is_ref( $nodes, 'ARRAY' ) ) {
         confess("Didn't get an ARRAY ref, got '$nodes' instead");
     }
-    my @sorted_values = sort numerically map { $_->{$hash_key} } @{$nodes};
+    my @sorted_values = sort _numerically map { $_->{$hash_key} } @{$nodes};
     my $min           = $sorted_values[0];
     my $max           = $sorted_values[-1];
     return ( $min, $max, \@sorted_values );
 }
 
-sub numerically {
+sub _numerically {
     return $a <=> $b;
 }
 
@@ -314,6 +314,50 @@ in the order encounted.
 =head2 sub_count
 
 How many subroutines found.
+
+=head2 summary_stats
+
+Returns a data structure of the summary counts for all the files examined:
+
+    {
+        sub_length      => {
+            min           => $min_sub_length,
+            max           => $max_sub_length,
+            sorted_values => \@lengths_of_all_subs,
+            mean          => $average_sub_length,
+            median        => $median_sub_length,
+            standard_deviation => $std_dev_for_sub_lengths,
+         },
+        sub_complexity  => {
+            min           => $min_sub_complexity,
+            max           => $max_sub_complexity,
+            sorted_values => \@complexitys_of_all_subs,
+            mean          => $average_sub_complexity,
+            median        => $median_sub_complexity,
+            standard_deviation => $std_dev_for_sub_complexity,
+        },
+        main_complexity => {
+            min           => $min_main_complexity,
+            max           => $max_main_complexity,
+            sorted_values => \@complexitys_of_all_subs,
+            mean          => $average_main_complexity,
+            median        => $median_main_complexity,
+            standard_deviation => $std_dev_for_main_complexity,
+        },
+    }
+
+
+=head1 STATIC PACKAGE SUBROUTINES
+
+Utility subs used internally, but not harm in exposing them for now.
+Call these with a fully-qualified package name, e.g.
+
+  Perl::Metrics::Simple::Analysis::is_ref($thing,$type)
+
+=head2 is_ref
+
+Takes a I<thing> and a I<type>. Returns true is I<thing> is a reference
+of type I<type>, otherwise returns false.
 
 =head1 BUGS AND LIMITATIONS
 

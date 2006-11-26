@@ -1,34 +1,16 @@
 NAME
     Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 
-SYNOPSIS
-      use Perl::Metrics::Simple;
-      blah blah blah
-
 DESCRIPTION
-    Stub documentation for this module was created by ExtUtils::ModuleMaker.
-    It looks like the author of the extension was negligent enough to leave
-    the stub unedited.
+    Perl::Metrics::Simple is far simpler that Perl::Metrics.
 
-    Blah blah blah.
+    Perl::Metrics::Simple provides just enough methods to run static
+    analysis of one or many Perl files and obtain a few metrics: packages,
+    subroutines, lines of code, and cyclomatic (mccabe) complexity of the
+    subroutines and the "main" portion of the code.
 
-USAGE
-    blah blah
+    Installs a a script called countperl.
 
-CLASS METHODS
-  new
-    Blah blah
-
-OBJECT METHODS
-  analyze_files
-  analyze_one_file
-  find_files
-  get_node_length
-  list_perl_files
-  measure_complexity
-  is_perl_file
-BUGS
-SUPPORT
 AUTHOR
         Matisse Enzer
         CPAN ID: MATISSE
@@ -36,7 +18,7 @@ AUTHOR
         matisse@eigenstate.net
         http://www.eigenstate.net/
 
-COPYRIGHT
+LICENSE AND COPYRIGHT
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
 
@@ -44,5 +26,8 @@ COPYRIGHT
     with this module.
 
 SEE ALSO
-    perl(1).
+    PPI
+    Perl::Critic
+    Perl::Metrics
+    http://en.wikipedia.org/wiki/Cyclomatic_complexity
 

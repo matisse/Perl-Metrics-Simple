@@ -4,8 +4,10 @@ Revision history for Perl module Perl::Metrics::Simple
   Refactored much code into new Perl::Metrics::Simple::Analysis::File
   Added summary_stats() method to Perl::Metrics::Simple::Analysis
      provides min/max/mean/median/standard_deviation info.
-  Added  '!' and  'not' to list of logic operators.
+  Added  '!' and  'not' to list of logic operators that add t complexity scores.
   Installs new script 'countperl' which creates report in text format.
+  Made various changes to satisfy perlcritic.
+  Made a change to list_perl_files() to work with old versions of File::Find.
 
 0.014
   Added 'last', 'next', and 'goto' to list of things that count for complexity.

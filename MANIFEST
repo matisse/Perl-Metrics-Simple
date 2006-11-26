@@ -12,6 +12,8 @@ bin/countperl
 t/001_load.t
 t/0020_find_files.t
 t/0030_analyze.t
+t/0040_statistics.t
+t/0050_file.t
 t/lib/Perl/Metrics/Simple/TestData.pm
 t/test_files/no_packages_nor_subs
 t/test_files/not_a_perl_file

@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Perl-Metrics-Simple
-version: 0.013
+version: 0.02
 author:
 
 abstract: Count packages, subs, lines, etc. of many files.

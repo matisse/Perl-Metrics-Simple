@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.6 2006/11/26 18:36:14 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.7 2006/11/26 18:38:07 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/11/26 18:36:14 $
+# $Date: 2006/11/26 18:38:07 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -368,6 +368,7 @@ Example of complexity 2:
    # There are two possible paths through this code:
    if ( $a ) {
    }
+
 =head2 packages
 
 Arrayref of unique packages found in the file.

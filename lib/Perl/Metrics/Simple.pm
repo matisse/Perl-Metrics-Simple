@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.7 2006/11/26 06:47:43 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.8 2006/11/26 18:36:14 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/11/26 06:47:43 $
+# $Date: 2006/11/26 18:36:14 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -19,7 +19,7 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
 Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;

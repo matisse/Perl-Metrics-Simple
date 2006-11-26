@@ -1,5 +1,9 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.022
+ Line counts now exclude comments and pod.
+ Complexity counts now will be 0 (zero) for code that is only comments/pod.
+
 0.021 - Sat Nov 25 22:46:23 PST 2006
  Mostly changes to improve Kwalitee. See http://cpants.perl.org/kwalitee.html
  Added pod.

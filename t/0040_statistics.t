@@ -26,10 +26,10 @@ sub test_summary_stats {
     my $sub_length       = $analysis->summary_stats->{sub_length};
     cmp_ok( $sub_length->{min},    '==', 1,   'minimum sub length.' );
     cmp_ok( $sub_length->{max},    '==', 9,   'maximum sub length.' );
-    cmp_ok( $sub_length->{mean},   '==', 5.8, 'mean (average) sub length.' );
+    cmp_ok( $sub_length->{mean},   '==', 5.4, 'mean (average) sub length.' );
     cmp_ok( $sub_length->{median}, '==', 5,   'median sub length.' );
     cmp_ok( $sub_length->{standard_deviation},
-        '==', 2.99, 'standard deviation of sub length.' );
+        '==', 3.2, 'standard deviation of sub length.' );
  
     my $sub_complexity      = $analysis->summary_stats->{sub_complexity};
     cmp_ok( $sub_complexity->{min},    '==', 1,   'minimum sub complexity.' );

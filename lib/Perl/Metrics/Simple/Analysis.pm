@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.6 2006/11/26 06:47:43 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.7 2006/11/26 18:36:14 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/11/26 06:47:43 $
+# $Date: 2006/11/26 18:36:14 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -16,7 +16,7 @@ use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 
 my %AnalysisData = ();
 my %Files        = ();
@@ -269,7 +269,7 @@ How many Perl files were found.
 
 =head2 lines
 
-Total lines in all files, including comments.
+Total lines in all files, excluding comments and pod.
 
 =head2 main_stats
 

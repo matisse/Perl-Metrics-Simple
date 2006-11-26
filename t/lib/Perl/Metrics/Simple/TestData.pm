@@ -76,16 +76,16 @@ sub make_test_data {
     my $test_data = bless {
         'no_packages_nor_subs' => {
             path       => "$test_directory/no_packages_nor_subs",
-            lines      => 14,
-            main_stats => { lines => 14, mccabe_complexity => 1, },
+            lines      => 7,
+            main_stats => { lines => 7, mccabe_complexity => 1, },
             subs       => [],
             packages   => [],
         },
         'package_no_subs.pl' => {
             path       => "$test_directory/package_no_subs.pl",
-            lines      => 24,
+            lines      => 17,
             main_stats => {
-                lines             => 24,
+                lines             => 17,
                 mccabe_complexity => 3,
             },
             subs => [
@@ -95,8 +95,8 @@ sub make_test_data {
         },
         'subs_no_package.pl' => {
             path       => "$test_directory/subs_no_package.pl",
-            lines      => 22,
-            main_stats => { lines => 16, mccabe_complexity => 2, },
+            lines      => 13,
+            main_stats => { lines => 9, mccabe_complexity => 2, },
             subs       => [
                 {
                     name              => 'foo',
@@ -106,7 +106,7 @@ sub make_test_data {
                 },
                 {
                     name              => 'bar',
-                    lines             => 5,
+                    lines             => 3,
                     mccabe_complexity => 1,
                     path              => "$test_directory/subs_no_package.pl",
                 }
@@ -115,8 +115,8 @@ sub make_test_data {
         },
         'Module.pm' => {
             path       => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
-            lines      => 45,
-            main_stats => { lines => 22, mccabe_complexity => 1, },
+            lines      => 38,
+            main_stats => { lines => 15, mccabe_complexity => 1, },
             subs       => [
                 {
                     name              => 'new',

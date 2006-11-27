@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.7 2006/11/26 18:38:07 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.8 2006/11/27 06:06:00 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/11/26 18:38:07 $
+# $Date: 2006/11/27 06:06:00 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -77,8 +77,7 @@ sub _init {
 sub _make_pruned_document {
     my $path = shift;
     my $document = PPI::Document->new( $path);
-    $document->prune('PPI::Token::Comment');
-    $document->prune('PPI::Token::Pod');
+    $document= _prune_comments_and_pod($document);
     $document->index_locations();
     $document->readonly(1);
     return $document
@@ -118,9 +117,24 @@ sub analyze_main {
 
 sub get_node_length {
     my ( $self, $node ) = @_;
+    eval {
+        $node = _prune_comments_and_pod($node);
+    };
     my $string = $node->content;
+    return 0 if ( ! length $string );
+    $string =~ s/ \s+ \n /\n/msxg;
+    $string =~ s/ \A \s+ //msx;
     my @newlines = ( $string =~ /$ALL_NEWLINES_REGEX/mxg );
-    return scalar @newlines + 1;
+    my $line_count = scalar @newlines;
+
+    # if the string is not empty and the last character is not a newline then add 1
+    if ( length $string ) {
+        my $last_char = substr $string, -1, 1;
+        if ( $last_char ne "\n" ) {
+            $line_count++;
+        }
+    }
+    return $line_count;
 }
 
 sub path {
@@ -252,7 +266,17 @@ sub is_hash_key {
     return $is_hash_key;
 }
 
+sub _prune_comments_and_pod {
+    my $document = shift;
+
+    $document->prune('PPI::Token::Comment');
+    $document->prune('PPI::Token::Pod');
+    return $document;
+}
+
 1;
+
+
 
 __END__
 
@@ -325,13 +349,13 @@ portions of the document:
 Takes a B<PPI> node and returns a count of the newlines it
 contains. B<PPI> normalizes line endings to newlines so
 CR/LF, CR and LF all come out the same. The line counts reported by
-the various methods in this class all B<exclude> comments and pod
+the various methods in this class all B<exclude> blank lines,
+comment lines and pod
 (the B<PPI> document is pruned before counting.)
-
 
 =head2 lines
 
-Total non-comment/pod lines.
+Total non-blank, non-comment/pod lines.
 
 =head2 main_stats
 

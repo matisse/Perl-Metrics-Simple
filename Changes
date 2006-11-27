@@ -1,6 +1,6 @@
 Revision history for Perl module Perl::Metrics::Simple
 
-0.022
+0.022 - Sun Nov 26 22:08:47 PST 2006
  Line counts now exclude blank lines, comments and pod.
  Complexity counts now will be 0 (zero) for code that is only comments/pod.
 

@@ -80,7 +80,7 @@ sub make_test_data {
             main_stats => {
                 lines             => 4,
                 mccabe_complexity => 1,
-                name              => '{code not in subroutines}',
+                name              => '{code not in named subroutines}',
                 path              => "$test_directory/no_packages_nor_subs",
             },
             subs     => [],
@@ -92,7 +92,7 @@ sub make_test_data {
             main_stats => {
                 lines             => 12,
                 mccabe_complexity => 3,
-                name              => '{code not in subroutines}',
+                name              => '{code not in named subroutines}',
                 path              => "$test_directory/package_no_subs.pl",
             },
             subs => [
@@ -106,7 +106,7 @@ sub make_test_data {
             main_stats => {
                 lines             => 5,
                 mccabe_complexity => 2,
-                name              => '{code not in subroutines}',
+                name              => '{code not in named subroutines}',
                 path              => "$test_directory/subs_no_package.pl",
             },
             subs => [
@@ -131,7 +131,7 @@ sub make_test_data {
             main_stats => {
                 lines             => 6,
                 mccabe_complexity => 1,
-                name              => '{code not in subroutines}',
+                name              => '{code not in named subroutines}',
                 path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
             },
             subs => [

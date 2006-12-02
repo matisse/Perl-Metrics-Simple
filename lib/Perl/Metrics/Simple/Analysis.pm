@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.8 2006/12/02 07:11:20 matisse Exp $
-# $Revision: 1.8 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.9 2006/12/02 17:06:50 matisse Exp $
+# $Revision: 1.9 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/12/02 07:11:20 $
+# $Date: 2006/12/02 17:06:50 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -16,7 +16,7 @@ use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
-our $VERSION = '0.022';
+our $VERSION = '0.03';
 
 my %AnalysisData = ();
 my %Files        = ();
@@ -294,7 +294,7 @@ is for all the code in the file B<outside of> any named subroutines.
                         lines             => 23,
                         mccabe_complexity => 3,
                         path              => '/path/to/file',
-                        name              => '{code not in subroutines}',
+                        name              => '{code not in named subroutines}',
                        },
         },
         ...

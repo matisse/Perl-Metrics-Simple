@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.9 2006/12/02 07:11:20 matisse Exp $
-# $Revision: 1.9 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.10 2006/12/02 17:06:50 matisse Exp $
+# $Revision: 1.10 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/12/02 07:11:20 $
+# $Date: 2006/12/02 17:06:50 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -109,7 +109,7 @@ sub analyze_main {
     $document_without_subs->prune('PPI::Statement::Sub');
     my $complexity = $self->measure_complexity($document_without_subs);
     my $results    = {
-        name              => '{code not in subroutines}',
+        name              => '{code not in named subroutines}',
         lines             => $lines,
         mccabe_complexity => $complexity,
         path              => $self->path,
@@ -344,7 +344,7 @@ portions of the document:
     lines             => $lines,      # Line count outside subs. Skips comments and pod.
     mccabe_complexity => $complexity, # Cyclomatic complexity of all non-sub areas
     path              => '/path/to/file',
-    name              => '{code not in subroutines}',  # always the same name
+    name              => '{code not in named subroutines}',  # always the same name
   };
 
 =head2 get_node_length

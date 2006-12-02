@@ -1,10 +1,12 @@
 Revision history for Perl module Perl::Metrics::Simple
 
-0.03 - Fri Dec  1 23:10:35 PST 2006
- Added name and path keys to the hash for the "main" stats for each file,
- so these hashes have the same structure as those for subroutines.
+0.03 - Sat Dec  2 09:01:41 PST 2006
+ The "main" stats for each file now have the same format as the stats for
+ a subroutine: Added 'name' and 'path' keys to the hash.
+ The 'name' is always:     {code not in named subroutines}
+
  Changed the 'countperl' script to use the new data structure to add
- the {code not in any subroutines} to the list of subroutines it reports.
+ the {code not in named subroutines} to the list of subroutines it reports.
 
 0.022 - Sun Nov 26 22:08:47 PST 2006
  Line counts now exclude blank lines, comments and pod.

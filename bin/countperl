@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.4 2006/12/02 07:11:20 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.5 2006/12/02 17:06:50 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v $
-# $Date: 2006/12/02 07:11:20 $
+# $Date: 2006/12/02 17:06:50 $
 ###############################################################################
 
 use strict;
@@ -171,7 +171,7 @@ The current output format is human-readable text:
 
 =head1 VERSION
 
-This is version 0.01 of C<countperl>.
+This is version 0.03 of F<countperl>.
 
 
 =head1 BUGS AND LIMITATIONS
@@ -206,7 +206,7 @@ http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
 
 =over 4
 
-=item L<Perl::Metrics::Simple> 0.02 (which depends upon L<PPI>.)
+=item L<Perl::Metrics::Simple> 0.03 (which depends upon L<PPI>.)
 
 =item L<Pod::Usage>
 

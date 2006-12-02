@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.8 2006/11/26 18:36:14 matisse Exp $
-# $Revision: 1.8 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.9 2006/12/02 07:11:20 matisse Exp $
+# $Revision: 1.9 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/11/26 18:36:14 $
+# $Date: 2006/12/02 07:11:20 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -19,7 +19,7 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.022';
+our $VERSION = '0.03';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
 Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;
@@ -124,7 +124,7 @@ Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 
 =head1 VERSION
 
-This is VERSION 0.02.
+This is VERSION 0.03
 
 =head1 DESCRIPTION
 
@@ -139,13 +139,14 @@ Installs a a script called B<countperl>.
 
 =head1 USAGE
 
-TODO: Fill in.
+See the F<countperl> script (included with this distribution)
+for a simple example of usage.
 
 =head1 CLASS METHODS
 
 =head2 new
 
-Blah blah
+Takes no arguments and returns a new L<Perl::Metrics::Simple> object.
 
 =head2 is_perl_file
 
@@ -158,26 +159,13 @@ Takes a path and returns true if the target is a Perl file.
 Takes an array of files and or directory paths and returns
 a L<Perl::Metrics::Simple::Analysis> object.
 
-=head2 analyze_one_file
-
 =head2 find_files
-
-=head2 get_node_length
 
 =head2 list_perl_files
 
-=head2 measure_complexity($PPI_node)
-
-Attempts to measure the cyclomatic complexity of a chunk of code.
-
-Takes a L<PPI::Node> and returns the total number of
-logic keywords and logic operators. plus 1. See the C<PACKAGE PROPERTIES> section
-for a list.
-
-See also: http://en.wikipedia.org/wiki/Cyclomatic_complexity
-
-The code for this method was copied from 
-L<Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity>
+Takes a list of one or more paths and returns an
+alphabetically sorted list of only the perl files.
+Uses I<is_perl_file> so may throw an exception if a file is unreadable.
 
 =head2 is_perl_file($path)
 
@@ -225,6 +213,8 @@ LICENSE file included with this module.
 =head1 SEE ALSO
 
 =over 4
+
+=item The F<countperl> script included with this distribution.
 
 =item L<PPI>
 

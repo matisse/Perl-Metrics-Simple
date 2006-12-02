@@ -1,18 +1,18 @@
 #!/usr/bin/perl
 
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.3 2006/11/24 16:28:25 matisse Exp $
-# $Revision: 1.3 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.4 2006/12/02 07:11:20 matisse Exp $
+# $Revision: 1.4 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v $
-# $Date: 2006/11/24 16:28:25 $
+# $Date: 2006/12/02 07:11:20 $
 ###############################################################################
 
 use strict;
 use warnings;
-use Perl::Metrics::Simple qw(0.02);
+use Perl::Metrics::Simple qw(0.03);
 use Pod::Usage;
 
-my $VERSION = 0.01;
+my $VERSION = 0.03;
 
 if ( !@ARGV ) {
     pod2usage( -verbose => 1 );
@@ -36,10 +36,10 @@ Perl files found:                $file_count
 
 Counts
 ------
-total lines:          $lines
-lines of main code:   $main_stats->{lines}
-packages found:       $package_count
-subs/methods:         $sub_count
+total code lines:        $lines
+lines of non-sub code:   $main_stats->{lines}
+packages found:          $package_count
+subs/methods:            $sub_count
 
 Subroutine/Method Size
 ----------------------
@@ -51,7 +51,7 @@ median:               $summary_stats->{sub_length}->{median}
 
 McCabe Complexity
 -----------------
-Main code:
+Code not in any subroutine::
 min:                  $summary_stats->{main_complexity}->{min}
 max                   $summary_stats->{main_complexity}->{max}
 mean:                 $summary_stats->{main_complexity}->{median}
@@ -69,7 +69,9 @@ Tab-delimited list of subroutines, with most complex at top
 -----------------------------------------------------------
 EOS
 
-my @sorted_subs = sort _by_complexity(), @{ $analysis->subs };
+my @main_from_each_file = map { $_->{main_stats} } @{ $analysis->file_stats };
+
+my @sorted_subs = sort _by_complexity(), @{ $analysis->subs }, @main_from_each_file;
 print join( "\t", 'complexity', 'sub', 'path', 'size' ), "\n";
 foreach my $sub (@sorted_subs) {
     my %sub_hash = %{$sub};
@@ -120,16 +122,18 @@ the 'main' portion of each file (everything not in a subroutine.)
 
 =head2 Output Format
 
+Line counts do not include comments nor pod.
+
 The current output format is human-readable text:
 
     Perl files found:                3
     
     Counts
     ------
-    total lines:          856
-    lines of main code:   450
-    packages found:       3
-    subs/methods:         42
+    total code lines:       856
+    lines of non-sub code:  450
+    packages found:           3
+    subs/methods:            42
     
     Subroutine/Method Size
     ----------------------
@@ -141,7 +145,7 @@ The current output format is human-readable text:
     
     McCabe Complexity
     -----------------
-    Main code:
+    Code not in any subroutine::
     min:                  1
     max                   1
     mean:                 1.00

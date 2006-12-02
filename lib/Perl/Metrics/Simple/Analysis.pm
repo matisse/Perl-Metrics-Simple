@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.7 2006/11/26 18:36:14 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.8 2006/12/02 07:11:20 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/11/26 18:36:14 $
+# $Date: 2006/12/02 07:11:20 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -293,6 +293,8 @@ is for all the code in the file B<outside of> any named subroutines.
         main_stats => {
                         lines             => 23,
                         mccabe_complexity => 3,
+                        path              => '/path/to/file',
+                        name              => '{code not in subroutines}',
                        },
         },
         ...

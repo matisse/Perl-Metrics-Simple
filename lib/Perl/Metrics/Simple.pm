@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.9 2006/12/02 07:11:20 matisse Exp $
-# $Revision: 1.9 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.10 2006/12/14 17:09:06 matisse Exp $
+# $Revision: 1.10 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/12/02 07:11:20 $
+# $Date: 2006/12/14 17:09:06 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -19,7 +19,7 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.03';
+our $VERSION = '0.031';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
 Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;
@@ -124,7 +124,7 @@ Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 
 =head1 VERSION
 
-This is VERSION 0.03
+This is VERSION 0.031
 
 =head1 DESCRIPTION
 

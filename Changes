@@ -1,5 +1,10 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.031 - Thu Dec 14 09:05:15 PST 2006
+Fixed bug in the  countperl  script. Was reporting the median instead of mean for
+the summary complexity numbers.
+Thanks to Ovid for spotting this.
+
 0.03 - Sat Dec  2 09:01:41 PST 2006
  The "main" stats for each file now have the same format as the stats for
  a subroutine: Added 'name' and 'path' keys to the hash.

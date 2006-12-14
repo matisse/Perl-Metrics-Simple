@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.10 2006/12/02 17:06:50 matisse Exp $
-# $Revision: 1.10 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.11 2006/12/14 17:09:06 matisse Exp $
+# $Revision: 1.11 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2006/12/02 17:06:50 $
+# $Date: 2006/12/14 17:09:06 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -16,7 +16,7 @@ use Perl::Metrics::Simple::Analysis;
 use PPI;
 use Readonly;
 
-our $VERSION = '0.03';
+our $VERSION = '0.031';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 Readonly::Array our @LOGIC_OPERATORS    =>
@@ -292,7 +292,7 @@ Perl::Metrics::Simple::Analysis::File - Methods analyzing a single file.
 
 =head1 VERSION
 
-This is VERSION 0.03
+This is VERSION 0.031
 
 =head1 DESCRIPTION
 

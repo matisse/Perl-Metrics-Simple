@@ -14,7 +14,7 @@ use lib "$Bin/lib";
 use PPI;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
@@ -56,6 +56,11 @@ sub test_measure_complexity {
     my $all_comment_complexity =
       $file_counter->measure_complexity($all_comment_doc);
     is( $all_comment_complexity, 0, 'Complexity of all-comment code is 0' );
+
+    my $empty_code = q{};
+    my $empty_doc  = PPI::Document->new( \$empty_code );
+    my $empty_doc_complexity = $file_counter->measure_complexity($empty_doc);
+    is($empty_doc_complexity, 0, 'Complexity of empty doc is 0');
 
     my $print_statement_code = 'print "Hello world.\n";';
     my $print_statement_doc  = PPI::Document->new( \$print_statement_code );

@@ -1,10 +1,11 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.10 2006/11/26 06:47:43 matisse Exp $
-# $Revision: 1.10 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.11 2007/01/19 16:29:18 matisse Exp $
+# $Revision: 1.11 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2006/11/26 06:47:43 $
+# $Date: 2007/01/19 16:29:18 $
 ###############################################################################
-
+use strict;
+use warnings;
 use Module::Build;
 
 # See perldoc Module::Build for details of how this works

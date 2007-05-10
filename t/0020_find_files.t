@@ -1,26 +1,39 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v 1.4 2006/10/03 03:53:08 matisse Exp $
-# $Revision: 1.4 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v 1.5 2007/05/10 15:12:27 matisse Exp $
+# $Revision: 1.5 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v $
-# $Date: 2006/10/03 03:53:08 $
+# $Date: 2007/05/10 15:12:27 $
 ###############################################################################
 use strict;
 use warnings;
 use English qw(-no_match_vars);
 use FindBin qw($Bin);
 use Readonly;
-use Test::More tests => 3;
+use Test::More tests => 6;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
 BEGIN { use_ok('Perl::Metrics::Simple'); }
 
 test_find_files();
+test_is_in_skip_list();
 
 exit;
 
 sub set_up {
     my $analyzer = Perl::Metrics::Simple->new();
+}
+
+sub test_is_in_skip_list {
+    my $analyzer = set_up();
+    my @paths_to_skip = qw(
+        /foo/bar/.svn/hello.pl
+        /foo/bar/_darcs/hello.pl
+        /foo/bar/CVS/hello.pl
+    );
+    foreach my $path_to_skip ( @paths_to_skip ) {
+        ok($analyzer->should_be_skipped($path_to_skip), "is_in_skip_list($path_to_skip)");
+    }
 }
 
 sub test_find_files {

@@ -1,14 +1,16 @@
 TODO list for Perl module Perl::Metrics::Simple
 
-- Change the analyze_one_file method to return an object.
-
-- Make the example script get installed - but change the name
-
-- Documentation
-
-- Maybe put statistics methods in Simple.pm ?
-
 - Add percentile-ranking for subroutine size and complexity,
   and/or list top-10 largest, and top-10 most complex subs.
 
+- Add method to allow setting the regexes used to find Perl files.
+
+countperl:
+
+	- Add capability to countperl to take input from STDIN
+	
+	- Add machine-readable (XML?) output option to countperl.
+	
+	- Check for Devel::Cover and/or Pod::Cover and if available, add stats.
+	  (Suggested by Jerrad Pierce)
 

@@ -1,5 +1,10 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.032 Thu May 10 08:07:56 PDT 2007
+- Added    should_be_skipped()  method which causes  find_files()
+  to skip  .svn   CVS  _darcs directories.
+- Better documentation about measuring complexity.
+
 0.031 - Thu Dec 14 09:05:15 PST 2006
 Fixed bug in the  countperl  script. Was reporting the median instead of mean for
 the summary complexity numbers.

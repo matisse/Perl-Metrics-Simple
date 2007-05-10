@@ -1,6 +1,7 @@
 blib
 .cvsignore
 .project
+.settings
 .includepath
 .bak
 .svn

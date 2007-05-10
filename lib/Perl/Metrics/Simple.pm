@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.10 2006/12/14 17:09:06 matisse Exp $
-# $Revision: 1.10 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.11 2007/05/10 15:12:27 matisse Exp $
+# $Revision: 1.11 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2006/12/14 17:09:06 $
+# $Date: 2007/05/10 15:12:27 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -19,9 +19,10 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.031';
+our $VERSION = '0.032';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
+Readonly::Scalar our $SKIP_LIST_REGEX    => qr{ \.svn | _darcs | CVS }xmi;
 Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;
 Readonly::Scalar my $DOT_FILE_REGEX      => qr/ \A [.] /xm;
 
@@ -61,14 +62,22 @@ sub list_perl_files {
     my @files;
 
     my $wanted = sub {
-        if ( $self->is_perl_file($File::Find::name) ) { ## no critic ProhibitPackageVars
-            push @files, $File::Find::name;             ## no critic ProhibitPackageVars
+        return if $self->should_be_skipped($File::Find::name);
+        if ( $self->is_perl_file($File::Find::name) )
+        {    ## no critic ProhibitPackageVars
+            push @files, $File::Find::name;    ## no critic ProhibitPackageVars
         }
     };
 
     File::Find::find( { wanted => $wanted, no_chdir => 1 }, @paths );
 
     return sort @files;
+}
+
+sub should_be_skipped {
+    my ( $self, $fullpath ) = @_;
+    my ( $name, $path, $suffix ) = File::Basename::fileparse($fullpath);
+    return $path =~ $SKIP_LIST_REGEX;
 }
 
 sub is_perl_file {
@@ -132,8 +141,8 @@ Perl::Metrics::Simple is far simpler that Perl::Metrics.
 
 Perl::Metrics::Simple provides just enough methods to run static analysis
 of one or many Perl files and obtain a few metrics: packages, subroutines,
-lines of code, and cyclomatic (mccabe) complexity of the subroutines and
-the "main" portion of the code.
+lines of code, and an approximation of cyclomatic (mccabe) complexity of
+the subroutines and the "main" portion of the code.
 
 Installs a a script called B<countperl>.
 
@@ -175,6 +184,11 @@ otherwise returns false.
 If the file name does not match any of @Perl::Metrics::Simple::PERL_FILE_SUFFIXES
 then the file is opened for reading and the first line examined for a a Perl
 'shebang' line. An exception is thrown if the file cannot be opened in this case.
+
+=head2 should_be_skipped($path)
+
+Returns true if the I<path> should be skipped when looking for Perl files.
+Currently skips  F<.svn>, F<CVS>, and F<_darcs> directories.
 
 =head1 BUGS AND LIMITATIONS
 

@@ -3,6 +3,7 @@ lib/Perl/Metrics/Simple.pm
 lib/Perl/Metrics/Simple/Analysis.pm
 lib/Perl/Metrics/Simple/Analysis/File.pm
 Build.PL
+Makefile.PL
 EXAMPLES
 INSTALL
 LICENSE

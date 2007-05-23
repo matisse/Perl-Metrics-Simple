@@ -1,4 +1,7 @@
 _build
 Build
 blib
+Makefile
+Maekfile.old
 .includepath
+.settings

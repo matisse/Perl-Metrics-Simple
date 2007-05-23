@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.11 2007/01/19 16:29:18 matisse Exp $
-# $Revision: 1.11 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.12 2007/05/23 15:40:48 matisse Exp $
+# $Revision: 1.12 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2007/01/19 16:29:18 $
+# $Date: 2007/05/23 15:40:48 $
 ###############################################################################
 use strict;
 use warnings;
@@ -25,5 +25,5 @@ Module::Build->new(
 	'Test::Pod::Coverage' => 1.04,
     },
     script_files   => { 'bin/countperl' => 1, },
-    add_to_cleanup => [ '*.tar.gz', ],
+    add_to_cleanup => [ '*.tar.gz', 'Makefile', 'Makefile.old' ],
 )->create_build_script;

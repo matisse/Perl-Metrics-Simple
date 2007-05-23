@@ -1,6 +1,6 @@
 ---
 name: Perl-Metrics-Simple
-version: 0.032
+version: 0.033
 author: []
 abstract: 'Count packages, subs, lines, etc. of many files.'
 license: perl
@@ -18,7 +18,7 @@ build_requires:
 provides:
   Perl::Metrics::Simple:
     file: lib/Perl/Metrics/Simple.pm
-    version: 0.032
+    version: 0.033
   Perl::Metrics::Simple::Analysis:
     file: lib/Perl/Metrics/Simple/Analysis.pm
     version: 0.031

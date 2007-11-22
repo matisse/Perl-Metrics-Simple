@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.034 Thu Nov 22 10:15:05 PST 2007
+  Listed core modules used as dependencies.
+  Added Readonly::XS as a reccomended module in Build.PL
+  Small documentation fix for subs() in Perl::Metrics::Simple::Analysis
+  Set VERSION of all .pm files to 0.034
+
 0.033 Wed May 23 08:35:18 PDT 2007
  Added EXAMPLES file
  Added INSTALL file

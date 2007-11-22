@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.10 2006/12/14 17:09:06 matisse Exp $
-# $Revision: 1.10 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.11 2007/11/22 18:21:56 matisse Exp $
+# $Revision: 1.11 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2006/12/14 17:09:06 $
+# $Date: 2007/11/22 18:21:56 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -16,7 +16,7 @@ use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
-our $VERSION = '0.031';
+our $VERSION = '0.034';
 
 my %AnalysisData = ();
 my %Files        = ();
@@ -310,8 +310,17 @@ How many unique packages found.
 
 =head2 subs
 
-Array ref containing names of all named subroutines,
+Array ref containing hashrefs of all named subroutines,
 in the order encounted.
+
+Each hashref has the structure:
+
+    {
+         'lines' => 19,
+         'mccabe_complexity' => 6,
+         'name' => 'databaseRecords',
+         'path' => '../path/to/File.pm',
+    }
 
 =head2 sub_count
 

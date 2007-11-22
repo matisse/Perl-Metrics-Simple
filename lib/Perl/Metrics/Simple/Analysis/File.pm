@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.12 2007/05/10 15:12:27 matisse Exp $
-# $Revision: 1.12 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.13 2007/11/22 18:21:56 matisse Exp $
+# $Revision: 1.13 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2007/05/10 15:12:27 $
+# $Date: 2007/11/22 18:21:56 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -16,7 +16,7 @@ use Perl::Metrics::Simple::Analysis;
 use PPI;
 use Readonly;
 
-our $VERSION = '0.032';
+our $VERSION = '0.034';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 Readonly::Array our @LOGIC_OPERATORS    =>
@@ -371,14 +371,18 @@ through the code.
 We use a simplified method for counting this, which ignores things like
 the possibility that a 'use' statement could throw an exception.
 
-The actual measurement we for a chunk of code is 1 plus
+The actual measurement we use for a chunk of code is 1 plus
 1 each logic keyword or operator:
 
 =head3 Logic operators:
 
+See I<@Perl::Metrics::Simple::Analysis::File::LOGIC_OPERATORS>
+
  ! && || ||= &&= or and xor not ? <<= >>=
 
 =head3 Logic keywords:
+
+See I<@Perl::Metrics::Simple::Analysis::File::LOGIC_KEYWORDS>
 
  for foreach goto if else elsif last next unless until while
 
@@ -446,7 +450,6 @@ for example C<foo> and C<bar> are hash keys in the following:
 
   { foo => 123, bar => $a }
  
-Returns true if 
 Copied and somehwat simplified from
 http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
 See L<Perl::Critic::Utils>.
@@ -461,7 +464,7 @@ None reported yet ;-)
 
 =item L<Readonly>
 
-=item L<Statistics::Basic>
+=item L<Perl::Metrics::Simple::Analysis>
 
 =back
 

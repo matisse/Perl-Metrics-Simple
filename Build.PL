@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.13 2007/11/22 18:21:56 matisse Exp $
-# $Revision: 1.13 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.14 2007/12/27 05:03:20 matisse Exp $
+# $Revision: 1.14 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2007/11/22 18:21:56 $
+# $Date: 2007/12/27 05:03:20 $
 ###############################################################################
 use strict;
 use warnings;
@@ -17,6 +17,7 @@ Module::Build->new(
     requires    => {
         'Carp'                      => 0,
         'File::Find'                => 1.01,
+        'IO::File'                  => 1.14,
         'Readonly'                  => 1.03,
         'PPI'                       => 1.113,
         'Statistics::Basic::StdDev' => 0,

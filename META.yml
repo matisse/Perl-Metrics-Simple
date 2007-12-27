@@ -9,6 +9,7 @@ resources:
 requires:
   Carp: 0
   File::Find: 1.01
+  IO::File: 1.14
   PPI: 1.113
   Pod::Usage: 0
   Readonly: 1.03

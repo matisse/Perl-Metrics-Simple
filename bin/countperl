@@ -1,18 +1,20 @@
 #!/usr/bin/perl
 
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.6 2006/12/14 17:09:06 matisse Exp $
-# $Revision: 1.6 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.7 2007/12/27 05:11:40 matisse Exp $
+# $Revision: 1.7 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v $
-# $Date: 2006/12/14 17:09:06 $
+# $Date: 2007/12/27 05:11:40 $
 ###############################################################################
 
+package main;
 use strict;
 use warnings;
+use Carp qw(croak);
 use Perl::Metrics::Simple qw(0.03);
 use Pod::Usage;
 
-my $VERSION = 0.031;
+our $VERSION = 0.035;
 
 if ( !@ARGV ) {
     pod2usage( -verbose => 1 );
@@ -30,7 +32,7 @@ my $file_stats    = $analysis->file_stats;
 
 my $summary_stats = $analysis->summary_stats;
 
-print <<"EOS";
+print <<"EOS" or croak('Could not print!');
 
 Perl files found:                $file_count
 

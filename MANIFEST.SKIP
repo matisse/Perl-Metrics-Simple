@@ -6,6 +6,7 @@ blib
 .bak
 .svn
 _build
-Build
+^Build$
 CVS
 \.tar\.gz$
+^Perl-Metrics-Simple

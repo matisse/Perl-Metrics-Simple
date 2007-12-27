@@ -1,17 +1,17 @@
+bin/countperl
+Build.PL
 Changes
+EXAMPLES
+INSTALL
 lib/Perl/Metrics/Simple.pm
 lib/Perl/Metrics/Simple/Analysis.pm
 lib/Perl/Metrics/Simple/Analysis/File.pm
-Build.PL
-Makefile.PL
-EXAMPLES
-INSTALL
 LICENSE
+Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 README
-bin/countperl
 t/001_load.t
 t/0020_find_files.t
 t/0030_analyze.t
@@ -20,6 +20,8 @@ t/0050_file.t
 t/0901_pod.t
 t/0902_pod_coverage.t
 t/lib/Perl/Metrics/Simple/TestData.pm
+t/perlcritic.t
+t/perlcriticrc
 t/test_files/no_packages_nor_subs
 t/test_files/not_a_perl_file
 t/test_files/package_no_subs.pl

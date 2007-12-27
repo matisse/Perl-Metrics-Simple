@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.13 2007/11/22 18:21:56 matisse Exp $
-# $Revision: 1.13 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.14 2007/12/27 04:43:44 matisse Exp $
+# $Revision: 1.14 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2007/11/22 18:21:56 $
+# $Date: 2007/12/27 04:43:44 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -238,7 +238,8 @@ sub _iterate_over_subs {
 # Copied from
 # http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
 sub hashify {
-    return map { $_ => 1 } @_;
+    my @hash_keys = @_;
+    return map { $_ => 1 } @hash_keys;
 }
 
 #-------------------------------------------------------------------------

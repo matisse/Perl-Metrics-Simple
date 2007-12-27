@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.13 2007/11/22 18:21:56 matisse Exp $
-# $Revision: 1.13 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.14 2007/12/27 04:59:52 matisse Exp $
+# $Revision: 1.14 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2007/11/22 18:21:56 $
+# $Date: 2007/12/27 04:59:52 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -14,6 +14,7 @@ use Data::Dumper;
 use English qw(-no_match_vars);
 use File::Basename qw(fileparse);
 use File::Find qw(find);
+use IO::File;
 use PPI;
 use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
@@ -46,8 +47,7 @@ sub analyze_files {
 }
 
 sub find_files {
-    my $self                  = shift;
-    my @directories_and_files = @_;
+    my ($self, @directories_and_files) = @_;
     foreach my $path (@directories_and_files) {
         if ( !-r $path ) {
             confess "Path '$path' is not readable!";
@@ -95,13 +95,13 @@ sub is_perl_file {
 sub _has_perl_shebang {
     my $path = shift;
 
-    open my $fh, '<', $path;
+    my $fh = IO::File->new( $path, '<' );
     if ( !-r $fh ) {
         cluck "Could not open '$path' for reading: $OS_ERROR";
         return;
     }
     my $first_line = <$fh>;
-    close $fh;
+    $fh->close();
     return if ( !$first_line );
     return $first_line =~ $PERL_SHEBANG_REGEX;
 }

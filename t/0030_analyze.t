@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.13 2007/12/30 20:45:48 matisse Exp $
-# $Revision: 1.13 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.14 2007/12/30 20:46:23 matisse Exp $
+# $Revision: 1.14 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2007/12/30 20:45:48 $
+# $Date: 2007/12/30 20:46:23 $
 ###############################################################################
 
 use strict;
@@ -12,6 +12,7 @@ use Data::Dumper;
 use File::Spec qw();
 use FindBin qw($Bin);
 use lib "$Bin/lib";
+use Perl::Metrics::Simple::Analysis::File;
 use Perl::Metrics::Simple::TestData;
 use Readonly;
 use Test::More tests => 25;

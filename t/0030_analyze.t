@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.15 2007/12/30 20:48:12 matisse Exp $
-# $Revision: 1.15 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.16 2007/12/30 21:03:46 matisse Exp $
+# $Revision: 1.16 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2007/12/30 20:48:12 $
+# $Date: 2007/12/30 21:03:46 $
 ###############################################################################
 
 use strict;
@@ -14,7 +14,7 @@ use FindBin qw($Bin);
 use lib "$Bin/lib";
 use Perl::Metrics::Simple::TestData;
 use Readonly;
-use Test::More tests => 25;
+use Test::More tests => 29;    
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
@@ -30,6 +30,7 @@ test_new();
 test_analyze_one_file();
 test_analyze_files();
 test_analysis();
+test_is_ref();
 
 exit;
 
@@ -196,5 +197,20 @@ sub test_new {
 
     isa_ok( $analysis, 'Perl::Metrics::Simple::Analysis' );
 
+    return 1;
+}
+
+sub test_is_ref {
+    my $not_a_ref = 'hello';
+    is( Perl::Metrics::Simple::Analysis::is_ref( $not_a_ref, 'ARRAY' ),
+        undef, 'is_ref() returns undef on a string.' );
+    my $array_ref = [];
+    ok( Perl::Metrics::Simple::Analysis::is_ref( $array_ref, 'ARRAY' ),
+        'is_ref() returns true for ARRAY ref.' );
+    my $hash_ref = {};
+    ok( Perl::Metrics::Simple::Analysis::is_ref( $hash_ref, 'HASH' ),
+        'is_ref() returns true for HASH ref.' );
+    is( Perl::Metrics::Simple::Analysis::is_ref( $array_ref, 'HASH' ),
+        undef, 'is_ref() knows an array ref is not a HASH' );
     return 1;
 }

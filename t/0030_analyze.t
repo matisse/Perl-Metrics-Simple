@@ -1,57 +1,57 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.12 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.12 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.13 2007/12/30 20:45:48 matisse Exp $
+# $Revision: 1.13 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2006/11/23 22:25:48 $
+# $Date: 2007/12/30 20:45:48 $
 ###############################################################################
 
 use strict;
 use warnings;
 use English qw(-no_match_vars);
 use Data::Dumper;
+use File::Spec qw();
 use FindBin qw($Bin);
 use lib "$Bin/lib";
 use Perl::Metrics::Simple::TestData;
 use Readonly;
-use Test::More tests => 23;
+use Test::More tests => 25;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
 
 BEGIN {
     use_ok('Perl::Metrics::Simple')
-      || BAIL_OUT('Could not compile Perl::Metrics::Simple');
+        || BAIL_OUT('Could not compile Perl::Metrics::Simple');
     use_ok('Perl::Metrics::Simple::Analysis::File')
-      || BAIL_OUT('Could not compile Perl::Metrics::Simple::Analysis::File');
+        || BAIL_OUT('Could not compile Perl::Metrics::Simple::Analysis::File');
 }
 
 test_analyze_one_file();
 test_analyze_files();
 test_analysis();
+test_new();
 
 exit;
 
 sub set_up {
-    my $test_data_object =
-      Perl::Metrics::Simple::TestData->new( test_directory => $TEST_DIRECTORY );
+    my $test_data_object = Perl::Metrics::Simple::TestData->new(
+        test_directory => $TEST_DIRECTORY );
     return $test_data_object;
 }
 
 sub test_analyze_one_file {
     my $test_data_object = set_up();
-    my $test_data = $test_data_object->get_test_data;
-    my $no_package_no_sub_expected_result =
-      $test_data->{'no_packages_nor_subs'};
-    my $analysis =
-      Perl::Metrics::Simple::Analysis::File->new(
+    my $test_data        = $test_data_object->get_test_data;
+    my $no_package_no_sub_expected_result
+        = $test_data->{'no_packages_nor_subs'};
+    my $analysis = Perl::Metrics::Simple::Analysis::File->new(
         path => $no_package_no_sub_expected_result->{'path'} );
     is_deeply( $analysis->packages, [], 'Analysis of file with no packages.' );
     is_deeply( $analysis->subs,     [], 'Analysis of file with no subs.' );
 
-    my $has_package_no_subs_expected_result =
-      $test_data->{'package_no_subs.pl'};
-    my $new_analysis =
-      Perl::Metrics::Simple::Analysis::File->new(
+    my $has_package_no_subs_expected_result
+        = $test_data->{'package_no_subs.pl'};
+    my $new_analysis = Perl::Metrics::Simple::Analysis::File->new(
         path => $has_package_no_subs_expected_result->{'path'} );
     is_deeply(
         $new_analysis->packages,
@@ -62,15 +62,13 @@ sub test_analyze_one_file {
         'Analysis of file with one package and no subs.' );
 
     my $has_subs_expected_result = $test_data->{'subs_no_package.pl'};
-    my $has_subs_analysis        =
-      Perl::Metrics::Simple::Analysis::File->new(
+    my $has_subs_analysis        = Perl::Metrics::Simple::Analysis::File->new(
         path => $has_subs_expected_result->{'path'} );
     is_deeply( $has_subs_analysis->all_counts,
         $has_subs_expected_result, 'analyze_one_file() subs_no_package.pl' );
 
     my $has_subs_and_package_expected_result = $test_data->{'Module.pm'};
-    my $subs_and_package_analysis            =
-      Perl::Metrics::Simple::Analysis::File->new(
+    my $subs_and_package_analysis = Perl::Metrics::Simple::Analysis::File->new(
         path => $has_subs_and_package_expected_result->{'path'} );
     is_deeply(
         $subs_and_package_analysis->all_counts,
@@ -80,17 +78,23 @@ sub test_analyze_one_file {
 }
 
 sub test_analyze_files {
-    my $test_data_object     = set_up();
-    my $test_data            = $test_data_object->get_test_data;
-    my $analyzer             = Perl::Metrics::Simple->new();
-    my $analysis_of_one_file =
-      $analyzer->analyze_files( $test_data->{'Module.pm'}->{path} );
+    my $test_data_object = set_up();
+    my $test_data        = $test_data_object->get_test_data;
+    my $analyzer         = Perl::Metrics::Simple->new();
+    my $analysis_of_one_file
+        = $analyzer->analyze_files( $test_data->{'Module.pm'}->{path} );
     isa_ok( $analysis_of_one_file, 'Perl::Metrics::Simple::Analysis' );
     my $expected_from_one_file = $test_data->{'Module.pm'};
-    is( scalar @{ $analysis_of_one_file->data }, 1, 'Analysis has only 1 element.');
-    isa_ok( $analysis_of_one_file->data->[0], 'Perl::Metrics::Simple::Analysis::File');
-    is_deeply( $analysis_of_one_file->data->[0]->all_counts, $expected_from_one_file,
-        'analyze_files() when given a single file path.' ) || diag Dumper $analysis_of_one_file->data;
+    is( scalar @{ $analysis_of_one_file->data },
+        1, 'Analysis has only 1 element.' );
+    isa_ok(
+        $analysis_of_one_file->data->[0],
+        'Perl::Metrics::Simple::Analysis::File'
+    );
+    is_deeply( $analysis_of_one_file->data->[0]->all_counts,
+        $expected_from_one_file,
+        'analyze_files() when given a single file path.' )
+        || diag Dumper $analysis_of_one_file->data;
 
     my $analysis = $analyzer->analyze_files($TEST_DIRECTORY);
     my @expected = (
@@ -99,9 +103,14 @@ sub test_analyze_files {
         $test_data->{'package_no_subs.pl'},
         $test_data->{'subs_no_package.pl'},
     );
-    is( scalar @{ $analysis->data }, scalar @expected, 'analayze_files() gets right number of files.');
+    is( scalar @{ $analysis->data },
+        scalar @expected,
+        'analayze_files() gets right number of files.'
+    );
+
     for my $i ( scalar @expected ) {
-        is_deeply( $analysis->data->[$i], $expected[$i], 'Got expected results for test file.');
+        is_deeply( $analysis->data->[$i],
+            $expected[$i], 'Got expected results for test file.' );
     }
 }
 
@@ -113,7 +122,7 @@ sub test_analysis {
 
     my $expected_lines;
     map { $expected_lines += $test_data->{$_}->{lines} }
-      keys %{$test_data};
+        keys %{$test_data};
     is( $analysis->lines, $expected_lines,
         'analysis->lines() returns correct number' );
 
@@ -125,8 +134,7 @@ sub test_analysis {
     );
     is_deeply( $analysis->files, \@expected_files,
         'analysis->files() contains expected files.' );
-    is(
-        $analysis->file_count,
+    is( $analysis->file_count,
         scalar @expected_files,
         'file_count() returns correct number.'
     );
@@ -138,8 +146,7 @@ sub test_analysis {
     );
     is_deeply( $analysis->packages, \@expected_packages,
         'analysis->packages() returns expected list.' );
-    is(
-        $analysis->package_count,
+    is( $analysis->package_count,
         scalar @expected_packages,
         'analysis->package_count returns correct number.'
     );
@@ -155,8 +162,7 @@ sub test_analysis {
     is_deeply( $analysis->subs, \@expected_subs,
         'analysis->subs() returns expected list.' );
 
-    is(
-        $analysis->sub_count,
+    is( $analysis->sub_count,
         scalar @expected_subs,
         'analysis->subs_count returns correct number.'
     );
@@ -171,3 +177,24 @@ sub test_analysis {
     return 1;
 }
 
+sub test_new {
+    eval { my $analysis = Perl::Metrics::Simple::Analysis->new() };
+    like(
+        $EVAL_ERROR,
+        qr/Did not supply an arryref of analysis data/,
+        'new() throws exception when no data supplied.'
+    );
+
+    my $test_path_1 = File::Spec->join( $TEST_DIRECTORY, 'package_no_subs.pl' );
+    my $file_object_1
+        = Perl::Metrics::Simple::Analysis::File->new( path => $test_path_1 );
+    my $test_path_2 = File::Spec->join( $TEST_DIRECTORY, 'subs_no_package.pl' );
+    my $file_object_2
+        = Perl::Metrics::Simple::Analysis::File->new( path => $test_path_2 );
+    my $analysis = Perl::Metrics::Simple::Analysis->new(
+        [ $file_object_1, $file_object_2 ] );
+
+    isa_ok( $analysis, 'Perl::Metrics::Simple::Analysis' );
+
+    return 1;
+}

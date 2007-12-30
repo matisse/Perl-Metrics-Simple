@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.11 2007/11/22 18:21:56 matisse Exp $
-# $Revision: 1.11 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.12 2007/12/30 21:24:42 matisse Exp $
+# $Revision: 1.12 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2007/11/22 18:21:56 $
+# $Date: 2007/12/30 21:24:42 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -33,7 +33,7 @@ sub new {
         confess 'Did not supply an arryref of analysis data.';
     }
     my $self = {};
-    bless $self, ref $class || $class;
+    bless $self, $class;
     $self->_init($analysis_data);    # Load object properties
     return $self;
 }
@@ -110,8 +110,8 @@ sub _numerically {
 }
 
 sub _init {
-    my ( $self, $analysis_data ) = @_;
-    $AnalysisData{$self} = $analysis_data;
+    my ( $self, $file_objects ) = @_;
+    $AnalysisData{$self} = $file_objects;
 
     my @all_files  = ();
     my @packages   = ();
@@ -121,11 +121,11 @@ sub _init {
     my %main_stats = ( lines => 0, mccabe_complexity => 0 );
 
     foreach my $file ( @{ $self->data() } ) {
-        $lines                         += $file->lines;
-        $main_stats{lines}             += $file->main_stats->{lines};
+        $lines                         += $file->lines();
+        $main_stats{lines}             += $file->main_stats()->{lines};
         $main_stats{mccabe_complexity} +=
-          $file->main_stats->{mccabe_complexity};
-        push @all_files, $file->path;
+          $file->main_stats()->{mccabe_complexity};
+        push @all_files, $file->path();
         push @file_stats,
           { path => $file->path, main_stats => $file->main_stats };
         push @packages, @{ $file->packages };
@@ -138,7 +138,7 @@ sub _init {
     $Packages{$self}     = \@packages;
     $Lines{$self}        = $lines;
     $Subs{$self}         = \@subs;
-    $SummaryStats{$self} = $self->_make_summary_stats;
+    $SummaryStats{$self} = $self->_make_summary_stats();
     return 1;
 }
 
@@ -249,15 +249,15 @@ This is VERSION 0.031.
 
 =head2 new
 
-  $analysis = Perl::Metrics::Simple::Analsys->new( $array_of_data )
+  $analysis = Perl::Metrics::Simple::Analsys->new( \@file_objects )
 
-Takes an arrayref of data and returns a new  Perl::Metrics::Simple::Analysis
-object.
+Takes an arrayref of B<Perl::Metrics::Simple::Analysis::File> objects
+and returns a new Perl::Metrics::Simple::Analysis object.
 
 =head2 data
 
-The raw data for the analysis. This is the arryref you passed
-as athe argument to new();
+The raw data for the analysis. This is the arrayref you passed
+as the argument to new();
 
 =head2 files
 

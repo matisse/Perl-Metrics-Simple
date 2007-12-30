@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.14 2007/12/27 04:43:44 matisse Exp $
-# $Revision: 1.14 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.15 2007/12/30 21:37:31 matisse Exp $
+# $Revision: 1.15 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2007/12/27 04:43:44 $
+# $Date: 2007/12/30 21:37:31 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -16,7 +16,7 @@ use Perl::Metrics::Simple::Analysis;
 use PPI;
 use Readonly;
 
-our $VERSION = '0.034';
+our $VERSION = '0.1';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
 Readonly::Array our @LOGIC_OPERATORS    =>
@@ -289,7 +289,7 @@ Perl::Metrics::Simple::Analysis::File - Methods analyzing a single file.
 
 =head1 VERSION
 
-This is VERSION 0.031
+This is VERSION 0.1
 
 =head1 DESCRIPTION
 
@@ -297,7 +297,7 @@ A B<Perl::Metrics::Simple::Analysis::File> object is created by
 B<Perl::Metrics::Simple> for each file analyzed. These objects are aggregated into
 a B<Perl::Metrics::Simple::Analysis> object by B<Perl::Metrics::Simple>.
 
-In general you will not use this calss directly, instead you will use
+In general you will not use this class directly, instead you will use
 B<Perl::Metrics::Simple>, but there's no harm in exposing the various methods
 this class provides.
 

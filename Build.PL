@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.14 2007/12/27 05:03:20 matisse Exp $
-# $Revision: 1.14 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.15 2007/12/30 21:37:31 matisse Exp $
+# $Revision: 1.15 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2007/12/27 05:03:20 $
+# $Date: 2007/12/30 21:37:31 $
 ###############################################################################
 use strict;
 use warnings;
@@ -16,6 +16,8 @@ Module::Build->new(
     license     => 'perl',
     requires    => {
         'Carp'                      => 0,
+        'Data::Dumper'              => 0,
+        'File::Basename'            => 0,
         'File::Find'                => 1.01,
         'IO::File'                  => 1.14,
         'Readonly'                  => 1.03,
@@ -29,7 +31,10 @@ Module::Build->new(
         'Readonly::XS' => 1.02, # Speeds up Readonly scalars
     },
     build_requires => {
+        'Data::Dumper'        => 0,
+        'File::Spec'          => 0,
         'Module::Build'       => 0.2612,
+        'Readonly'            => 1.03,
         'Test::Pod'           => 1.00,
         'Test::Pod::Coverage' => 1.04,
     },

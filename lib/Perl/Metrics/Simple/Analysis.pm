@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.12 2007/12/30 21:24:42 matisse Exp $
-# $Revision: 1.12 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.13 2007/12/30 21:37:32 matisse Exp $
+# $Revision: 1.13 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2007/12/30 21:24:42 $
+# $Date: 2007/12/30 21:37:32 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -16,7 +16,7 @@ use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
-our $VERSION = '0.034';
+our $VERSION = '0.1';
 
 my %AnalysisData = ();
 my %Files        = ();
@@ -240,7 +240,7 @@ object.
 
 =head1 VERSION
 
-This is VERSION 0.031.
+This is VERSION 0.1
 
 =head1 DESCRIPTION
 
@@ -342,7 +342,7 @@ Returns a data structure of the summary counts for all the files examined:
         sub_complexity  => {
             min           => $min_sub_complexity,
             max           => $max_sub_complexity,
-            sorted_values => \@complexitys_of_all_subs,
+            sorted_values => \@complexities_of_all_subs,
             mean          => $average_sub_complexity,
             median        => $median_sub_complexity,
             standard_deviation => $std_dev_for_sub_complexity,
@@ -350,7 +350,7 @@ Returns a data structure of the summary counts for all the files examined:
         main_complexity => {
             min           => $min_main_complexity,
             max           => $max_main_complexity,
-            sorted_values => \@complexitys_of_all_subs,
+            sorted_values => \@complexities_of_all_subs,
             mean          => $average_main_complexity,
             median        => $median_main_complexity,
             standard_deviation => $std_dev_for_main_complexity,
@@ -360,10 +360,10 @@ Returns a data structure of the summary counts for all the files examined:
 
 =head1 STATIC PACKAGE SUBROUTINES
 
-Utility subs used internally, but not harm in exposing them for now.
+Utility subs used internally, but no harm in exposing them for now.
 Call these with a fully-qualified package name, e.g.
 
-  Perl::Metrics::Simple::Analysis::is_ref($thing,$type)
+  Perl::Metrics::Simple::Analysis::is_ref($thing,'ARRAY')
 
 =head2 is_ref
 

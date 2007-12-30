@@ -1,7 +1,7 @@
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Makefile.PL,v $
-# $Date: 2007/11/22 18:21:56 $
+# $Date: 2007/12/30 21:37:30 $
 #
 # ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
 ###############################################################################
@@ -21,7 +21,11 @@ WriteMakefile(
     PL_FILES      => {},
     PREREQ_PM     => {
         'Carp'                      => 0,
-        'File::Find'                => 1.01,
+        'Data::Dumper'              => 0,
+        'File::Basename'            => 0,
+        'File::Find'                => 1.01,                 
+        'File::Spec'                => 0,
+        'IO::File'                  => 1.14,
         'Readonly'                  => 1.03,
         'PPI'                       => 1.113,
         'Statistics::Basic::StdDev' => 0,

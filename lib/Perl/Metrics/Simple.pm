@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.14 2007/12/27 04:59:52 matisse Exp $
-# $Revision: 1.14 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.15 2007/12/30 21:37:31 matisse Exp $
+# $Revision: 1.15 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2007/12/27 04:59:52 $
+# $Date: 2007/12/30 21:37:31 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -20,7 +20,7 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.034';
+our $VERSION = '0.1';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
 Readonly::Scalar our $SKIP_LIST_REGEX    => qr{ \.svn | _darcs | CVS }xmi;
@@ -133,18 +133,18 @@ Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 
 =head1 VERSION
 
-This is VERSION 0.031
+This is VERSION 0.1
 
 =head1 DESCRIPTION
 
-Perl::Metrics::Simple is far simpler that Perl::Metrics.
+Perl::Metrics::Simple is far simpler than Perl::Metrics.
 
 Perl::Metrics::Simple provides just enough methods to run static analysis
 of one or many Perl files and obtain a few metrics: packages, subroutines,
-lines of code, and an approximation of cyclomatic (mccabe) complexity of
+lines of code, and an approximation of cyclomatic (mccabe) complexity for
 the subroutines and the "main" portion of the code.
 
-Installs a a script called B<countperl>.
+Installs a script called B<countperl>.
 
 =head1 USAGE
 

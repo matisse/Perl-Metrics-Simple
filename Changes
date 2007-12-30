@@ -1,5 +1,10 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.1 Sun Dec 30 13:30:34 PST 2007
+  No feature changes.
+  Improved test coverage, documentation.
+  Listed core modules as requirements in Build.PL and Makefile.PL
+
 0.034 Thu Nov 22 10:15:05 PST 2007
   Listed core modules used as dependencies.
   Added Readonly::XS as a reccomended module in Build.PL

@@ -5,3 +5,4 @@ Makefile
 Maekfile.old
 .includepath
 .settings
+pm_to_blib

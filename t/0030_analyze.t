@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.16 2007/12/30 21:03:46 matisse Exp $
-# $Revision: 1.16 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.17 2007/12/30 21:17:31 matisse Exp $
+# $Revision: 1.17 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2007/12/30 21:03:46 $
+# $Date: 2007/12/30 21:17:31 $
 ###############################################################################
 
 use strict;
@@ -14,7 +14,7 @@ use FindBin qw($Bin);
 use lib "$Bin/lib";
 use Perl::Metrics::Simple::TestData;
 use Readonly;
-use Test::More tests => 29;    
+use Test::More tests => 31;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
@@ -31,6 +31,8 @@ test_analyze_one_file();
 test_analyze_files();
 test_analysis();
 test_is_ref();
+test_get_min_max_values();
+test_get_mean_median_std_dev();
 
 exit;
 
@@ -213,4 +215,25 @@ sub test_is_ref {
     is( Perl::Metrics::Simple::Analysis::is_ref( $array_ref, 'HASH' ),
         undef, 'is_ref() knows an array ref is not a HASH' );
     return 1;
+}
+
+sub test_get_min_max_values {
+    eval { Perl::Metrics::Simple::Analysis::_get_min_max_values('some-string') };
+    like(
+        $EVAL_ERROR,
+        qr/Didn't get an ARRAY ref/,
+        '_get_min_max_values() throws exception when no array ref passed.'
+    );
+    return 1;
+}
+
+sub test_get_mean_median_std_dev {
+    my @empty_array = ();
+    is( Perl::Metrics::Simple::Analysis::_get_mean_median_std_dev(
+            \@empty_array
+        ),
+        undef,
+        '_get_mean_median_std_dev() returns undef when passed empty array.'
+    );
+    return 1;    
 }

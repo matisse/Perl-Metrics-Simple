@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.15 2007/12/30 21:37:31 matisse Exp $
-# $Revision: 1.15 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.16 2008/03/15 18:07:51 matisse Exp $
+# $Revision: 1.16 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2007/12/30 21:37:31 $
+# $Date: 2008/03/15 18:07:51 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -20,7 +20,7 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.1';
+our $VERSION = '0.11';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
 Readonly::Scalar our $SKIP_LIST_REGEX    => qr{ \.svn | _darcs | CVS }xmi;

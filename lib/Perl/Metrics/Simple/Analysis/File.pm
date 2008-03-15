@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.15 2007/12/30 21:37:31 matisse Exp $
-# $Revision: 1.15 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.16 2008/03/15 18:07:52 matisse Exp $
+# $Revision: 1.16 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2007/12/30 21:37:31 $
+# $Date: 2008/03/15 18:07:52 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -16,15 +16,16 @@ use Perl::Metrics::Simple::Analysis;
 use PPI;
 use Readonly;
 
-our $VERSION = '0.1';
+our $VERSION = '0.11';
 
-Readonly::Scalar my $ALL_NEWLINES_REGEX => qr/ ( \n ) /xm;
-Readonly::Array our @LOGIC_OPERATORS    =>
-  qw( ! && || ||= &&= or and xor not ? <<= >>= );
+Readonly::Scalar my $ALL_NEWLINES_REGEX =>
+    qr/ ( \Q$INPUT_RECORD_SEPARATOR\E ) /xm;
+Readonly::Array our @LOGIC_OPERATORS =>
+    qw( ! && || ||= &&= or and xor not ? <<= >>= );
 Readonly::Hash our %LOGIC_OPERATORS => hashify(@LOGIC_OPERATORS);
 
 Readonly::Array our @LOGIC_KEYWORDS =>
-  qw( for foreach goto if else elsif last next unless until while );
+    qw( for foreach goto if else elsif last next unless until while );
 Readonly::Hash our %LOGIC_KEYWORDS => hashify(@LOGIC_KEYWORDS);
 
 # Private instance variables:
@@ -62,10 +63,10 @@ sub _init {
 
     my @sub_analysis = ();
     my $sub_elements = $document->find('PPI::Statement::Sub');
-    @sub_analysis = @{ $self->_iterate_over_subs( $sub_elements ) };
+    @sub_analysis = @{ $self->_iterate_over_subs($sub_elements) };
 
-    $Main_Stats{$self} =
-      $self->analyze_main( $document, $sub_elements, \@sub_analysis );
+    $Main_Stats{$self}
+        = $self->analyze_main( $document, $sub_elements, \@sub_analysis );
     $Subs{$self}     = \@sub_analysis;
     $Packages{$self} = $packages;
     $Lines{$self}    = $self->get_node_length($document);
@@ -73,14 +74,13 @@ sub _init {
     return $self;
 }
 
-
 sub _make_pruned_document {
-    my $path = shift;
-    my $document = PPI::Document->new( $path);
-    $document= _prune_comments_and_pod($document);
+    my $path     = shift;
+    my $document = PPI::Document->new($path);
+    $document = _prune_non_code_lines($document);
     $document->index_locations();
     $document->readonly(1);
-    return $document
+    return $document;
 }
 
 sub all_counts {
@@ -101,6 +101,10 @@ sub analyze_main {
     my $sub_elements = shift;
     my $sub_analysis = shift;
 
+    if ( !UNIVERSAL::isa( $document, 'PPI::Document' ) ) {
+        Carp::confess('Did not supply a PPI::Document');
+    }
+
     my $lines = $self->get_node_length($document);
     foreach my $sub ( @{$sub_analysis} ) {
         $lines -= $sub->{lines};
@@ -119,25 +123,27 @@ sub analyze_main {
 
 sub get_node_length {
     my ( $self, $node ) = @_;
-    eval {
-        $node = _prune_comments_and_pod($node);
-    };
-    return 0 if ( !defined $node);
+    eval { $node = _prune_non_code_lines($node); };
+    return 0 if ( !defined $node );
     my $string = $node->content;
-    return 0 if ( ! length $string );
-    $string =~ s/ \s+ \n /\n/msxg;
-    $string =~ s/ \A \s+ //msx;
+    return 0 if ( !length $string );
+
+    # Replace whitespace-newline with newline
+    $string =~ s/ \s+ \Q$INPUT_RECORD_SEPARATOR\E /$INPUT_RECORD_SEPARATOR/mxg;
+    $string =~ s/\Q$INPUT_RECORD_SEPARATOR\E /$INPUT_RECORD_SEPARATOR/mxg;
+    $string =~ s/ \A \s+ //msx;    # Remove leading whitespace
     my @newlines = ( $string =~ /$ALL_NEWLINES_REGEX/mxg );
     my $line_count = scalar @newlines;
 
-    # if the string is not empty and the last character is not a newline then add 1
+ # if the string is not empty and the last character is not a newline then add 1
     if ( length $string ) {
         my $last_char = substr $string, -1, 1;
-        if ( $last_char ne "\n" ) {
+        if ( $last_char ne "$INPUT_RECORD_SEPARATOR" ) {
             $line_count++;
         }
     }
-    return $line_count;
+
+    return $line_count;            
 }
 
 sub path {
@@ -166,15 +172,15 @@ sub lines {
 }
 
 sub measure_complexity {
-    my $self  = shift;
-    my $elem  = shift;
-    
+    my $self = shift;
+    my $elem = shift;
+
     my $complexity_count = 0;
     if ( $self->get_node_length($elem) == 0 ) {
         return $complexity_count;
     }
 
-    if ( $elem ) {
+    if ($elem) {
         $complexity_count++;
     }
 
@@ -186,7 +192,8 @@ sub measure_complexity {
     # Count up all the logic operators
     my $operators_ref = $elem->find('PPI::Token::Operator');
     if ($operators_ref) {
-        $complexity_count += grep { exists $LOGIC_OPERATORS{$_} } @{$operators_ref};
+        $complexity_count
+            += grep { exists $LOGIC_OPERATORS{$_} } @{$operators_ref};
     }
     return $complexity_count;
 }
@@ -198,7 +205,7 @@ sub _get_packages {
     my $found_packages  = $document->find('PPI::Statement::Package');
 
     return \@unique_packages
-      if (
+        if (
         !Perl::Metrics::Simple::Analysis::is_ref( $found_packages, 'ARRAY' ) );
 
     my %seen_packages = ();
@@ -217,19 +224,19 @@ sub _iterate_over_subs {
     my $found_subs = shift;
 
     return []
-      if ( !Perl::Metrics::Simple::Analysis::is_ref( $found_subs, 'ARRAY' ) );
+        if ( !Perl::Metrics::Simple::Analysis::is_ref( $found_subs, 'ARRAY' ) );
 
     my @subs = ();
 
     foreach my $sub ( @{$found_subs} ) {
         my $sub_length = $self->get_node_length($sub);
         push @subs,
-          {
+            {
             path              => $self->path,
             name              => $sub->name,
             lines             => $sub_length,
             mccabe_complexity => $self->measure_complexity($sub),
-          };
+            };
     }
     return \@subs;
 }
@@ -251,11 +258,11 @@ sub is_hash_key {
     my $is_hash_key = eval {
         my $parent      = $ppi_elem->parent();
         my $grandparent = $parent->parent();
-        if ($grandparent->isa('PPI::Structure::Subscript') ) {
+        if ( $grandparent->isa('PPI::Structure::Subscript') ) {
             return 1;
         }
         my $sib = $ppi_elem->snext_sibling();
-        if ($sib->isa('PPI::Token::Operator') && $sib eq '=>' ) {
+        if ( $sib->isa('PPI::Token::Operator') && $sib eq '=>' ) {
             return 1;
         }
         return;
@@ -264,17 +271,19 @@ sub is_hash_key {
     return $is_hash_key;
 }
 
-sub _prune_comments_and_pod {
+sub _prune_non_code_lines {
     my $document = shift;
-
-    $document->prune('PPI::Token::Comment','PPI::Token::Pod',);
+    if ( !defined $document ) {
+        Carp::confess('Did not supply a document!');
+    }
+    $document->prune('PPI::Token::Comment');
+    $document->prune('PPI::Token::Pod');
+    $document->prune('PPI::Token::End');
 
     return $document;
 }
 
 1;
-
-
 
 __END__
 

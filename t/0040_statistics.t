@@ -29,35 +29,25 @@ sub set_up {
 
 sub test_main_stats {
     my $counter = set_up();
-    my $main_subs_and_pod_test_file
-        = File::Spec->join( $Bin, 'more_test_files', 'main_subs_and_pod.pl' );
 
-    require $main_subs_and_pod_test_file;
-    if ( !$main_subs_and_pod::EXPECTED_NON_SUB_LINES ) {
-        Test::More::BAIL_OUT(
-            "Could not get expected value from '$main_subs_and_pod_test_file'");
-    }    
-    my $analysis = $counter->analyze_files($main_subs_and_pod_test_file);
-    Test::More::is(
-        $analysis->main_stats()->{'lines'},
-        $main_subs_and_pod::EXPECTED_NON_SUB_LINES,
-        'main_stats() number of lines for file with subs and pod.'
-    );
+    my @files_to_test = qw(main_subs_and_pod.pl end_token.pl);
 
-    my $test_file_for_end_token
-        = File::Spec->join( $Bin, 'more_test_files', 'end_token.pl' );
-    require $test_file_for_end_token;
-    if ( !$end_token::EXPECTED_NON_SUB_LINES ) {
-        Test::More::BAIL_OUT(
-            "Could not get expected value from '$main_subs_and_pod_test_file'");
+    foreach my $test_file (@files_to_test) {
+        my $path_to_test_file
+            = File::Spec->join( $Bin, 'more_test_files', $test_file );
+        require $path_to_test_file;
+        my ( $pkg_name, $suffix ) = split / \. /x, $test_file;
+        my $var_name       = '$' . $pkg_name . '::' . 'EXPECTED_NON_SUB_LINES';
+        my $expected_count = eval "$var_name";
+        if ( !$expected_count ) {
+            Test::More::BAIL_OUT(
+                "Could not get expected value from '$path_to_test_file'");
+        }    
+        my $analysis = $counter->analyze_files($path_to_test_file);
+        Test::More::is( $analysis->main_stats()->{'lines'},
+            $expected_count, "main_stats() number of lines for '$test_file'" );
     }
 
-    my $new_analysis = $counter->analyze_files($test_file_for_end_token);
-    Test::More::is(
-        $new_analysis->main_stats()->{'lines'},
-        $end_token::EXPECTED_NON_SUB_LINES,
-        'main_stats() finds correct number of lines.'
-    );
     return 1;
 }
 

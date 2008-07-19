@@ -18,6 +18,7 @@ our $VERSION = '0.01';
 # Bad hack. Do this in the data instead!
 our @ORDER_OF_FILES = qw(
   Module.pm
+  empty_file.pl
   no_packages_nor_subs
   package_no_subs.pl
   subs_no_package.pl
@@ -82,6 +83,18 @@ sub make_test_data {
                 mccabe_complexity => 1,
                 name              => '{code not in named subroutines}',
                 path              => "$test_directory/no_packages_nor_subs",
+            },
+            subs     => [],
+            packages => [],
+        },
+        'empty_file.pl' => {
+            path       => "$test_directory/empty_file.pl",
+            lines      => 0,
+            main_stats => {
+                lines             => 0,
+                mccabe_complexity => 0,
+                name              => '{code not in named subroutines}',
+                path              => "$test_directory/empty_file.pl",
             },
             subs     => [],
             packages => [],

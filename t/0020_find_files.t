@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v 1.5 2007/05/10 15:12:27 matisse Exp $
-# $Revision: 1.5 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v 1.6 2008/07/19 17:36:27 matisse Exp $
+# $Revision: 1.6 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v $
-# $Date: 2007/05/10 15:12:27 $
+# $Date: 2008/07/19 17:36:27 $
 ###############################################################################
 use strict;
 use warnings;
@@ -44,6 +44,7 @@ sub test_find_files {
 
     my $expected_list = [
         "$TEST_DIRECTORY/Perl/Code/Analyze/Test/Module.pm",
+        "$TEST_DIRECTORY/empty_file.pl",
         "$TEST_DIRECTORY/no_packages_nor_subs",
         "$TEST_DIRECTORY/package_no_subs.pl",
         "$TEST_DIRECTORY/subs_no_package.pl",

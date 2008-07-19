@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.16 2008/03/15 18:07:52 matisse Exp $
-# $Revision: 1.16 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.17 2008/07/19 17:36:29 matisse Exp $
+# $Revision: 1.17 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2008/03/15 18:07:52 $
+# $Date: 2008/07/19 17:36:29 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -14,6 +14,7 @@ use Data::Dumper;
 use English qw(-no_match_vars);
 use Perl::Metrics::Simple::Analysis;
 use PPI;
+use PPI::Document;
 use Readonly;
 
 our $VERSION = '0.11';
@@ -50,10 +51,10 @@ sub _init {
     my $path = $self->path;
 
     if ( !-r $path ) {
-        confess "Path '$path' is missing or not readable!";
+        Carp::confess "Path '$path' is missing or not readable!";
     }
-
     my $document = _make_pruned_document($path);
+
     if ( !defined $document ) {
         cluck "Could not make a PPI document from '$path'";
         return;
@@ -75,8 +76,21 @@ sub _init {
 }
 
 sub _make_pruned_document {
-    my $path     = shift;
-    my $document = PPI::Document->new($path);
+    my $path = shift;
+    my $document;
+    if ( -s $path ) {
+        $document = PPI::Document->new($path);
+    }
+    else {
+
+        # The file is empty. Create a PPI document with a single whitespace
+        # chararacter. This makes sure that the PPI tokens() method
+        # returns something, so we avoid a warning from
+        # PPI::Document::index_locations() which expects tokens() to return
+        # something other than undef.
+        my $one_whitespace_character = q{ };
+        $document = PPI::Document->new( \$one_whitespace_character );
+    }
     $document = _prune_non_code_lines($document);
     $document->index_locations();
     $document->readonly(1);
@@ -101,7 +115,7 @@ sub analyze_main {
     my $sub_elements = shift;
     my $sub_analysis = shift;
 
-    if ( !UNIVERSAL::isa( $document, 'PPI::Document' ) ) {
+    if ( !$document->isa('PPI::Document') ) {
         Carp::confess('Did not supply a PPI::Document');
     }
 
@@ -143,7 +157,7 @@ sub get_node_length {
         }
     }
 
-    return $line_count;            
+    return $line_count;
 }
 
 sub path {

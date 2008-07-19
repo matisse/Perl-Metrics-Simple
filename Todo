@@ -1,5 +1,12 @@
 TODO list for Perl module Perl::Metrics::Simple
 
+- Refactor tests so that there is one .t file for each .pm file.
+
+- Refactor the test suite to not use such cmplex data structures.
+  The test suite sucks. It is way too tightly coupled to
+  hard-coded complex data structures such as found in:
+    t/lib/Perl/Metrics/Simple/TestData.pm
+
 - Add percentile-ranking for subroutine size and complexity,
   and/or list top-10 largest, and top-10 most complex subs.
 

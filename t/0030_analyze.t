@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.17 2007/12/30 21:17:31 matisse Exp $
-# $Revision: 1.17 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.18 2008/07/19 17:36:27 matisse Exp $
+# $Revision: 1.18 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2007/12/30 21:17:31 $
+# $Date: 2008/07/19 17:36:27 $
 ###############################################################################
 
 use strict;
@@ -102,6 +102,7 @@ sub test_analyze_files {
     my $analysis = $analyzer->analyze_files($TEST_DIRECTORY);
     my @expected = (
         $test_data->{'Module.pm'},
+        $test_data->{'empty_file.pl'},
         $test_data->{'no_packages_nor_subs'},
         $test_data->{'package_no_subs.pl'},
         $test_data->{'subs_no_package.pl'},
@@ -131,6 +132,7 @@ sub test_analysis {
 
     my @expected_files = (
         $test_data->{'Module.pm'}->{path},
+        $test_data->{'empty_file.pl'}->{path},
         $test_data->{'no_packages_nor_subs'}->{path},
         $test_data->{'package_no_subs.pl'}->{path},
         $test_data->{'subs_no_package.pl'}->{path},

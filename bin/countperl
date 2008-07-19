@@ -1,16 +1,16 @@
 #!/usr/bin/perl
 
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.7 2007/12/27 05:11:40 matisse Exp $
-# $Revision: 1.7 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.8 2008/07/19 17:36:29 matisse Exp $
+# $Revision: 1.8 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v $
-# $Date: 2007/12/27 05:11:40 $
+# $Date: 2008/07/19 17:36:29 $
 ###############################################################################
 
 package main;
 use strict;
 use warnings;
-use Carp qw(croak);
+use Carp qw();
 use Perl::Metrics::Simple qw(0.03);
 use Pod::Usage;
 
@@ -32,7 +32,7 @@ my $file_stats    = $analysis->file_stats;
 
 my $summary_stats = $analysis->summary_stats;
 
-print <<"EOS" or croak('Could not print!');
+print <<"EOS" or Carp::croak('Could not print!');
 
 Perl files found:                $file_count
 
@@ -73,13 +73,19 @@ EOS
 
 my @main_from_each_file = map { $_->{main_stats} } @{ $analysis->file_stats };
 
-my @sorted_subs = sort _by_complexity(), @{ $analysis->subs }, @main_from_each_file;
-print join( "\t", 'complexity', 'sub', 'path', 'size' ), "\n";
+my @sorted_subs = sort _by_complexity(), @{ $analysis->subs },
+    @main_from_each_file;
+my $header = join( "\t", 'complexity', 'sub', 'path', 'size' ), "\n";
+print "$header"
+    || Carp::croak('Could not print to currently selectd filehandle.');
 foreach my $sub (@sorted_subs) {
     my %sub_hash = %{$sub};
-    print
-      join( "\t", @sub_hash{ 'mccabe_complexity', 'name', 'path', 'lines' } ),
-      "\n";
+    my $line
+        = join( "\t",
+        @sub_hash{ 'mccabe_complexity', 'name', 'path', 'lines' } ),
+        "\n";
+    print "$line"
+        || Carp::croak('Could not print to currently selected file handle.');
 }
 
 exit;

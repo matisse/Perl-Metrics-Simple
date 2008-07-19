@@ -20,8 +20,11 @@ t/0050_file.t
 t/0901_pod.t
 t/0902_pod_coverage.t
 t/lib/Perl/Metrics/Simple/TestData.pm
+t/more_test_files/end_token.pl
+t/more_test_files/main_subs_and_pod.pl
 t/perlcritic.t
 t/perlcriticrc
+t/test_files/empty_file.pl
 t/test_files/no_packages_nor_subs
 t/test_files/not_a_perl_file
 t/test_files/package_no_subs.pl

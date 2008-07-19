@@ -72,13 +72,13 @@ sub test_summary_stats {
         '==', 2.06, 'standard deviation of sub complexity.' );
 
     my $main_complexity = $analysis->summary_stats->{main_complexity};
-    cmp_ok( $main_complexity->{min}, '==', 1, 'minimum main complexity.' );
+    cmp_ok( $main_complexity->{min}, '==', 0, 'minimum main complexity.' );
     cmp_ok( $main_complexity->{max}, '==', 3, 'maximum main complexity.' );
     cmp_ok( $main_complexity->{mean},
-        '==', 1.75, 'mean (average) main complexity.' );
-    cmp_ok( $main_complexity->{median}, '==', 1.5, 'median main complexity.' );
+        '==', 1.4, 'mean (average) main complexity.' );
+    cmp_ok( $main_complexity->{median}, '==', 1, 'median main complexity.' );
     cmp_ok( $main_complexity->{standard_deviation},
-        '==', 0.83, 'standard deviation of main complexity.' );
+        '==', 1.02, 'standard deviation of main complexity.' );
 
     return 1;
 }

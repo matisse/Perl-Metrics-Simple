@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.17 2008/07/19 17:36:29 matisse Exp $
-# $Revision: 1.17 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.18 2008/07/19 22:07:06 matisse Exp $
+# $Revision: 1.18 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2008/07/19 17:36:29 $
+# $Date: 2008/07/19 22:07:06 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -39,7 +39,7 @@ my %Lines      = ();
 sub new {
     my ( $class, %parameters ) = @_;
     my $self = {};
-    bless $self, ref $class || $class;
+    bless $self, $class;
     $self->_init(%parameters);
     return $self;
 }

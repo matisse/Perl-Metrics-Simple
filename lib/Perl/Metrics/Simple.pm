@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.16 2008/03/15 18:07:51 matisse Exp $
-# $Revision: 1.16 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.17 2008/07/19 22:07:06 matisse Exp $
+# $Revision: 1.17 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2008/03/15 18:07:51 $
+# $Date: 2008/07/19 22:07:06 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -30,7 +30,7 @@ Readonly::Scalar my $DOT_FILE_REGEX      => qr/ \A [.] /xm;
 sub new {
     my ($class) = @_;
     my $self = {};
-    bless $self, ref $class || $class;
+    bless $self, $class;
     return $self;
 }
 

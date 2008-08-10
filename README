@@ -2,14 +2,15 @@ NAME
     Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 
 DESCRIPTION
-    Perl::Metrics::Simple is far simpler that Perl::Metrics.
 
-    Perl::Metrics::Simple provides just enough methods to run static
+    Perl::Metrics::Simple provides methods to run static
     analysis of one or many Perl files and obtain a few metrics: packages,
     subroutines, lines of code, and cyclomatic (mccabe) complexity of the
     subroutines and the "main" portion of the code.
+    
+    Perl::Metrics::Simple is far simpler that Perl::Metrics.
 
-    Installs a a script called countperl.
+    Installs a script called countperl.
 
 AUTHOR
         Matisse Enzer

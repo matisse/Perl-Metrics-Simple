@@ -1,17 +1,21 @@
 Revision history for Perl module Perl::Metrics::Simple
+0.12 Sun Aug 10 09:25:38 PDT 2008
+  Added credits to 0.11 notes.
+  Minor changes to README and documentation in Perl/Metrics/Simple.pm
+  Added section on using Makefile.PL to INSTALL notes.
 
 0.11 Sat Jul 19 10:31:21 PDT 2008
   Fixed http://rt.cpan.org/Public/Bug/Display.html?id=37771
         countperl dying on empty files
+  Thanks to Mathieu Gagnon, GAGNONM <gagnonm@cpan.org> for reporting this.
 
   Changes to satisfy Perl::Critic
   
   Fixed bug in Perl/Metrics/Simple/Analysis/File.pm where lines after __END__
   were being counted.
+  Thanks to Elliot Shank, ELLIOTJS perl@galumph.com for reporting this.
 
   Made line counts platform-independent (using $INPUT_RECORD_SEPARATOR)
-
-
 
 0.1 Sun Dec 30 13:30:34 PST 2007
   No feature changes.

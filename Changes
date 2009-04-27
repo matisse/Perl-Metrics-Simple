@@ -1,4 +1,8 @@
 Revision history for Perl module Perl::Metrics::Simple
+
+0.13 NOT RELEASED YET
+  Fixed bug in report output in countperl.
+
 0.12 Sun Aug 10 09:25:38 PDT 2008
   Added credits to 0.11 notes.
   Minor changes to README and documentation in Perl/Metrics/Simple.pm

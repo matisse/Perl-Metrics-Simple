@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.18 2008/07/19 22:07:06 matisse Exp $
-# $Revision: 1.18 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.19 2009/05/02 16:21:00 matisse Exp $
+# $Revision: 1.19 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2008/07/19 22:07:06 $
+# $Date: 2009/05/02 16:21:00 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -513,6 +513,8 @@ http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
     http://www.eigenstate.net/
 
 =head1 LICENSE AND COPYRIGHT
+
+Copyright (c) 2006-2009 by Eigenstate Consulting, LLC.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

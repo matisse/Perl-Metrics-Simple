@@ -1,11 +1,12 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.20 2009/05/02 16:20:58 matisse Exp $
-# $Revision: 1.20 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.21 2010/02/07 20:59:07 matisse Exp $
+# $Revision: 1.21 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2009/05/02 16:20:58 $
+# $Date: 2010/02/07 20:59:07 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
+use 5.006;
 use strict;
 use warnings;
 
@@ -20,12 +21,12 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = 0.13;
+our $VERSION = '0.14';
 
-Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }xmi;
-Readonly::Scalar our $SKIP_LIST_REGEX    => qr{ \.svn | _darcs | CVS }xmi;
-Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /xm;
-Readonly::Scalar my $DOT_FILE_REGEX      => qr/ \A [.] /xm;
+Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }sxmi;
+Readonly::Scalar our $SKIP_LIST_REGEX    => qr{ \.svn | \. git | _darcs | CVS }sxmi;
+Readonly::Scalar my $PERL_SHEBANG_REGEX  => qr/ \A [#] ! .* perl /sxm;
+Readonly::Scalar my $DOT_FILE_REGEX      => qr/ \A [.] /sxm;
 
 sub new {
     my ($class) = @_;
@@ -37,7 +38,9 @@ sub new {
 sub analyze_files {
     my ( $self, @dirs_and_files ) = @_;
     my @results = ();
-    foreach my $file ( @{ $self->find_files(@dirs_and_files) } ) {
+    my @objects = grep { ref $_ } @dirs_and_files;
+    @dirs_and_files = grep { not ref $_ } @dirs_and_files;
+    foreach my $file ( (scalar(@dirs_and_files)?@{ $self->find_files(@dirs_and_files) }:()),@objects ) {
         my $file_analysis =
           Perl::Metrics::Simple::Analysis::File->new( path => $file );
         push @results, $file_analysis;
@@ -71,7 +74,8 @@ sub list_perl_files {
 
     File::Find::find( { wanted => $wanted, no_chdir => 1 }, @paths );
 
-    return sort @files;
+    my @sorted_list = sort @files;
+    return @sorted_list;
 }
 
 sub should_be_skipped {
@@ -122,8 +126,8 @@ Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
 =head1 SYNOPSIS
 
   use Perl::Metrics::Simple;
-  my $analzyer = Perl::Metrics::Simple->new;
-  my $analysis = $analzyer->analyze_files(@ARGV);
+  my $analyzer = Perl::Metrics::Simple->new;
+  my $analysis = $analyzer->analyze_files(@paths, @refs_to_file_contents);
   $file_count    = $analysis->file_count;
   $package_count = $analysis->package_count;
   $sub_count     = $analysis->sub_count;
@@ -163,12 +167,16 @@ Takes a path and returns true if the target is a Perl file.
 
 =head1 OBJECT METHODS
 
-=head2 analyze_files( @files_and_or_dirs )
+=head2 analyze_files( @paths, @refs_to_file_contents )
 
-Takes an array of files and or directory paths and returns
-a L<Perl::Metrics::Simple::Analysis> object.
+Takes an array of files and or directory paths, and/or
+SCALAR refs to file contents and returns
+an L<Perl::Metrics::Simple::Analysis> object.
 
-=head2 find_files
+=head2 find_files( @directories_and_files )
+
+Uses I<list_perl_files> to find all the readable Perl files
+and returns a reference to a (possibly empty) list of paths.
 
 =head2 list_perl_files
 

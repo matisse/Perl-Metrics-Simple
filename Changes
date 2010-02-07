@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.14
+  Allow using a ref-to-SCALAR of file contents instead of a file path.
+  https://rt.cpan.org/Ticket/Display.html?id=54293
+  Thanks to Alexandr Ciornii for requesting this and supplying patches.
+  Also changes all VERSION numbers to match: 0.14
+
 0.13 Mon May  4 08:25:51 PDT 2009
   Fixed bug in report output in countperl.
   Added Copyright notice in form suitable for Debian GNU/Linux. (per Ryan Niebur)

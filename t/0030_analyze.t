@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.18 2008/07/19 17:36:27 matisse Exp $
-# $Revision: 1.18 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.19 2010/02/07 20:59:07 matisse Exp $
+# $Revision: 1.19 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2008/07/19 17:36:27 $
+# $Date: 2010/02/07 20:59:07 $
 ###############################################################################
 
 use strict;
@@ -14,7 +14,7 @@ use FindBin qw($Bin);
 use lib "$Bin/lib";
 use Perl::Metrics::Simple::TestData;
 use Readonly;
-use Test::More tests => 31;
+use Test::More tests => 37;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
@@ -28,6 +28,7 @@ BEGIN {
 
 test_new();
 test_analyze_one_file();
+test_analyze_text_from_scalar_ref();
 test_analyze_files();
 test_analysis();
 test_is_ref();
@@ -40,6 +41,14 @@ sub set_up {
     my $test_data_object = Perl::Metrics::Simple::TestData->new(
         test_directory => $TEST_DIRECTORY );
     return $test_data_object;
+}
+
+sub slurp {
+    my ($path) = @_;
+    open my $fh, '<', $path;
+    my $contents = do { local $INPUT_RECORD_SEPARATOR; <$fh> };
+    close $fh;
+    return \$contents;
 }
 
 sub test_analyze_one_file {
@@ -73,6 +82,62 @@ sub test_analyze_one_file {
     my $has_subs_and_package_expected_result = $test_data->{'Module.pm'};
     my $subs_and_package_analysis = Perl::Metrics::Simple::Analysis::File->new(
         path => $has_subs_and_package_expected_result->{'path'} );
+    is_deeply(
+        $subs_and_package_analysis->all_counts,
+        $has_subs_and_package_expected_result,
+        'analyze_one_file() with packages and subs.'
+    );
+}
+
+sub test_analyze_text_from_scalar_ref {
+    my $test_data_object = set_up();
+    my $test_data        = $test_data_object->get_test_data;
+    my $no_package_no_sub_expected_result
+        = $test_data->{'no_packages_nor_subs'};
+
+    my $ref_to_text = slurp( $no_package_no_sub_expected_result->{'path'} );
+
+    my $analysis
+        = Perl::Metrics::Simple::Analysis::File->new( path => $ref_to_text );
+    is_deeply( $analysis->packages, [], 'Analysis of file with no packages.' );
+    is_deeply( $analysis->subs,     [], 'Analysis of file with no subs.' );
+
+    my $has_package_no_subs_expected_result
+        = $test_data->{'package_no_subs.pl'};
+    my $has_package_no_subs_contents
+        = slurp( $has_package_no_subs_expected_result->{'path'} );
+    my $new_analysis = Perl::Metrics::Simple::Analysis::File->new(
+        path => $has_package_no_subs_contents );
+    is_deeply(
+        $new_analysis->packages,
+        $has_package_no_subs_expected_result->{packages},
+        'Analysis of file with one package.'
+    );
+    is_deeply( $new_analysis->subs, [],
+        'Analysis of file with one package and no subs.' );
+
+    my $has_subs_expected_result = $test_data->{'subs_no_package.pl'};
+    $ref_to_text = slurp( $has_subs_expected_result->{'path'} );
+
+    $has_subs_expected_result->{'subs'}[0]{'path'}    = $ref_to_text;
+    $has_subs_expected_result->{'subs'}[1]{'path'}    = $ref_to_text;
+    $has_subs_expected_result->{'path'}               = $ref_to_text;
+    $has_subs_expected_result->{'main_stats'}{'path'} = $ref_to_text;
+    my $has_subs_analysis
+        = Perl::Metrics::Simple::Analysis::File->new( path => $ref_to_text );
+    is_deeply( $has_subs_analysis->all_counts,
+        $has_subs_expected_result, 'analyze_one_file() subs_no_package.pl' );
+
+    my $has_subs_and_package_expected_result = $test_data->{'Module.pm'};
+    $ref_to_text = slurp( $has_subs_and_package_expected_result->{'path'} );
+    $has_subs_and_package_expected_result->{'path'}            = $ref_to_text;
+    $has_subs_and_package_expected_result->{'subs'}[0]{'path'} = $ref_to_text;
+    $has_subs_and_package_expected_result->{'subs'}[1]{'path'} = $ref_to_text;
+    $has_subs_and_package_expected_result->{'subs'}[2]{'path'} = $ref_to_text;
+    $has_subs_and_package_expected_result->{'main_stats'}{'path'}
+        = $ref_to_text;
+    my $subs_and_package_analysis
+        = Perl::Metrics::Simple::Analysis::File->new( path => $ref_to_text );
     is_deeply(
         $subs_and_package_analysis->all_counts,
         $has_subs_and_package_expected_result,
@@ -237,5 +302,5 @@ sub test_get_mean_median_std_dev {
         undef,
         '_get_mean_median_std_dev() returns undef when passed empty array.'
     );
-    return 1;    
+    return 1;
 }

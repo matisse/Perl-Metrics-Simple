@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.19 2009/05/02 16:21:00 matisse Exp $
-# $Revision: 1.19 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.20 2010/02/07 20:59:07 matisse Exp $
+# $Revision: 1.20 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2009/05/02 16:21:00 $
+# $Date: 2010/02/07 20:59:07 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -17,10 +17,10 @@ use PPI;
 use PPI::Document;
 use Readonly;
 
-our $VERSION = '0.11';
+our $VERSION = '0.14';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX =>
-    qr/ ( \Q$INPUT_RECORD_SEPARATOR\E ) /xm;
+    qr/ ( \Q$INPUT_RECORD_SEPARATOR\E ) /sxm;
 Readonly::Array our @LOGIC_OPERATORS =>
     qw( ! && || ||= &&= or and xor not ? <<= >>= );
 Readonly::Hash our %LOGIC_OPERATORS => hashify(@LOGIC_OPERATORS);
@@ -28,6 +28,7 @@ Readonly::Hash our %LOGIC_OPERATORS => hashify(@LOGIC_OPERATORS);
 Readonly::Array our @LOGIC_KEYWORDS =>
     qw( for foreach goto if else elsif last next unless until while );
 Readonly::Hash our %LOGIC_KEYWORDS => hashify(@LOGIC_KEYWORDS);
+Readonly::Scalar my $LAST_CHARACTER => -1;
 
 # Private instance variables:
 my %Path       = ();
@@ -50,10 +51,20 @@ sub _init {
 
     my $path = $self->path;
 
-    if ( !-r $path ) {
-        Carp::confess "Path '$path' is missing or not readable!";
+    my $document;
+    if (ref $path) {
+        if (ref $path eq 'SCALAR') {
+            $document = PPI::Document->new($path);
+        } else {
+            $document = $path;
+        }
+    } else {
+        if ( !-r $path ) {
+            Carp::confess "Path '$path' is missing or not readable!";
+        }
+        $document = _create_ppi_document($path);
     }
-    my $document = _make_pruned_document($path);
+    $document = _make_pruned_document($document);
 
     if ( !defined $document ) {
         cluck "Could not make a PPI document from '$path'";
@@ -75,7 +86,7 @@ sub _init {
     return $self;
 }
 
-sub _make_pruned_document {
+sub _create_ppi_document {
     my $path = shift;
     my $document;
     if ( -s $path ) {
@@ -91,6 +102,11 @@ sub _make_pruned_document {
         my $one_whitespace_character = q{ };
         $document = PPI::Document->new( \$one_whitespace_character );
     }
+    return $document;
+}
+
+sub _make_pruned_document {
+    my $document = shift;;
     $document = _prune_non_code_lines($document);
     $document->index_locations();
     $document->readonly(1);
@@ -137,21 +153,22 @@ sub analyze_main {
 
 sub get_node_length {
     my ( $self, $node ) = @_;
-    eval { $node = _prune_non_code_lines($node); };
+    my $eval_result = eval { $node = _prune_non_code_lines($node); };
+    return 0 if not $eval_result;
     return 0 if ( !defined $node );
     my $string = $node->content;
     return 0 if ( !length $string );
 
     # Replace whitespace-newline with newline
-    $string =~ s/ \s+ \Q$INPUT_RECORD_SEPARATOR\E /$INPUT_RECORD_SEPARATOR/mxg;
-    $string =~ s/\Q$INPUT_RECORD_SEPARATOR\E /$INPUT_RECORD_SEPARATOR/mxg;
+    $string =~ s/ \s+ \Q$INPUT_RECORD_SEPARATOR\E /$INPUT_RECORD_SEPARATOR/smxg;
+    $string =~ s/\Q$INPUT_RECORD_SEPARATOR\E /$INPUT_RECORD_SEPARATOR/smxg;
     $string =~ s/ \A \s+ //msx;    # Remove leading whitespace
-    my @newlines = ( $string =~ /$ALL_NEWLINES_REGEX/mxg );
+    my @newlines = ( $string =~ /$ALL_NEWLINES_REGEX/smxg );
     my $line_count = scalar @newlines;
 
  # if the string is not empty and the last character is not a newline then add 1
     if ( length $string ) {
-        my $last_char = substr $string, -1, 1;
+        my $last_char = substr $string, $LAST_CHARACTER, 1;
         if ( $last_char ne "$INPUT_RECORD_SEPARATOR" ) {
             $line_count++;
         }
@@ -448,7 +465,8 @@ Arrayref of unique packages found in the file.
 
 =head2 path
 
-Path to the file.
+Either the path to the file, or a scalar ref if that was supplied
+instaed of a path.
 
 =head2 subs
 

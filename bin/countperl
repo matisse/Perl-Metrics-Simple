@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.9 2009/04/27 15:35:37 matisse Exp $
-# $Revision: 1.9 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.10 2010/02/07 20:59:07 matisse Exp $
+# $Revision: 1.10 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v $
-# $Date: 2009/04/27 15:35:37 $
+# $Date: 2010/02/07 20:59:07 $
 ###############################################################################
 
 package main;
@@ -14,7 +14,7 @@ use Carp qw();
 use Perl::Metrics::Simple qw(0.13);
 use Pod::Usage;
 
-our $VERSION = 0.13;
+our $VERSION = 0.14;
 
 if ( !@ARGV ) {
     pod2usage( -verbose => 1 );

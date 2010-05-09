@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.21 2010/02/07 20:59:07 matisse Exp $
-# $Revision: 1.21 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v 1.22 2010/05/09 17:30:45 matisse Exp $
+# $Revision: 1.22 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple.pm,v $
-# $Date: 2010/02/07 20:59:07 $
+# $Date: 2010/05/09 17:30:45 $
 ###############################################################################
 
 package Perl::Metrics::Simple;
@@ -67,8 +67,8 @@ sub list_perl_files {
     my $wanted = sub {
         return if $self->should_be_skipped($File::Find::name);
         if ( $self->is_perl_file($File::Find::name) )
-        {    ## no critic ProhibitPackageVars
-            push @files, $File::Find::name;    ## no critic ProhibitPackageVars
+        {
+            push @files, $File::Find::name;  ## no critic (ProhibitPackageVars)
         }
     };
 

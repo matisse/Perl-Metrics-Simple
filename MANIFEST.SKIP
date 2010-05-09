@@ -11,3 +11,4 @@ CVS
 \.tar\.gz$
 ^Perl-Metrics-Simple
 .DS_Store
+^MYMETA.yml$

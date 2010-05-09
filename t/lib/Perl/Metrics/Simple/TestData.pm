@@ -157,13 +157,13 @@ sub make_test_data {
                 {
                     name              => 'foo',
                     lines             => 9,
-                    mccabe_complexity => 6,
+                    mccabe_complexity => 8,
                     path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
                 },
                 {
                     name              => 'say_hello',
                     lines             => 9,
-                    mccabe_complexity => 4,
+                    mccabe_complexity => 5,
                     path => "$test_directory/Perl/Code/Analyze/Test/Module.pm",
                 },
             ],

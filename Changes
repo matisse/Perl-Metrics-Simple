@@ -1,5 +1,39 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.15
+
+Changes for https://rt.cpan.org/Public/Bug/Display.html?id=56441
+Thanks to Maggie J. Xiong for the inquiry, inpsiration and patch.
+
+You can now set:
+  @Perl::Metrics::Simple::Analysis::File::LOGIC_KEYWORDS and OPERATORS
+to custom values before creating a new 
+  Perl::Metrics::Simple::Analysis::File object.
+
+Added to the default @LOGIC_KEYWORDS used in calculating complexity:
+    map
+    grep
+
+Added to the default @LOGIC_OPERATORS used in calculating complexity:
+    !~
+    //
+    <
+    <=>
+    ==
+    =~
+    >
+    cmp
+    eq
+    gt
+    lt
+    ne
+    ~~
+
+Added two accessors on Perl::Metrics::Simple::Analysis::File to obtain
+the values in use: 
+    logic_keywords()
+    logic_operators()
+
 0.14
   Allow using a ref-to-SCALAR of file contents instead of a file path.
   https://rt.cpan.org/Ticket/Display.html?id=54293

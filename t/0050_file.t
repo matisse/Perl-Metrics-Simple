@@ -14,13 +14,14 @@ use lib "$Bin/lib";
 use PPI;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
-use Test::More tests => 17;
+use Test::More tests => 20;
 
 Readonly::Scalar my $TEST_DIRECTORY => "$Bin/test_files";
 Readonly::Scalar my $EMPTY_STRING   => q{};
 
 test_get_node_length();
 test_measure_complexity();
+test_measure_complexity_with_custom_settings();
 test_is_hash_key();
 
 exit;
@@ -68,10 +69,72 @@ sub test_measure_complexity {
       $file_counter->measure_complexity($print_statement_doc);
     is( $print_statement_complexity, 1, 'Complexity of print statement is 1' );
 
-    my $basic_if_code       = 'if ($a > $b) { return 1; }';
+    my $basic_if_code       = 'if ($boolean) { return 1; }';
     my $basic_if_doc        = PPI::Document->new( \$basic_if_code );
     my $basic_if_complexity = $file_counter->measure_complexity($basic_if_doc);
     is( $basic_if_complexity, 2, 'Complexity of basic "if" block is 2' );
+
+    return 1;
+}
+
+sub test_measure_complexity_with_custom_settings {
+    my $test_file    = "$TEST_DIRECTORY/not_a_perl_file";
+    my $file_counter = 
+         Perl::Metrics::Simple::Analysis::File->new(path => $test_file);
+
+    my $code_with_if_plus_map = <<'EOS';
+        if ($boolean) {
+            @new_list = map { do_something($_) } @old_list;
+            $a++;
+        }
+        $b = rand;
+        return $a || $b;
+EOS
+
+    my $doc_with_if_plus_map  = PPI::Document->new( \$code_with_if_plus_map );
+    
+    my $if_plus_map_complexity = $file_counter->measure_complexity($doc_with_if_plus_map);
+    my $expected_default_complexity = 4;
+    is( $if_plus_map_complexity,
+        $expected_default_complexity,
+        'Using default @LOGIC_KEYWORDS and @LOGIC_OPERATORS'
+      );
+
+    {
+        # Add 'rand' as a logic keyword
+        no warnings qw(once);
+        local @Perl::Metrics::Simple::Analysis::File::LOGIC_KEYWORDS =
+            ( @Perl::Metrics::Simple::Analysis::File::DEFAULT_LOGIC_KEYWORDS,
+            'rand' );
+
+        $file_counter = 
+         Perl::Metrics::Simple::Analysis::File->new(path => $test_file);
+         
+        my $got_custom_complexity = $file_counter->measure_complexity($doc_with_if_plus_map);
+        my $expected_with_custom_keywords = 5;
+        is( $got_custom_complexity,
+            $expected_with_custom_keywords,
+           'Using custom @LOGIC_KEYWORDS'
+         );
+
+        # Add '++' as a logic operator.
+        local @Perl::Metrics::Simple::Analysis::File::LOGIC_OPERATORS =
+            (
+                @Perl::Metrics::Simple::Analysis::File::DEFAULT_LOGIC_OPERATORS,
+                '++'
+            );
+
+        my $custom_counter = 
+         Perl::Metrics::Simple::Analysis::File->new(path => $test_file);
+         
+        $got_custom_complexity = $custom_counter->measure_complexity($doc_with_if_plus_map);
+        my $expected_with_custom_keywords_and_operators = 6;
+        is( $got_custom_complexity,
+            $expected_with_custom_keywords_and_operators,
+           'Using custom @LOGIC_OPERATORS and @LOGIC_KEYWORDS'
+         );
+    }
+    
     return 1;
 }
 

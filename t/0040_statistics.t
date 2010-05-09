@@ -64,12 +64,12 @@ sub test_summary_stats {
 
     my $sub_complexity = $analysis->summary_stats->{sub_complexity};
     cmp_ok( $sub_complexity->{min}, '==', 1, 'minimum sub complexity.' );
-    cmp_ok( $sub_complexity->{max}, '==', 6, 'maximum sub complexity.' );
+    cmp_ok( $sub_complexity->{max}, '==', 8, 'maximum sub complexity.' );
     cmp_ok( $sub_complexity->{mean},
-        '==', 2.6, 'mean (average) sub complexity.' );
+        '==', 3.2, 'mean (average) sub complexity.' );
     cmp_ok( $sub_complexity->{median}, '==', 1, 'median sub complexity.' );
     cmp_ok( $sub_complexity->{standard_deviation},
-        '==', 2.06, 'standard deviation of sub complexity.' );
+        '==', 2.86, 'standard deviation of sub complexity.' );
 
     my $main_complexity = $analysis->summary_stats->{main_complexity};
     cmp_ok( $main_complexity->{min}, '==', 0, 'minimum main complexity.' );

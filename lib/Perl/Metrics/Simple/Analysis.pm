@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.16 2010/02/07 20:59:07 matisse Exp $
-# $Revision: 1.16 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v 1.17 2010/05/09 17:57:07 matisse Exp $
+# $Revision: 1.17 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis.pm,v $
-# $Date: 2010/02/07 20:59:07 $
+# $Date: 2010/05/09 17:57:07 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis;
@@ -18,14 +18,14 @@ use Statistics::Basic::Median;
 
 our $VERSION = '0.14';
 
-my %AnalysisData = ();
-my %Files        = ();
-my %FileStats    = ();
-my %Lines        = ();
-my %Main         = ();
-my %Packages     = ();
-my %Subs         = ();
-my %SummaryStats = ();
+my %_ANALYSIS_DATA = ();
+my %_FILES         = ();
+my %_FILE_STATS    = ();
+my %_LINES         = ();
+my %_MAIN          = ();
+my %_PACKAGES      = ();
+my %_SUBS          = ();
+my %_SUMMARY_STATS = ();
 
 sub new {
     my ( $class, $analysis_data ) = @_;
@@ -40,12 +40,12 @@ sub new {
 
 sub files {
     my ($self) = @_;
-    return $Files{$self};
+    return $_FILES{$self};
 }
 
 sub data {
     my $self = shift;
-    return $AnalysisData{$self};
+    return $_ANALYSIS_DATA{$self};
 }
 
 sub file_count {
@@ -55,12 +55,12 @@ sub file_count {
 
 sub lines {
     my $self = shift;
-    return $Lines{$self};
+    return $_LINES{$self};
 }
 
 sub packages {
     my ($self) = @_;
-    return $Packages{$self};
+    return $_PACKAGES{$self};
 }
 
 sub package_count {
@@ -70,22 +70,22 @@ sub package_count {
 
 sub file_stats {
     my $self = shift;
-    return $FileStats{$self};
+    return $_FILE_STATS{$self};
 }
 
 sub main_stats {
     my $self = shift;
-    return $Main{$self};
+    return $_MAIN{$self};
 }
 
 sub summary_stats {
     my $self = shift;
-    return $SummaryStats{$self};
+    return $_SUMMARY_STATS{$self};
 }
 
 sub subs {
     my ($self) = @_;
-    return $Subs{$self};
+    return $_SUBS{$self};
 }
 
 sub sub_count {
@@ -111,7 +111,7 @@ sub _numerically {
 
 sub _init {
     my ( $self, $file_objects ) = @_;
-    $AnalysisData{$self} = $file_objects;
+    $_ANALYSIS_DATA{$self} = $file_objects;
 
     my @all_files  = ();
     my @packages   = ();
@@ -132,13 +132,13 @@ sub _init {
         push @subs,     @{ $file->subs };
     }
 
-    $FileStats{$self}    = \@file_stats;
-    $Files{$self}        = \@all_files;
-    $Main{$self}         = \%main_stats;
-    $Packages{$self}     = \@packages;
-    $Lines{$self}        = $lines;
-    $Subs{$self}         = \@subs;
-    $SummaryStats{$self} = $self->_make_summary_stats();
+    $_FILE_STATS{$self}    = \@file_stats;
+    $_FILES{$self}        = \@all_files;
+    $_MAIN{$self}         = \%main_stats;
+    $_PACKAGES{$self}     = \@packages;
+    $_LINES{$self}        = $lines;
+    $_SUBS{$self}         = \@subs;
+    $_SUMMARY_STATS{$self} = $self->_make_summary_stats();
     return 1;
 }
 

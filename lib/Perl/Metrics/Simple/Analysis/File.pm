@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.21 2010/05/09 17:30:46 matisse Exp $
-# $Revision: 1.21 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.22 2010/05/09 17:57:07 matisse Exp $
+# $Revision: 1.22 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2010/05/09 17:30:46 $
+# $Date: 2010/05/09 17:57:07 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -71,13 +71,13 @@ our (@LOGIC_KEYWORDS, @LOGIC_OPERATORS); # For user-supplied values;
 our (%LOGIC_KEYWORDS, %LOGIC_OPERATORS); # Populated in _init()
 
 # Private instance variables:
-my %Path       = ();
-my %Main_Stats = ();
-my %Subs       = ();
-my %Packages   = ();
-my %Lines      = ();
-my %LogicKeywords = ();
-my %LogicOperators = ();
+my %_PATH       = ();
+my %_MAIN_STATS = ();
+my %_SUBS       = ();
+my %_PACKAGES   = ();
+my %_LINES      = ();
+my %_LOGIC_KEYWORDS = ();
+my %_LOGIC_OPERATORS = ();
 
 sub new {
     my ( $class, %parameters ) = @_;
@@ -89,7 +89,7 @@ sub new {
 
 sub _init {
     my ( $self, %parameters ) = @_;
-    $Path{$self} = $parameters{'path'};
+    $_PATH{$self} = $parameters{'path'};
 
     my $path = $self->path();
 
@@ -117,21 +117,21 @@ sub _init {
 
     my @logic_keywords = @LOGIC_KEYWORDS  ? @LOGIC_KEYWORDS : @DEFAULT_LOGIC_KEYWORDS;
     %LOGIC_KEYWORDS = hashify(@logic_keywords);
-    $LogicKeywords{$self} = \%LOGIC_OPERATORS;
+    $_LOGIC_OPERATORS{$self} = \%LOGIC_KEYWORDS;
 
     my @logic_operators = @LOGIC_OPERATORS ? @LOGIC_OPERATORS : @DEFAULT_LOGIC_OPERATORS;
     %LOGIC_OPERATORS = hashify(@logic_operators);
-    $LogicOperators{$self} = \%LOGIC_OPERATORS;
+    $_LOGIC_OPERATORS{$self} = \%LOGIC_OPERATORS;
 
     my @sub_analysis = ();
     my $sub_elements = $document->find('PPI::Statement::Sub');
     @sub_analysis = @{ $self->_iterate_over_subs($sub_elements) };
 
-    $Main_Stats{$self}
+    $_MAIN_STATS{$self}
         = $self->analyze_main( $document, $sub_elements, \@sub_analysis );
-    $Subs{$self}     = \@sub_analysis;
-    $Packages{$self} = $packages;
-    $Lines{$self}    = $self->get_node_length($document);
+    $_SUBS{$self}     = \@sub_analysis;
+    $_PACKAGES{$self} = $packages;
+    $_LINES{$self}    = $self->get_node_length($document);
 
     return $self;
 }
@@ -229,37 +229,37 @@ sub get_node_length {
 
 sub path {
     my ($self) = @_;
-    return $Path{$self};
+    return $_PATH{$self};
 }
 
 sub main_stats {
     my ($self) = @_;
-    return $Main_Stats{$self};
+    return $_MAIN_STATS{$self};
 }
 
 sub subs {
     my ($self) = @_;
-    return $Subs{$self};
+    return $_SUBS{$self};
 }
 
 sub packages {
     my ($self) = @_;
-    return $Packages{$self};
+    return $_PACKAGES{$self};
 }
 
 sub lines {
     my ($self) = @_;
-    return $Lines{$self};
+    return $_LINES{$self};
 }
 
 sub logic_keywords {
     my ($self) = @_;
-    return wantarray ? @{$LogicKeywords{$self}} : $LogicKeywords{$self};
+    return wantarray ? @{$_LOGIC_KEYWORDS{$self}} : $_LOGIC_KEYWORDS{$self};
 }
 
 sub logic_operators {
     my ($self) = @_;
-    return wantarray ? @{$LogicOperators{$self}} : $LogicOperators{$self};
+    return wantarray ? @{$_LOGIC_OPERATORS{$self}} : $_LOGIC_OPERATORS{$self};
 }
 
 sub measure_complexity {

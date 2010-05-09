@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.10 2010/02/07 20:59:07 matisse Exp $
-# $Revision: 1.10 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v 1.11 2010/05/09 17:57:07 matisse Exp $
+# $Revision: 1.11 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/bin/countperl,v $
-# $Date: 2010/02/07 20:59:07 $
+# $Date: 2010/05/09 17:57:07 $
 ###############################################################################
 
 package main;
@@ -75,17 +75,17 @@ my @main_from_each_file = map { $_->{main_stats} } @{ $analysis->file_stats };
 
 my @sorted_subs = sort _by_complexity(), @{ $analysis->subs },
     @main_from_each_file;
-my $header = join( "\t", 'complexity', 'sub', 'path', 'size' );
+my $header = join "\t", 'complexity', 'sub', 'path', 'size';
 $header .= "\n";
 print "$header"
-    || Carp::croak('Could not print to currently selectd filehandle.');
+    || Carp::croak 'Could not print to currently selectd filehandle.';
 foreach my $sub (@sorted_subs) {
     my %sub_hash = %{$sub};
-    my $line     = join( "\t",
-        @sub_hash{ 'mccabe_complexity', 'name', 'path', 'lines' } );
+    my $line     = join "\t",
+        @sub_hash{ 'mccabe_complexity', 'name', 'path', 'lines' };
     $line .= "\n";
     print "$line"
-        || Carp::croak('Could not print to currently selected file handle.');
+        || Carp::croak 'Could not print to currently selected file handle.';
 }
 
 exit;

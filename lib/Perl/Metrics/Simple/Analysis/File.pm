@@ -1,8 +1,8 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.22 2010/05/09 17:57:07 matisse Exp $
-# $Revision: 1.22 $
+# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v 1.23 2010/05/09 18:02:28 matisse Exp $
+# $Revision: 1.23 $
 # $Author: matisse $
 # $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm,v $
-# $Date: 2010/05/09 17:57:07 $
+# $Date: 2010/05/09 18:02:28 $
 ###############################################################################
 
 package Perl::Metrics::Simple::Analysis::File;
@@ -17,7 +17,7 @@ use PPI;
 use PPI::Document;
 use Readonly;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX =>
     qr/ ( \Q$INPUT_RECORD_SEPARATOR\E ) /sxm;

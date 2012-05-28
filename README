@@ -1,5 +1,5 @@
 NAME
-    Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
+    Perl::Metrics::Simple - Static analysis of Perl code. Counts complexity, packages, subs, lines, etc. of many files.
 
 DESCRIPTION
 
@@ -16,7 +16,7 @@ AUTHOR
         Matisse Enzer
         CPAN ID: MATISSE
         Eigenstate Consulting, LLC
-        matisse@eigenstate.net
+        matisse@cpan.org
         http://www.eigenstate.net/
 
 LICENSE AND COPYRIGHT

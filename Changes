@@ -1,5 +1,12 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.16
+  The countperl script now offers HTML output as well as plain text,
+  thanks to Merten Falk.
+
+  Perl::Metrics::Simple is on github at:
+     https://github.com/matisse/Perl-Metrics-Simple
+
 0.15
   Changes for https://rt.cpan.org/Public/Bug/Display.html?id=56441
   Thanks to Maggie J. Xiong for the inquiry, inspiration and patch.

@@ -10,7 +10,7 @@ build_requires:
   Test::Pod::Coverage: 1.04
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3607'
+generated_by: 'Module::Build version 0.3603'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -19,13 +19,13 @@ name: Perl-Metrics-Simple
 provides:
   Perl::Metrics::Simple:
     file: lib/Perl/Metrics/Simple.pm
-    version: 0.14
+    version: 0.16
   Perl::Metrics::Simple::Analysis:
     file: lib/Perl/Metrics/Simple/Analysis.pm
-    version: 0.14
+    version: 0.16
   Perl::Metrics::Simple::Analysis::File:
     file: lib/Perl/Metrics/Simple/Analysis/File.pm
-    version: 0.14
+    version: 0.16
 recommends:
   Readonly::XS: 1.02
 requires:
@@ -42,4 +42,4 @@ requires:
   Statistics::Basic::StdDev: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.14
+version: 0.16

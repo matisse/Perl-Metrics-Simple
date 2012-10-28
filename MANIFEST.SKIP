@@ -1,4 +1,5 @@
 blib
+.git
 .cvsignore
 .project
 .settings

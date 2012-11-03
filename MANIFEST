@@ -31,3 +31,4 @@ t/test_files/package_no_subs.pl
 t/test_files/Perl/Code/Analyze/Test/Module.pm
 t/test_files/subs_no_package.pl
 Todo
+META.json

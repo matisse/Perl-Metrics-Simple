@@ -21,7 +21,7 @@ use Perl::Metrics::Simple::Analysis;
 use Perl::Metrics::Simple::Analysis::File;
 use Readonly;
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 Readonly::Scalar our $PERL_FILE_SUFFIXES => qr{ \. (:? pl | pm | t ) }sxmi;
 Readonly::Scalar our $SKIP_LIST_REGEX    => qr{ \.svn | \. git | _darcs | CVS }sxmi;

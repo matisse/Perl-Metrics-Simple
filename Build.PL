@@ -1,20 +1,14 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v 1.15 2007/12/30 21:37:31 matisse Exp $
-# $Revision: 1.15 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Build.PL,v $
-# $Date: 2007/12/30 21:37:31 $
-###############################################################################
 use strict;
 use warnings;
 use Module::Build;
 
-
 # See perldoc Module::Build for details of how this works
 
 Module::Build->new(
-    module_name => 'Perl::Metrics::Simple',
-    license     => 'perl',
-    requires    => {
+    module_name        => 'Perl::Metrics::Simple',
+    license            => 'perl',
+    configure_requires => { 'Module::Build' => 0.40 },
+    requires           => {
         'Carp'                      => 0,
         'Data::Dumper'              => 0,
         'File::Basename'            => 0,
@@ -28,7 +22,7 @@ Module::Build->new(
         'Pod::Usage'                => 0,
     },
     recommends => {
-        'Readonly::XS' => 1.02, # Speeds up Readonly scalars
+        'Readonly::XS' => 1.02,                 # Speeds up Readonly scalars
     },
     build_requires => {
         'Data::Dumper'        => 0,
@@ -40,4 +34,8 @@ Module::Build->new(
     },
     script_files => { 'bin/countperl' => 1, },
     add_to_cleanup => [ '*.tar.gz', 'Makefile', 'Makefile.old' ],
+    meta_merge     => {
+        resources =>
+            { repository => 'https://github.com/matisse/Perl-Metrics-Simple', },
+    },
 )->create_build_script;

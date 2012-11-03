@@ -51,22 +51,25 @@
    "provides" : {
       "Perl::Metrics::Simple" : {
          "file" : "lib/Perl/Metrics/Simple.pm",
-         "version" : "0.16"
+         "version" : "0.17"
       },
       "Perl::Metrics::Simple::Analysis" : {
          "file" : "lib/Perl/Metrics/Simple/Analysis.pm",
-         "version" : "0.16"
+         "version" : "0.17"
       },
       "Perl::Metrics::Simple::Analysis::File" : {
          "file" : "lib/Perl/Metrics/Simple/Analysis/File.pm",
-         "version" : "0.16"
+         "version" : "0.17"
       }
    },
    "release_status" : "stable",
    "resources" : {
       "license" : [
          "http://dev.perl.org/licenses/"
-      ]
+      ],
+      "repository" : {
+         "url" : "https://github.com/matisse/Perl-Metrics-Simple"
+      }
    },
-   "version" : "0.16"
+   "version" : "0.17"
 }

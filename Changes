@@ -1,5 +1,12 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.17
+  Clarified terms of license, updated FSF address: 
+    https://rt.cpan.org/Ticket/Display.html?id=80463
+
+  countperl now utilizes Pod::Usage for diagnostic and new --help option
+    https://rt.cpan.org/Ticket/Display.html?id=80462
+
 0.16
   The countperl script now offers HTML output as well as plain text,
   thanks to Merten Falk.

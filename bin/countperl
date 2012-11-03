@@ -5,13 +5,14 @@ use warnings;
 use English qw(-no_match_vars);
 use Carp qw();
 use Readonly;
+use Pod::Usage qw(pod2usage);
 use Perl::Metrics::Simple qw(0.13);
 
 Readonly::Scalar my $MAX_PLAINTEXT_LABEL_LENGTH => 25;
 Readonly::Scalar my $EMPTY_STRING               => q{};
 Readonly::Scalar my $ONE_SPACE                  => q{ };
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 my $COMPLEXITY_LEVEL_THRESHOLD = {
     BTW => 10,
@@ -69,28 +70,27 @@ sub main {
 
 sub parse_opts {
     if ( !@ARGV ) {
-        print usage() || Carp::croak "Cannot print! $OS_ERROR";
-
-        exit 1;
+        pod2usage(
+            -msg     => "Missing required argument(s).\n",
+            -exitval => 1,
+            -verbose => 1,
+        );    # exits program
     }
 
     foreach (@ARGV) {
         if ( $_ eq '--html' ) {
             $HTML_OUTPUT = 1;
+            next;
         }
-        else {
-            push @FILES, $_;
-        }
-    }
-    return;
-}
 
-sub usage {
-    my $usage = <<'EOU';
-Usage:
-    $PROGRAM_NAME FILE_OR_DIRECTORY [FILE_OR_DIRECTORY ....]
-EOU
-    return $usage;
+        if ( $_ eq '--help' ) {
+            pod2usage( -verbose => 2, -exitval => 1 );  # exits program
+        }
+
+        push @FILES, $_;
+    }
+
+    return;
 }
 
 sub set_analysis {
@@ -115,14 +115,12 @@ sub make_plain {
 
 sub make_counts_plain {
     my $counts_plain = make_headline_plain('Counts');
-    $counts_plain
-        .= make_line_plain( 'total code lines', $ANALYSIS->lines() );
+    $counts_plain .= make_line_plain( 'total code lines', $ANALYSIS->lines() );
     $counts_plain .= make_line_plain( 'lines of non-sub code',
         $ANALYSIS->main_stats()->{lines} );
     $counts_plain
         .= make_line_plain( 'packages found', $ANALYSIS->package_count() );
-    $counts_plain
-        .= make_line_plain( 'subs/methods', $ANALYSIS->sub_count() );
+    $counts_plain .= make_line_plain( 'subs/methods', $ANALYSIS->sub_count() );
     $counts_plain .= "\n\n";
     return $counts_plain;
 }
@@ -180,10 +178,10 @@ sub make_complexity_section_plain {
 
     my $complexity_section_plain = $section . "\n";
 
-    $complexity_section_plain .= make_line_plain( 'min',
-        $ANALYSIS->summary_stats()->{$key}->{min} );
-    $complexity_section_plain .= make_line_plain( 'max',
-        $ANALYSIS->summary_stats()->{$key}->{max} );
+    $complexity_section_plain
+        .= make_line_plain( 'min', $ANALYSIS->summary_stats()->{$key}->{min} );
+    $complexity_section_plain
+        .= make_line_plain( 'max', $ANALYSIS->summary_stats()->{$key}->{max} );
     $complexity_section_plain .= make_line_plain( 'mean',
         $ANALYSIS->summary_stats()->{$key}->{mean} );
     $complexity_section_plain .= make_line_plain( 'std. deviation',
@@ -201,8 +199,8 @@ sub make_list_of_subs_plain {
 
     my $column_widths = get_column_widths(@main_from_each_file);
 
-    my $list_of_subs_plain = make_headline_plain(
-        'List of subroutines, with most complex at top');
+    my $list_of_subs_plain
+        = make_headline_plain('List of subroutines, with most complex at top');
 
     $list_of_subs_plain
         .= make_column( 'complexity', $column_widths->{mccabe_complexity} );
@@ -323,8 +321,8 @@ sub make_counts_html {
     my $counts_html = '<table><tr><th colspan="2">Counts</th></tr>';
 
     $counts_html .= make_tr( 'total code lines', $ANALYSIS->lines() );
-    $counts_html .= make_tr( 'lines of non-sub code',
-        $ANALYSIS->main_stats()->{lines} );
+    $counts_html
+        .= make_tr( 'lines of non-sub code', $ANALYSIS->main_stats()->{lines} );
     $counts_html .= make_tr( 'packages found', $ANALYSIS->package_count() );
     $counts_html .= make_tr( 'subs/methods',   $ANALYSIS->sub_count() );
 
@@ -353,8 +351,8 @@ sub make_subroutine_size_html {
         .= make_tr( 'min', $ANALYSIS->summary_stats()->{sub_length}->{min} );
     $subroutine_size_html
         .= make_tr( 'max', $ANALYSIS->summary_stats()->{sub_length}->{max} );
-    $subroutine_size_html .= make_tr( 'mean',
-        $ANALYSIS->summary_stats()->{sub_length}->{mean} );
+    $subroutine_size_html
+        .= make_tr( 'mean', $ANALYSIS->summary_stats()->{sub_length}->{mean} );
     $subroutine_size_html .= make_tr( 'std. deviation',
         $ANALYSIS->summary_stats()->{sub_length}->{standard_deviation} );
     $subroutine_size_html .= make_tr( 'median',
@@ -500,7 +498,7 @@ countperl - count lines, packages, subs and complexity of Perl files.
 
 =head1 USAGE
 
-B<countperl> F<FILE_OR_DIRECTORY> [F<FILE_OR_DIRECTORY> ....] [--html]
+B<countperl> F<FILE_OR_DIRECTORY> [F<FILE_OR_DIRECTORY> ....] [--html] [--help]
 
 =head1 REQUIRED ARGUMENTS
 
@@ -509,6 +507,10 @@ At least one file or directory path must be supplied.
 =head1 OPTIONS
 
 =over 4
+
+=item --help
+
+Prints documentation to STDERR.
 
 =item --html
 
@@ -597,7 +599,7 @@ This is version 0.031 of F<countperl>.
 
 =head1 DIAGNOSTICS
 
-None avalable.
+Prints usage message to STDERR if required arguments are not provided.
 
 =head1 INCOMPATIBILITIES
 

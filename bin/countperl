@@ -347,16 +347,17 @@ sub make_subroutine_size_html {
     my $subroutine_size_html
         = '<table><tr><th colspan="2">Subroutine/Method Size</th></tr>';
 
-    $subroutine_size_html
-        .= make_tr( 'min', $ANALYSIS->summary_stats()->{sub_length}->{min} );
-    $subroutine_size_html
-        .= make_tr( 'max', $ANALYSIS->summary_stats()->{sub_length}->{max} );
-    $subroutine_size_html
-        .= make_tr( 'mean', $ANALYSIS->summary_stats()->{sub_length}->{mean} );
-    $subroutine_size_html .= make_tr( 'std. deviation',
-        $ANALYSIS->summary_stats()->{sub_length}->{standard_deviation} );
-    $subroutine_size_html .= make_tr( 'median',
-        $ANALYSIS->summary_stats()->{sub_length}->{median} );
+    my $min                = $ANALYSIS->summary_stats()->{sub_length}->{min}                || 0;
+    my $max                = $ANALYSIS->summary_stats()->{sub_length}->{max}                || 0;
+    my $mean               = $ANALYSIS->summary_stats()->{sub_length}->{mean}               || '0.00';
+    my $standard_deviation = $ANALYSIS->summary_stats()->{sub_length}->{standard_deviation} || '0.00';
+    my $median             = $ANALYSIS->summary_stats()->{sub_length}->{median}             || '0.00';
+
+    $subroutine_size_html .= make_tr( 'min',            $min );
+    $subroutine_size_html .= make_tr( 'max',            $max );
+    $subroutine_size_html .= make_tr( 'mean',           $mean );
+    $subroutine_size_html .= make_tr( 'std. deviation', $standard_deviation );
+    $subroutine_size_html .= make_tr( 'median',         $median );
 
     $subroutine_size_html .= '</table>';
 
@@ -385,35 +386,20 @@ sub make_complexity_section_html {
     my $complexity_section_html
         = '<tr><td rowspan="5" class="w200">' . $section . '</td>';
 
-    $complexity_section_html
-        .= '<td class="w200">min</td><td class="w100 right '
-        . get_class_by_count( $ANALYSIS->summary_stats()->{$key}->{min} )
-        . '">';
-    $complexity_section_html .= $ANALYSIS->summary_stats()->{$key}->{min};
+    my $min                = $ANALYSIS->summary_stats()->{$key}->{min}                || 0;
+    my $max                = $ANALYSIS->summary_stats()->{$key}->{max}                || 0;
+    my $mean               = $ANALYSIS->summary_stats()->{$key}->{mean}               || '0.00';
+    my $standard_deviation = $ANALYSIS->summary_stats()->{$key}->{standard_deviation} || '0.00';
+    my $median             = $ANALYSIS->summary_stats()->{$key}->{median}             || '0.00';
+
+    $complexity_section_html .= '<td class="w200">min</td><td class="w100 right ' . get_class_by_count( $min ) . '">';
+    $complexity_section_html .= $min;
     $complexity_section_html .= '</td></tr>';
 
-    $complexity_section_html .= make_tr(
-        'max',
-        $ANALYSIS->summary_stats()->{$key}->{max},
-        get_class_by_count( $ANALYSIS->summary_stats()->{$key}->{max} )
-    );
-    $complexity_section_html .= make_tr(
-        'mean',
-        $ANALYSIS->summary_stats()->{$key}->{mean},
-        get_class_by_count( $ANALYSIS->summary_stats()->{$key}->{mean} )
-    );
-    $complexity_section_html .= make_tr(
-        'std. deviation',
-        $ANALYSIS->summary_stats()->{$key}->{standard_deviation},
-        get_class_by_count(
-            $ANALYSIS->summary_stats()->{$key}->{standard_deviation}
-        )
-    );
-    $complexity_section_html .= make_tr(
-        'median',
-        $ANALYSIS->summary_stats()->{$key}->{median},
-        get_class_by_count( $ANALYSIS->summary_stats()->{$key}->{median} )
-    );
+    $complexity_section_html .= make_tr( 'max',            $max,                get_class_by_count( $max ) );
+    $complexity_section_html .= make_tr( 'mean',           $mean,               get_class_by_count( $mean ) );
+    $complexity_section_html .= make_tr( 'std. deviation', $standard_deviation, get_class_by_count( $standard_deviation ) );
+    $complexity_section_html .= make_tr( 'median',         $median,             get_class_by_count( $median ) );
 
     return $complexity_section_html;
 }
@@ -517,7 +503,7 @@ Prints documentation to STDERR.
 Produces HTML output instead of the plain-text default.
 
 =back
- 
+
 =head1 CONFIGURATION
 
 N/A. Currently no support for any configuration files.

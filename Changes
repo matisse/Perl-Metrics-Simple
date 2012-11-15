@@ -1,6 +1,9 @@
 Revision history for Perl module Perl::Metrics::Simple
 
 0.17
+  Merten Falk - Added default values for subroutine metrics if
+  there is no subroutine.
+  
   Clarified terms of license, updated FSF address: 
     https://rt.cpan.org/Ticket/Display.html?id=80463
 

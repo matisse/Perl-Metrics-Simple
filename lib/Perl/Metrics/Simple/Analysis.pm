@@ -378,9 +378,9 @@ None reported yet ;-)
 
 =over 4
 
-=item L<Readonly>
+=item L<Readonly|Readonly>
 
-=item L<Statistics::Basic>
+=item L<Statistics::Basic|Statistics::Basic>
 
 =back
 

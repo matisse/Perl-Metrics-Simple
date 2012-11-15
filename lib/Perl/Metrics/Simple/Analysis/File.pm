@@ -610,7 +610,7 @@ for example C<foo> and C<bar> are hash keys in the following:
  
 Copied and somehwat simplified from
 http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
-See L<Perl::Critic::Utils>.
+See L<Perl::Critic::Utils|Perl::Critic::Utils>.
 
 =head1 BUGS AND LIMITATIONS
 
@@ -620,9 +620,9 @@ None reported yet ;-)
 
 =over 4
 
-=item L<Readonly>
+=item L<Readonly|Readonly>
 
-=item L<Perl::Metrics::Simple::Analysis>
+=item L<Perl::Metrics::Simple::Analysis|Perl::Metrics::Simple::Analysis>
 
 =back
 

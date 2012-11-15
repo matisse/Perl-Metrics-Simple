@@ -68,7 +68,7 @@ sub list_perl_files {
         return if $self->should_be_skipped($File::Find::name);
         if ( $self->is_perl_file($File::Find::name) )
         {
-            push @files, $File::Find::name;  ## no critic (ProhibitPackageVars)
+            push @files, $File::Find::name;
         }
     };
 
@@ -146,7 +146,7 @@ of one or many Perl files and obtain a few metrics: packages, subroutines,
 lines of code, and an approximation of cyclomatic (mccabe) complexity for
 the subroutines and the "main" portion of the code.
 
-B<Perl::Metrics::Simple> is far simpler than L<Perl::Metrics>.
+B<Perl::Metrics::Simple> is far simpler than L<Perl::Metrics|Perl::Metrics>.
 
 Installs a script called B<countperl>.
 
@@ -159,7 +159,7 @@ for a simple example of usage.
 
 =head2 new
 
-Takes no arguments and returns a new L<Perl::Metrics::Simple> object.
+Takes no arguments and returns a new L<Perl::Metrics::Simple|Perl::Metrics::Simple> object.
 
 =head2 is_perl_file
 
@@ -171,7 +171,7 @@ Takes a path and returns true if the target is a Perl file.
 
 Takes an array of files and or directory paths, and/or
 SCALAR refs to file contents and returns
-an L<Perl::Metrics::Simple::Analysis> object.
+an L<Perl::Metrics::Simple::Analysis|Perl::Metrics::Simple::Analysis> object.
 
 =head2 find_files( @directories_and_files )
 
@@ -239,11 +239,11 @@ LICENSE file included with this module.
 
 =item The F<countperl> script included with this distribution.
 
-=item L<PPI>
+=item L<PPI|PPI>
 
-=item L<Perl::Critic>
+=item L<Perl::Critic|Perl::Critic>
 
-=item L<Perl::Metrics>
+=item L<Perl::Metrics|Perl::Metrics>
 
 =item http://en.wikipedia.org/wiki/Cyclomatic_complexity
 

@@ -18,6 +18,7 @@ our $VERSION = '0.01';
 # Bad hack. Do this in the data instead!
 our @ORDER_OF_FILES = qw(
   Module.pm
+  Moose.pm
   empty_file.pl
   no_packages_nor_subs
   package_no_subs.pl
@@ -170,6 +171,33 @@ sub make_test_data {
             packages => [
                 'Perl::Metrics::Simple::Test::Module',
                 'Perl::Metrics::Simple::Test::Module::InnerClass'
+            ],
+        },
+        'Moose.pm' => {
+            path       => "$test_directory/Perl/Code/Analyze/Test/Moose.pm",
+            lines      => 9,
+            main_stats => {
+                lines             => 3,
+                mccabe_complexity => 1,
+                name              => '{code not in named subroutines}',
+                path => "$test_directory/Perl/Code/Analyze/Test/Moose.pm",
+            },
+            subs => [
+                {
+                    name              => 'foo',
+                    lines             => 3,
+                    mccabe_complexity => 1,
+                    path => "$test_directory/Perl/Code/Analyze/Test/Moose.pm",
+                },
+                {
+                    name              => '_after_bar',
+                    lines             => 3,
+                    mccabe_complexity => 1,
+                    path => "$test_directory/Perl/Code/Analyze/Test/Moose.pm",
+                },
+            ],
+            packages => [
+                'Perl::Metrics::Simple::Test::Moose',
             ],
         },
       },

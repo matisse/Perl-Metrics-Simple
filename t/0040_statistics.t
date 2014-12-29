@@ -57,28 +57,28 @@ sub test_summary_stats {
     my $sub_length = $analysis->summary_stats->{sub_length};
     cmp_ok( $sub_length->{min},    '==', 1,   'minimum sub length.' );
     cmp_ok( $sub_length->{max},    '==', 9,   'maximum sub length.' );
-    cmp_ok( $sub_length->{mean},   '==', 5.2, 'mean (average) sub length.' );
-    cmp_ok( $sub_length->{median}, '==', 5,   'median sub length.' );
+    cmp_ok( $sub_length->{mean},   '==', 4.57, 'mean (average) sub length.' );
+    cmp_ok( $sub_length->{median}, '==', 3,   'median sub length.' );
     cmp_ok( $sub_length->{standard_deviation},
-        '==', 3.37, 'standard deviation of sub length.' );
+        '==', 3.02, 'standard deviation of sub length.' );
 
     my $sub_complexity = $analysis->summary_stats->{sub_complexity};
     cmp_ok( $sub_complexity->{min}, '==', 1, 'minimum sub complexity.' );
     cmp_ok( $sub_complexity->{max}, '==', 8, 'maximum sub complexity.' );
     cmp_ok( $sub_complexity->{mean},
-        '==', 3.2, 'mean (average) sub complexity.' );
+        '==', 2.57, 'mean (average) sub complexity.' );
     cmp_ok( $sub_complexity->{median}, '==', 1, 'median sub complexity.' );
     cmp_ok( $sub_complexity->{standard_deviation},
-        '==', 2.86, 'standard deviation of sub complexity.' );
+        '==', 2.61, 'standard deviation of sub complexity.' );
 
     my $main_complexity = $analysis->summary_stats->{main_complexity};
     cmp_ok( $main_complexity->{min}, '==', 0, 'minimum main complexity.' );
     cmp_ok( $main_complexity->{max}, '==', 3, 'maximum main complexity.' );
     cmp_ok( $main_complexity->{mean},
-        '==', 1.4, 'mean (average) main complexity.' );
+        '==', 1.33, 'mean (average) main complexity.' );
     cmp_ok( $main_complexity->{median}, '==', 1, 'median main complexity.' );
     cmp_ok( $main_complexity->{standard_deviation},
-        '==', 1.02, 'standard deviation of main complexity.' );
+        '==', 0.94, 'standard deviation of main complexity.' );
 
     return 1;
 }

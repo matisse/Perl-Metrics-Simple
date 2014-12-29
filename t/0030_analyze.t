@@ -167,6 +167,7 @@ sub test_analyze_files {
     my $analysis = $analyzer->analyze_files($TEST_DIRECTORY);
     my @expected = (
         $test_data->{'Module.pm'},
+        $test_data->{'Moose.pm'},
         $test_data->{'empty_file.pl'},
         $test_data->{'no_packages_nor_subs'},
         $test_data->{'package_no_subs.pl'},
@@ -197,6 +198,7 @@ sub test_analysis {
 
     my @expected_files = (
         $test_data->{'Module.pm'}->{path},
+        $test_data->{'Moose.pm'}->{path},
         $test_data->{'empty_file.pl'}->{path},
         $test_data->{'no_packages_nor_subs'}->{path},
         $test_data->{'package_no_subs.pl'}->{path},
@@ -212,6 +214,7 @@ sub test_analysis {
     my @expected_packages = (
         'Perl::Metrics::Simple::Test::Module',
         'Perl::Metrics::Simple::Test::Module::InnerClass',
+        'Perl::Metrics::Simple::Test::Moose',
         'Hello::Dolly',
     );
     is_deeply( $analysis->packages, \@expected_packages,

@@ -8,8 +8,8 @@ sub foo {
     return 42;
 }
 
-sub _after_bar {
+after 'bar' => sub {
     print 43;
-}
+};
 
 1;

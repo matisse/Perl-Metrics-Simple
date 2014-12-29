@@ -156,8 +156,9 @@ sub _create_ppi_document {
 }
 
 sub _make_pruned_document {
-    my $document = shift;;
+    my $document = shift;
     $document = _prune_non_code_lines($document);
+    $document = _rewrite_moose_method_modifiers($document);
     $document->index_locations();
     $document->readonly(1);
     return $document;
@@ -370,6 +371,50 @@ sub _prune_non_code_lines {
     $document->prune('PPI::Token::Comment');
     $document->prune('PPI::Token::Pod');
     $document->prune('PPI::Token::End');
+
+    return $document;
+}
+
+sub _rewrite_moose_method_modifiers {
+    my $document = shift;
+    if ( !defined $document ) {
+        Carp::confess('Did not supply a document!');
+    }
+
+    my @method_modifiers =
+        # return only the item, not its child nodes
+        map  { $_->[0] }
+
+        # 5th child: { ... }
+        grep { $_->[5]->isa('PPI::Structure::Block') }
+
+        # 4th child: sub
+        grep {
+               $_->[4]->isa('PPI::Token::Word')
+            && $_->[4]->content eq 'sub'
+        }
+
+        # 3rd child: =>
+        grep {
+               $_->[3]->isa('PPI::Token::Operator')
+            && $_->[3]->content eq '=>'
+        }
+
+        # 2nd child: 'method_name'
+        grep { $_->[2]->isa('PPI::Token::Quote') }
+
+        # 1st child: after
+        grep {
+               $_->[1]->isa('PPI::Token::Word')
+            && $_->[1]->content =~ /^(before|after|around)$/
+        }
+
+        # create an arrayref [item, child0, child1, child2]
+        # for easier, cheaper access
+        map { [ $_, $_->schildren ] }
+
+        # don't want subclasses of PPI::Statement here
+        grep { $_->class eq 'PPI::Statement' } $document->schildren;
 
     return $document;
 }

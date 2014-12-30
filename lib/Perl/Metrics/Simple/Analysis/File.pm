@@ -382,9 +382,6 @@ sub _rewrite_moose_method_modifiers {
     }
 
     my @method_modifiers =
-        # return only the item, not its child nodes
-        map  { $_->[0] }
-
         # 5th child: { ... }
         grep { $_->[5]->isa('PPI::Structure::Block') }
 
@@ -415,6 +412,20 @@ sub _rewrite_moose_method_modifiers {
 
         # don't want subclasses of PPI::Statement here
         grep { $_->class eq 'PPI::Statement' } $document->schildren;
+
+    for (@method_modifiers) {
+        my ($old_stmt, @children) = @$_;
+        my $name = '_' . $children[0]->literal . '_' . $children[1]->string;
+        my $new_stmt = PPI::Statement::Sub->new();
+        $new_stmt->add_element(PPI::Token::Word->new('sub'));
+        $new_stmt->add_element(PPI::Token::Whitespace->new(' '));
+        $new_stmt->add_element(PPI::Token::Word->new($name));
+        $new_stmt->add_element(PPI::Token::Whitespace->new(' '));
+        $new_stmt->add_element($children[4]->clone());
+
+        $old_stmt->insert_after($new_stmt);
+        $old_stmt->delete();
+    }
 
     return $document;
 }

@@ -64,11 +64,19 @@ Readonly::Array our @DEFAULT_LOGIC_KEYWORDS => qw(
     until
     while
     );
+
+Readonly::Array our @DEFAULT_METHOD_MODIFIERS => qw(
+    before
+    after
+    around
+    );
+
+
 Readonly::Scalar my $LAST_CHARACTER => -1;
 
-our (@LOGIC_KEYWORDS, @LOGIC_OPERATORS); # For user-supplied values;
+our (@LOGIC_KEYWORDS, @LOGIC_OPERATORS, @METHOD_MODIFIERS); # For user-supplied values;
 
-our (%LOGIC_KEYWORDS, %LOGIC_OPERATORS); # Populated in _init()
+our (%LOGIC_KEYWORDS, %LOGIC_OPERATORS, %METHOD_MODIFIERS); # Populated in _init()
 
 # Private instance variables:
 my %_PATH       = ();
@@ -78,6 +86,7 @@ my %_PACKAGES   = ();
 my %_LINES      = ();
 my %_LOGIC_KEYWORDS = ();
 my %_LOGIC_OPERATORS = ();
+my %_METHOD_MODIFIERS = ();
 
 sub new {
     my ( $class, %parameters ) = @_;
@@ -106,14 +115,6 @@ sub _init {
         }
         $document = _create_ppi_document($path);
     }
-    $document = _make_pruned_document($document);
-
-    if ( !defined $document ) {
-        cluck "Could not make a PPI document from '$path'";
-        return;
-    }
-
-    my $packages = _get_packages($document);
 
     my @logic_keywords = @LOGIC_KEYWORDS  ? @LOGIC_KEYWORDS : @DEFAULT_LOGIC_KEYWORDS;
     %LOGIC_KEYWORDS = hashify(@logic_keywords);
@@ -122,6 +123,19 @@ sub _init {
     my @logic_operators = @LOGIC_OPERATORS ? @LOGIC_OPERATORS : @DEFAULT_LOGIC_OPERATORS;
     %LOGIC_OPERATORS = hashify(@logic_operators);
     $_LOGIC_OPERATORS{$self} = \%LOGIC_OPERATORS;
+
+    my @method_modifiers = @METHOD_MODIFIERS ? @METHOD_MODIFIERS : @DEFAULT_METHOD_MODIFIERS;
+    %METHOD_MODIFIERS = hashify(@method_modifiers);
+    $_METHOD_MODIFIERS{$self} = \%METHOD_MODIFIERS;
+
+    $document = $self->_make_pruned_document($document);
+
+    if ( !defined $document ) {
+        cluck "Could not make a PPI document from '$path'";
+        return;
+    }
+
+    my $packages = _get_packages($document);
 
     my @sub_analysis = ();
     my $sub_elements = $document->find('PPI::Statement::Sub');
@@ -156,8 +170,9 @@ sub _create_ppi_document {
 }
 
 sub _make_pruned_document {
-    my $document = shift;;
+    my ($self, $document) = @_;
     $document = _prune_non_code_lines($document);
+    $document = $self->_rewrite_moose_method_modifiers($document);
     $document->index_locations();
     $document->readonly(1);
     return $document;
@@ -261,6 +276,11 @@ sub logic_operators {
     my ($self) = @_;
     return wantarray ? @{$_LOGIC_OPERATORS{$self}} : $_LOGIC_OPERATORS{$self};
 }
+
+sub method_modifiers {
+    my ($self) = @_;
+    return wantarray ? @{$_METHOD_MODIFIERS{$self}} : $_METHOD_MODIFIERS{$self};
+1}
 
 sub measure_complexity {
     my $self = shift;
@@ -374,6 +394,63 @@ sub _prune_non_code_lines {
     return $document;
 }
 
+sub _rewrite_moose_method_modifiers {
+    my ($self, $document) = @_;
+    if ( !defined $document ) {
+        Carp::confess('Did not supply a document!');
+    }
+
+    my $re = '^(' . join('|', map {quotemeta} keys %{$_METHOD_MODIFIERS{$self}}) . ')$';
+    my @method_modifiers =
+        # 5th child: { ... }
+        grep { $_->[5]->isa('PPI::Structure::Block') }
+
+        # 4th child: sub
+        grep {
+               $_->[4]->isa('PPI::Token::Word')
+            && $_->[4]->content eq 'sub'
+        }
+
+        # 3rd child: =>
+        grep {
+               $_->[3]->isa('PPI::Token::Operator')
+            && $_->[3]->content eq '=>'
+        }
+
+        # 2nd child: 'method_name'
+        grep { $_->[2]->isa('PPI::Token::Quote')
+            || $_->[2]->isa('PPI::Token::Word') }
+
+        # 1st child: after
+        grep {
+               $_->[1]->isa('PPI::Token::Word')
+            && $_->[1]->content =~ /$re/
+        }
+
+        # create an arrayref [item, child0, child1, child2]
+        # for easier, cheaper access
+        map { [ $_, $_->schildren ] }
+
+        # don't want subclasses of PPI::Statement here
+        grep { $_->class eq 'PPI::Statement' } $document->schildren;
+
+    for (@method_modifiers) {
+        my ($old_stmt, @children) = @$_;
+        my $name = '_' . $children[0]->literal . '_' . $children[1]->literal;
+        my $new_stmt = PPI::Statement::Sub->new();
+        $new_stmt->add_element(PPI::Token::Word->new('sub'));
+        $new_stmt->add_element(PPI::Token::Whitespace->new(' '));
+        $new_stmt->add_element(PPI::Token::Word->new($name));
+        $new_stmt->add_element(PPI::Token::Whitespace->new(' '));
+        $new_stmt->add_element($children[4]->clone());
+
+        $old_stmt->insert_after($new_stmt);
+        $old_stmt->delete();
+    }
+
+    return $document;
+}
+
 1;
 
 __END__
@@ -471,6 +548,11 @@ used in calculating complexity. See I<Logic Keywords> section below.
 Returns an array (in array context) or ref-to-ARRAY of the operators
 used in calculating complexity. See I<Logic Operators> section below.
 
+=head2 method_modifiers
+
+Returns an array (in array context) or ref-to-ARRAY of the method modifiers
+considered to return methods during calculating complexity. See I<Method modifiers> section below.
+
 =head2 measure_complexity
 
 Takes a B<PPI> element and measures an approximation of the
@@ -542,6 +624,17 @@ I<@Perl::Metrics::Simple::Analysis::File::DEFAULT_LOGIC_KEYWORDS>
 You can supply your own list by setting:
 I<@Perl::Metrics::Simple::Analysis::File::LOGIC_KEYWORDS> before creating a
 new object.
+
+=head3 Method modifiers:
+
+I<@Perl::Metrics::Simple::Analysis::File::DEFAULT_METHOD_MODIFIERS>
+
+    before
+    after
+    around
+
+You can supply your own list by setting:
+I<@Perl::Metrics::Simple::Analysis::File::METHOD_MODIFIERS> before creating a new object.
 
 =head3 Examples of Complexity
 

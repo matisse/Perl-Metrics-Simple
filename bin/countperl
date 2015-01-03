@@ -87,6 +87,12 @@ sub parse_opts {
             pod2usage( -verbose => 2, -exitval => 1 );  # exits program
         }
 
+        if ( /--method-modifiers=(\S+)/ ) {
+            push @Perl::Metrics::Simple::Analysis::File::METHOD_MODIFIERS,
+                split /,/, $1;
+            next;
+        }
+
         push @FILES, $_;
     }
 
@@ -484,7 +490,7 @@ countperl - count lines, packages, subs and complexity of Perl files.
 
 =head1 USAGE
 
-B<countperl> F<FILE_OR_DIRECTORY> [F<FILE_OR_DIRECTORY> ....] [--html] [--help]
+B<countperl> F<FILE_OR_DIRECTORY> [F<FILE_OR_DIRECTORY> ...] [--html] [--help] [--method-modifiers=a,b,c]
 
 =head1 REQUIRED ARGUMENTS
 
@@ -501,6 +507,12 @@ Prints documentation to STDERR.
 =item --html
 
 Produces HTML output instead of the plain-text default.
+
+=item --method-modifiers=a,b,c
+
+A comma-separated list of method modifiers to be recognised, see
+L<Moose::Manual::MethodModifiers> for details. If unspecified, the
+default list is before,after,around.
 
 =back
 

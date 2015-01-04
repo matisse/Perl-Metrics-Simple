@@ -35,7 +35,9 @@ Module::Build->new(
     script_files => { 'bin/countperl' => 1, },
     add_to_cleanup => [ '*.tar.gz', 'Makefile', 'Makefile.old' ],
     meta_merge     => {
-        resources =>
-            { repository => 'https://github.com/matisse/Perl-Metrics-Simple', },
+        resources => {
+                repository =>  'https://github.com/matisse/Perl-Metrics-Simple',
+                bugtracker =>  'https://github.com/matisse/Perl-Metrics-Simple/issues',
+            },
     },
 )->create_build_script;

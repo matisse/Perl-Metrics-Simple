@@ -1,5 +1,12 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+0.18
+  Merged changes by mephinet to support better reporting for projects
+  using Moose, so that a method declared as 'foo' => sub {...} will
+  be reported as a sub named _around_foo instead of being counted
+  as part of the "Code not in any subroutine"
+  Pull request was: https://github.com/matisse/Perl-Metrics-Simple/pull/5
+
 0.17
   Merten Falk - Added default values for subroutine metrics if
   there is no subroutine.

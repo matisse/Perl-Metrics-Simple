@@ -12,7 +12,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.4
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.112150'
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.133380'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -21,13 +21,13 @@ name: Perl-Metrics-Simple
 provides:
   Perl::Metrics::Simple:
     file: lib/Perl/Metrics/Simple.pm
-    version: 0.17
+    version: 0.18
   Perl::Metrics::Simple::Analysis:
     file: lib/Perl/Metrics/Simple/Analysis.pm
-    version: 0.17
+    version: 0.18
   Perl::Metrics::Simple::Analysis::File:
     file: lib/Perl/Metrics/Simple/Analysis/File.pm
-    version: 0.17
+    version: 0.18
 recommends:
   Readonly::XS: 1.02
 requires:
@@ -45,4 +45,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: https://github.com/matisse/Perl-Metrics-Simple
-version: 0.17
+version: 0.18

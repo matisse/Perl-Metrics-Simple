@@ -1,5 +1,6 @@
-Perl-Metrics-Simple-*
+*.bak
 Build
 MYMETA.*
+Perl-Metrics-Simple-*
 _build
 blib

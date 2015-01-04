@@ -16,7 +16,7 @@ use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 my %_ANALYSIS_DATA = ();
 my %_FILES         = ();

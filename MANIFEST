@@ -10,6 +10,7 @@ LICENSE
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
+META.json
 META.yml
 README
 t/001_load.t
@@ -29,6 +30,6 @@ t/test_files/no_packages_nor_subs
 t/test_files/not_a_perl_file
 t/test_files/package_no_subs.pl
 t/test_files/Perl/Code/Analyze/Test/Module.pm
+t/test_files/Perl/Code/Analyze/Test/Moose.pm
 t/test_files/subs_no_package.pl
 Todo
-META.json

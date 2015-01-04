@@ -1,9 +1,4 @@
 #!/usr/bin/perl
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/subs_no_package.pl,v 1.4 2006/09/24 19:18:06 matisse Exp $
-# $Revision: 1.4 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/subs_no_package.pl,v $
-# $Date: 2006/09/24 19:18:06 $
 ###############################################################################
 
 use strict;

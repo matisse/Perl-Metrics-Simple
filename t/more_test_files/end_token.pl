@@ -1,9 +1,3 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/more_test_files/end_token.pl,v 1.1 2008/03/15 18:07:51 matisse Exp $
-# $Revision: 1.1 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/more_test_files/end_token.pl,v $
-# $Date: 2008/03/15 18:07:51 $
-
 package end_token; # 1
 
 our $VERSION = '1.0'; # 2

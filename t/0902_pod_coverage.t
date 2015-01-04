@@ -1,11 +1,3 @@
-# -*- perl -*-
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0902_pod_coverage.t,v 1.1 2006/11/26 06:47:43 matisse Exp $
-# $Revision: 1.1 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0902_pod_coverage.t,v $
-# $Date: 2006/11/26 06:47:43 $
-###############################################################################
-
 use strict;
 use warnings;
 use English qw(-no_match_vars);

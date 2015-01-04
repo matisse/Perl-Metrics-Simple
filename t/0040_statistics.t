@@ -1,10 +1,3 @@
-# $Header$
-# $Revision$
-# $Author$
-# $Source$
-# $Date$
-###############################################################################
-
 use strict;
 use warnings;
 use File::Spec qw();

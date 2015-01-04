@@ -1,10 +1,3 @@
-# $Header$
-# $Revision$
-# $Author$
-# $Source$
-# $Date$
-###############################################################################
-
 package Perl::Metrics::Simple::TestData;
 use strict;
 use warnings;

@@ -1,10 +1,3 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v 1.7 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.7 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/Perl/Code/Analyze/Test/Module.pm,v $
-# $Date: 2006/11/23 22:25:48 $
-###############################################################################
-
 # This is a comment. I love comments.
 
 package Perl::Metrics::Simple::Test::Module;

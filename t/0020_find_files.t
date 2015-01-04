@@ -1,9 +1,3 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v 1.6 2008/07/19 17:36:27 matisse Exp $
-# $Revision: 1.6 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0020_find_files.t,v $
-# $Date: 2008/07/19 17:36:27 $
-###############################################################################
 use strict;
 use warnings;
 use English qw(-no_match_vars);

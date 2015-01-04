@@ -1,8 +1,3 @@
-# $Revision: 1.3 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/Makefile.PL,v $
-# $Date: 2007/12/30 21:37:30 $
-#
 # ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
 ###############################################################################
 use strict;

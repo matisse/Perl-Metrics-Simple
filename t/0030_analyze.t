@@ -1,10 +1,3 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v 1.19 2010/02/07 20:59:07 matisse Exp $
-# $Revision: 1.19 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/0030_analyze.t,v $
-# $Date: 2010/02/07 20:59:07 $
-###############################################################################
-
 use strict;
 use warnings;
 use English qw(-no_match_vars);

@@ -1,9 +1,4 @@
 #!/usr/bin/perl
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/package_no_subs.pl,v 1.4 2006/11/23 22:25:48 matisse Exp $
-# $Revision: 1.4 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/test_files/package_no_subs.pl,v $
-# $Date: 2006/11/23 22:25:48 $
 ###############################################################################
 
 package Hello::Dolly;

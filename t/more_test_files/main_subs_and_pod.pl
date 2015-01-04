@@ -1,9 +1,3 @@
-# $Header: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/more_test_files/main_subs_and_pod.pl,v 1.1 2008/03/15 18:07:51 matisse Exp $
-# $Revision: 1.1 $
-# $Author: matisse $
-# $Source: /Users/matisse/Desktop/CVS2GIT/matisse.net.cvs/Perl-Metrics-Simple/t/more_test_files/main_subs_and_pod.pl,v $
-# $Date: 2008/03/15 18:07:51 $
-
 package main_subs_and_pod; # 1
 
 use strict; # 2

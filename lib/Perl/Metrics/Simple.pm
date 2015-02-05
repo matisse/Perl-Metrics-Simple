@@ -128,10 +128,6 @@ Perl::Metrics::Simple - Count packages, subs, lines, etc. of many files.
   $main_stats    = $analysis->main_stats;
   $file_stats    = $analysis->file_stats;
 
-=head1 VERSION
-
-This is VERSION 0.12
-
 =head1 DESCRIPTION
 
 B<Perl::Metrics::Simple> provides just enough methods to run static analysis

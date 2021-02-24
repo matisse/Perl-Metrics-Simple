@@ -7,6 +7,7 @@ use Carp qw();
 use Readonly;
 use Pod::Usage qw(pod2usage);
 use Perl::Metrics::Simple qw(0.13);
+use JSON::PP qw(encode_json);
 
 Readonly::Scalar my $MAX_PLAINTEXT_LABEL_LENGTH => 25;
 Readonly::Scalar my $EMPTY_STRING               => q{};
@@ -48,6 +49,7 @@ my $CSS = {
 
 my $ANALYSIS;
 my $HTML_OUTPUT = 0;
+my $JSON_OUTPUT = 0;
 my @FILES       = ();
 
 main();
@@ -61,6 +63,8 @@ sub main {
 
     if ($HTML_OUTPUT) {
         print make_html() || Carp::croak "Cannot print! $OS_ERROR";
+    } elsif ($JSON_OUTPUT) {
+        print make_json() || Carp::croak "Cannot print! $OS_ERROR";
     }
     else {
         print make_plain() || Carp::croak "Cannot print! $OS_ERROR";
@@ -80,6 +84,10 @@ sub parse_opts {
     foreach (@ARGV) {
         if ( $_ eq '--html' ) {
             $HTML_OUTPUT = 1;
+            next;
+        }
+        if ( $_ eq '--json' ) {
+            $JSON_OUTPUT = 1;
             next;
         }
 
@@ -482,6 +490,72 @@ sub get_class_by_count {
 
 ### /HTML
 
+### JSON
+
+sub make_json {
+    my $report = +{
+        statistics => +{
+            file_count => $ANALYSIS->file_count(),
+            counts => make_counts_json(),
+            subroutine_sizes => make_subroutine_size_json(),
+            mccabe_complexity => make_code_complexity_json(),
+        },
+        subs => make_list_of_subs_json(),
+    };
+
+    return encode_json($report);
+}
+
+sub make_counts_json {
+    return +{
+        total_code_lines => $ANALYSIS->lines(),
+        lines_of_non_sub_code => $ANALYSIS->main_stats()->{lines},
+        packages_found => $ANALYSIS->package_count(),
+        subs_and_methods_count => $ANALYSIS->sub_count(),
+    };
+}
+
+sub make_subroutine_size_json {
+    my $stats = $ANALYSIS->summary_stats();
+    return +{
+        min => $stats->{sub_length}->{min},
+        max => $stats->{sub_length}->{max},
+        mean => $stats->{sub_length}->{mean},
+        standard_deviation => $stats->{sub_length}->{standard_deviation},
+        median => $stats->{sub_length}->{median},
+    };
+}
+
+sub make_code_complexity_json {
+    return +{
+        code_not_in_any_subroutine => make_complexity_section_json('main_complexity'),
+        sub_complexity => make_complexity_section_json('sub_complexity'),
+    };
+}
+
+sub make_complexity_section_json {
+    my ( $key ) = @_;
+
+    return +{
+        min => $ANALYSIS->summary_stats()->{$key}->{min},
+        max => $ANALYSIS->summary_stats()->{$key}->{max},
+        mean => $ANALYSIS->summary_stats()->{$key}->{mean},
+        standard_deviation=> $ANALYSIS->summary_stats()->{$key}->{standard_deviation},
+        median => $ANALYSIS->summary_stats()->{$key}->{median},
+    };
+}
+
+sub make_list_of_subs_json {
+    my @main_from_each_file
+        = map { $_->{main_stats} } @{ $ANALYSIS->file_stats() };
+    my @sorted_subs = sort _sort_by_complexity(),
+        ( @{ $ANALYSIS->subs() }, @main_from_each_file );
+
+    return \@sorted_subs;
+}
+
+### /JSON
+
 __END__
 
 =head1 NAME
@@ -507,6 +581,10 @@ Prints documentation to STDERR.
 =item --html
 
 Produces HTML output instead of the plain-text default.
+
+=item --json
+
+Produces JSON output instead of the plain-text default.
 
 =item --method-modifiers=a,b,c
 

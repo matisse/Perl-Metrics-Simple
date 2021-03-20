@@ -1,19 +1,20 @@
-#!/usr/bin/env perl
+# !/usr/bin/env perl
 
 use strict;
 use warnings;
-use English qw(-no_match_vars);
 use Carp qw();
-use Readonly;
-use Pod::Usage qw(pod2usage);
-use Perl::Metrics::Simple qw(0.13);
+use English qw(-no_match_vars);
+use Getopt::Long;
 use JSON::PP qw(encode_json);
+use Perl::Metrics::Simple qw(0.13);
+use Pod::Usage qw(pod2usage);
+use Readonly;
 
 Readonly::Scalar my $MAX_PLAINTEXT_LABEL_LENGTH => 25;
 Readonly::Scalar my $EMPTY_STRING               => q{};
 Readonly::Scalar my $ONE_SPACE                  => q{ };
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 my $COMPLEXITY_LEVEL_THRESHOLD = {
     BTW => 10,
@@ -48,32 +49,42 @@ my $CSS = {
 };
 
 my $ANALYSIS;
-my $HTML_OUTPUT = 0;
-my $JSON_OUTPUT = 0;
-my @FILES       = ();
 
-main();
+exit main() if not caller;
 
-exit;
+#-------------------------------------------------------------------------------
 
 sub main {
-    parse_opts();
+    my ( $options, @files ) = parse_opts(@ARGV);
 
-    set_analysis();
+    if ( $options->{'help'} ) {
+        pod2usage( -verbose => 2, -exitval => 1 );    # exits program
+    }
 
-    if ($HTML_OUTPUT) {
-        print make_html() || Carp::croak "Cannot print! $OS_ERROR";
-    } elsif ($JSON_OUTPUT) {
-        print make_json() || Carp::croak "Cannot print! $OS_ERROR";
+    if ( my $modifiers = $options->{'method-modifiers'} ) {
+        push @Perl::Metrics::Simple::Analysis::File::METHOD_MODIFIERS,
+            split( /,/, $modifiers );
+    }
+
+    $ANALYSIS = analyze(@files);
+
+    if ( $options->{'html'} ) {
+        print make_html() || Carp::croak "Cannot make HTML! $OS_ERROR";
+    }
+    elsif ( $options->{'json'} ) {
+        print make_json() || Carp::croak "Cannot make JSON! $OS_ERROR";
     }
     else {
         print make_plain() || Carp::croak "Cannot print! $OS_ERROR";
     }
-    return;
+
+    return 0;
 }
 
 sub parse_opts {
-    if ( !@ARGV ) {
+    my (@command_line_arguments) = @_;
+
+    if ( !@command_line_arguments ) {
         pod2usage(
             -msg     => "Missing required argument(s).\n",
             -exitval => 1,
@@ -81,35 +92,31 @@ sub parse_opts {
         );    # exits program
     }
 
-    foreach (@ARGV) {
-        if ( $_ eq '--html' ) {
-            $HTML_OUTPUT = 1;
-            next;
-        }
-        if ( $_ eq '--json' ) {
-            $JSON_OUTPUT = 1;
-            next;
-        }
+    my %options;
 
-        if ( $_ eq '--help' ) {
-            pod2usage( -verbose => 2, -exitval => 1 );  # exits program
-        }
+    my $parsed_ok = Getopt::Long::GetOptionsFromArray(
+        \@command_line_arguments,
+        \%options,
+        'html',
+        'json',
+        'method-modifiers:s',
+    );
 
-        if ( /--method-modifiers=(\S+)/ ) {
-            push @Perl::Metrics::Simple::Analysis::File::METHOD_MODIFIERS,
-                split /,/, $1;
-            next;
-        }
-
-        push @FILES, $_;
+    if ( !$parsed_ok ) {
+        pod2usage(
+            -msg     => "Failed to parse command line.\n",
+            -exitval => 1,
+            -verbose => 1,
+        );    # exits program
     }
 
-    return;
+    return ( \%options, @command_line_arguments );
 }
 
-sub set_analysis {
-    $ANALYSIS = Perl::Metrics::Simple->new()->analyze_files(@FILES);
-    return $ANALYSIS;
+sub analyze {
+    my @files = @_;
+    my $analysis = Perl::Metrics::Simple->new()->analyze_files(@files);
+    return $analysis;
 }
 
 sub _sort_by_complexity {
@@ -141,6 +148,9 @@ sub make_counts_plain {
 
 sub make_line_plain {
     my ( $key, $value ) = @_;
+    if (!defined $value) {
+        $value = 'n/a';
+    }
     my $line = $key . q{:};
     $line .= $ONE_SPACE x ( $MAX_PLAINTEXT_LABEL_LENGTH - length $key );
     $line .= $value . "\n";

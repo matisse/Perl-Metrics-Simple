@@ -10,6 +10,10 @@ use Carp qw();
 sub new {
     my ( $class, $analysis ) = @_;
 
+    if ((! ref $analysis) && ($analysis->isa('Perl::Metrics::Simple::Analysis')) ) {
+        Carp::confess('Did not pass a Perl::Metrics::Simple::Analysis object.');
+    }
+    
     my $self = bless {
         _analysis => $analysis,
     }, $class;

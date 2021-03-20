@@ -62,6 +62,10 @@
       "Perl::Metrics::Simple::Analysis::File" : {
          "file" : "lib/Perl/Metrics/Simple/Analysis/File.pm",
          "version" : "0.18"
+      },
+      "Perl::Metrics::Simple::Output::PlainText" : {
+         "file" : "lib/Perl/Metrics/Simple/Output/PlainText.pm",
+         "version" : "0.18"
       }
    },
    "release_status" : "stable",

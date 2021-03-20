@@ -1,30 +1,17 @@
 package Perl::Metrics::Simple::Output::PlainText;
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 use strict;
 use warnings;
+
+use parent qw(Perl::Metrics::Simple::Output);
 
 use Readonly;
 
 Readonly my $MAX_PLAINTEXT_LABEL_LENGTH => 25;
 Readonly my $EMPTY_STRING               => q{};
 Readonly my $ONE_SPACE                  => q{ };
-
-sub new {
-    my ( $class, $analysis ) = @_;
-
-    my $self = bless {
-        _analysis => $analysis,
-    }, $class;
-
-    return $self;
-}
-
-sub analysis {
-    my ($self) = @_;
-    return $self->{'_analysis'};
-}
 
 sub make_report {
     my ($self) = @_;
@@ -221,7 +208,7 @@ __END__
 
 =head1 NAME
 
-Perl::Metrics::Simple::Putput::PlainText - Produce plain text report.
+Perl::Metrics::Simple::Output::PlainText - Produce plain text report.
 
 =head1 SYNOPSIS
 

@@ -29,9 +29,15 @@ provides:
   Perl::Metrics::Simple::Analysis::File:
     file: lib/Perl/Metrics/Simple/Analysis/File.pm
     version: '0.18'
+  Perl::Metrics::Simple::Output:
+    file: lib/Perl/Metrics/Simple/Output.pm
+    version: '0.19'
+  Perl::Metrics::Simple::Output::HTML:
+    file: lib/Perl/Metrics/Simple/Output/HTML.pm
+    version: '0.19'
   Perl::Metrics::Simple::Output::PlainText:
     file: lib/Perl/Metrics/Simple/Output/PlainText.pm
-    version: '0.18'
+    version: '0.19'
 recommends:
   Readonly::XS: '1.02'
 requires:

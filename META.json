@@ -53,15 +53,15 @@
    "provides" : {
       "Perl::Metrics::Simple" : {
          "file" : "lib/Perl/Metrics/Simple.pm",
-         "version" : "0.18"
+         "version" : "0.19"
       },
       "Perl::Metrics::Simple::Analysis" : {
          "file" : "lib/Perl/Metrics/Simple/Analysis.pm",
-         "version" : "0.18"
+         "version" : "0.19"
       },
       "Perl::Metrics::Simple::Analysis::File" : {
          "file" : "lib/Perl/Metrics/Simple/Analysis/File.pm",
-         "version" : "0.18"
+         "version" : "0.19"
       },
       "Perl::Metrics::Simple::Output" : {
          "file" : "lib/Perl/Metrics/Simple/Output.pm",
@@ -69,6 +69,10 @@
       },
       "Perl::Metrics::Simple::Output::HTML" : {
          "file" : "lib/Perl/Metrics/Simple/Output/HTML.pm",
+         "version" : "0.19"
+      },
+      "Perl::Metrics::Simple::Output::JSON" : {
+         "file" : "lib/Perl/Metrics/Simple/Output/JSON.pm",
          "version" : "0.19"
       },
       "Perl::Metrics::Simple::Output::PlainText" : {
@@ -88,6 +92,6 @@
          "url" : "https://github.com/matisse/Perl-Metrics-Simple"
       }
    },
-   "version" : "0.18",
+   "version" : "0.19",
    "x_serialization_backend" : "JSON::PP version 4.06"
 }

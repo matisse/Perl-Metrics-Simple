@@ -8,6 +8,7 @@ lib/Perl/Metrics/Simple/Analysis.pm
 lib/Perl/Metrics/Simple/Analysis/File.pm
 lib/Perl/Metrics/Simple/Output.pm
 lib/Perl/Metrics/Simple/Output/HTML.pm
+lib/Perl/Metrics/Simple/Output/JSON.pm
 lib/Perl/Metrics/Simple/Output/PlainText.pm
 LICENSE
 Makefile.PL

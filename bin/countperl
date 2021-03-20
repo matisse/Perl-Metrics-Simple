@@ -1,24 +1,16 @@
-# !/usr/bin/env perl
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
-use Carp qw();
-use English qw(-no_match_vars);
+
 use Getopt::Long;
-use JSON::PP qw(encode_json);
 use Perl::Metrics::Simple qw(0.13);
 use Perl::Metrics::Simple::Output::HTML;
+use Perl::Metrics::Simple::Output::JSON;
 use Perl::Metrics::Simple::Output::PlainText;
 use Pod::Usage qw(pod2usage);
-use Readonly;
-
-Readonly::Scalar my $MAX_PLAINTEXT_LABEL_LENGTH => 25;
-Readonly::Scalar my $EMPTY_STRING               => q{};
-Readonly::Scalar my $ONE_SPACE                  => q{ };
 
 our $VERSION = '0.19';
-
-my $ANALYSIS;
 
 exit main() if not caller;
 
@@ -36,17 +28,18 @@ sub main {
             split( /,/, $modifiers );
     }
 
-    $ANALYSIS = Perl::Metrics::Simple->new()->analyze_files(@files);
+    my $analysis = Perl::Metrics::Simple->new()->analyze_files(@files);
 
     if ( $options->{'html'} ) {
-        my $html = Perl::Metrics::Simple::Output::HTML->new($ANALYSIS);
+        my $html = Perl::Metrics::Simple::Output::HTML->new($analysis);
         print $html->make_report();
     }
     elsif ( $options->{'json'} ) {
-        print make_json() || Carp::croak "Cannot make JSON! $OS_ERROR";
+        my $json = Perl::Metrics::Simple::Output::JSON->new($analysis);
+        print $json->make_report();
     }
     else {
-        my $plain = Perl::Metrics::Simple::Output::PlainText->new($ANALYSIS);
+        my $plain = Perl::Metrics::Simple::Output::PlainText->new($analysis);
         print $plain->make_report();
     }
 
@@ -84,76 +77,6 @@ sub parse_opts {
 
     return ( \%options, @command_line_arguments );
 }
-
-sub _sort_by_complexity {
-    return $b->{mccabe_complexity} <=> $a->{mccabe_complexity};
-}
-
-# MARK: - JSON
-
-sub make_json {
-    my $report = +{
-        statistics => +{
-            file_count        => $ANALYSIS->file_count(),
-            counts            => make_counts_json(),
-            subroutine_sizes  => make_subroutine_size_json(),
-            mccabe_complexity => make_code_complexity_json(),
-        },
-        subs => make_list_of_subs_json(),
-    };
-
-    return encode_json($report);
-}
-
-sub make_counts_json {
-    return +{
-        total_code_lines       => $ANALYSIS->lines(),
-        lines_of_non_sub_code  => $ANALYSIS->main_stats()->{lines},
-        packages_found         => $ANALYSIS->package_count(),
-        subs_and_methods_count => $ANALYSIS->sub_count(),
-    };
-}
-
-sub make_subroutine_size_json {
-    my $stats = $ANALYSIS->summary_stats();
-    return +{
-        min                => $stats->{sub_length}->{min},
-        max                => $stats->{sub_length}->{max},
-        mean               => $stats->{sub_length}->{mean},
-        standard_deviation => $stats->{sub_length}->{standard_deviation},
-        median             => $stats->{sub_length}->{median},
-    };
-}
-
-sub make_code_complexity_json {
-    return +{
-        code_not_in_any_subroutine => make_complexity_section_json('main_complexity'),
-        sub_complexity             => make_complexity_section_json('sub_complexity'),
-    };
-}
-
-sub make_complexity_section_json {
-    my ($key) = @_;
-
-    return +{
-        min                => $ANALYSIS->summary_stats()->{$key}->{min},
-        max                => $ANALYSIS->summary_stats()->{$key}->{max},
-        mean               => $ANALYSIS->summary_stats()->{$key}->{mean},
-        standard_deviation => $ANALYSIS->summary_stats()->{$key}->{standard_deviation},
-        median             => $ANALYSIS->summary_stats()->{$key}->{median},
-    };
-}
-
-sub make_list_of_subs_json {
-    my @main_from_each_file
-        = map { $_->{main_stats} } @{ $ANALYSIS->file_stats() };
-    my @sorted_subs = sort _sort_by_complexity(),
-        ( @{ $ANALYSIS->subs() }, @main_from_each_file );
-
-    return \@sorted_subs;
-}
-
-### /JSON
 
 __END__
 

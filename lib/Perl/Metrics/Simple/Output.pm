@@ -26,6 +26,18 @@ sub make_report {
     Carp::confess('Use one of the sub-classes, e.g. Perl::Metrics::Simple::Output::PlainText');
 }
 
+sub make_list_of_subs {
+    my ($self) = @_;
+
+    my $analysis = $self->analysis();
+
+    my @main_from_each_file
+        = map { $_->{main_stats} } @{ $analysis->file_stats() };
+    my @sorted_all_subs = sort { $b->{'mccabe_complexity'} <=> $a->{'mccabe_complexity'} } ( @{ $analysis->subs() }, @main_from_each_file );
+
+    return [ \@main_from_each_file, \@sorted_all_subs ];
+}
+
 1;    # Keep Perl happy, snuggy, and warm.
 
 __END__

@@ -114,11 +114,9 @@ sub make_complexity_section {
 sub make_list_of_subs {
     my ($self) = @_;
 
-    my @main_from_each_file
-        = map { $_->{main_stats} } @{ $self->analysis()->file_stats() };
-    my @sorted_subs = sort { $b->{'mccabe_complexity'} <=> $a->{'mccabe_complexity'} } ( @{ $self->analysis()->subs() }, @main_from_each_file );
+    my ( $main_from_each_file, $sorted_all_subs ) = @{ $self->SUPER::make_list_of_subs() };
 
-    my $column_widths = _get_column_widths(@main_from_each_file);
+    my $column_widths = _get_column_widths($main_from_each_file);
 
     my $list_of_subs = _make_headline('List of subroutines, with most complex at top');
 
@@ -128,7 +126,7 @@ sub make_list_of_subs {
     $list_of_subs .= _make_column( 'size',       $column_widths->{lines} );
     $list_of_subs .= "\n";
 
-    foreach my $sub (@sorted_subs) {
+    foreach my $sub (@$sorted_all_subs) {
         $list_of_subs .= _make_list_of_subs_line( $sub, $column_widths );
     }
 
@@ -153,7 +151,7 @@ sub _make_list_of_subs_line {
 }
 
 sub _get_column_widths {
-    my @main_from_each_file = @_;
+    my ($main_from_each_file) = @_;
 
     my $column_widths = {
         mccabe_complexity => 10,
@@ -162,7 +160,7 @@ sub _get_column_widths {
         lines             => 4,
     };
 
-    foreach my $sub (@main_from_each_file) {
+    foreach my $sub (@$main_from_each_file) {
         foreach my $col ( 'mccabe_complexity', 'name', 'path', 'lines' ) {
             if ( length( $sub->{$col} ) > $column_widths->{$col} ) {
                 $column_widths->{$col} = length( $sub->{$col} );

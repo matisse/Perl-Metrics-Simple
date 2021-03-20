@@ -94,31 +94,31 @@ sub make_body {
     $body .= 'Perl files found ' . $self->analysis()->file_count();
     $body .= '</h3>';
 
-    $body .= $self->make_counts_html();
-    $body .= $self->make_subroutine_size_html();
-    $body .= $self->make_code_complexity_html();
-    $body .= $self->make_list_of_subs_html();
+    $body .= $self->make_counts();
+    $body .= $self->make_subroutine_size();
+    $body .= $self->make_code_complexity();
+    $body .= $self->make_list_of_subs();
     $body .= $self->make_complexity_levels();
 
     $body .= '</body>';
     return $body;
 }
 
-sub make_counts_html {
+sub make_counts {
     my ($self) = @_;
 
     my $analysis = $self->analysis();
 
-    my $counts_html = '<table><tr><th colspan="2">Counts</th></tr>';
+    my $counts = '<table><tr><th colspan="2">Counts</th></tr>';
 
-    $counts_html .= make_tr( 'total code lines', $analysis->lines() );
-    $counts_html
+    $counts .= make_tr( 'total code lines', $analysis->lines() );
+    $counts
         .= make_tr( 'lines of non-sub code', $analysis->main_stats()->{lines} );
-    $counts_html .= make_tr( 'packages found', $analysis->package_count() );
-    $counts_html .= make_tr( 'subs/methods',   $analysis->sub_count() );
+    $counts .= make_tr( 'packages found', $analysis->package_count() );
+    $counts .= make_tr( 'subs/methods',   $analysis->sub_count() );
 
-    $counts_html .= '</table>';
-    return $counts_html;
+    $counts .= '</table>';
+    return $counts;
 }
 
 sub make_tr {
@@ -134,12 +134,12 @@ sub make_tr {
     return $tr;
 }
 
-sub make_subroutine_size_html {
+sub make_subroutine_size {
     my ($self) = @_;
 
     my $analysis = $self->analysis();
 
-    my $subroutine_size_html = '<table><tr><th colspan="2">Subroutine/Method Size</th></tr>';
+    my $subroutine_size = '<table><tr><th colspan="2">Subroutine/Method Size</th></tr>';
 
     my $min                = $analysis->summary_stats()->{sub_length}->{min}                || 0;
     my $max                = $analysis->summary_stats()->{sub_length}->{max}                || 0;
@@ -147,42 +147,42 @@ sub make_subroutine_size_html {
     my $standard_deviation = $analysis->summary_stats()->{sub_length}->{standard_deviation} || '0.00';
     my $median             = $analysis->summary_stats()->{sub_length}->{median}             || '0.00';
 
-    $subroutine_size_html .= make_tr( 'min',            $min );
-    $subroutine_size_html .= make_tr( 'max',            $max );
-    $subroutine_size_html .= make_tr( 'mean',           $mean );
-    $subroutine_size_html .= make_tr( 'std. deviation', $standard_deviation );
-    $subroutine_size_html .= make_tr( 'median',         $median );
+    $subroutine_size .= make_tr( 'min',            $min );
+    $subroutine_size .= make_tr( 'max',            $max );
+    $subroutine_size .= make_tr( 'mean',           $mean );
+    $subroutine_size .= make_tr( 'std. deviation', $standard_deviation );
+    $subroutine_size .= make_tr( 'median',         $median );
 
-    $subroutine_size_html .= '</table>';
+    $subroutine_size .= '</table>';
 
-    return $subroutine_size_html;
+    return $subroutine_size;
 }
 
-sub make_code_complexity_html {
+sub make_code_complexity {
     my ($self) = @_;
 
-    my $code_complexity_html = '<table><tr><th colspan="3">McCabe Complexity</th></tr>';
+    my $code_complexity = '<table><tr><th colspan="3">McCabe Complexity</th></tr>';
 
-    $code_complexity_html .= $self->make_complexity_section_html(
+    $code_complexity .= $self->make_complexity_section(
         'Code not in any subroutine',
         'main_complexity'
     );
-    $code_complexity_html .= $self->make_complexity_section_html(
+    $code_complexity .= $self->make_complexity_section(
         'Subroutines/Methods',
         'sub_complexity'
     );
 
-    $code_complexity_html .= '</table>';
+    $code_complexity .= '</table>';
 
-    return $code_complexity_html;
+    return $code_complexity;
 }
 
-sub make_complexity_section_html {
+sub make_complexity_section {
     my ( $self, $section, $key ) = @_;
 
     my $analysis = $self->analysis();
 
-    my $complexity_section_html = '<tr><td rowspan="5" class="w200">' . $section . '</td>';
+    my $complexity_section = '<tr><td rowspan="5" class="w200">' . $section . '</td>';
 
     my $min                = $analysis->summary_stats()->{$key}->{min}                || 0;
     my $max                = $analysis->summary_stats()->{$key}->{max}                || 0;
@@ -190,16 +190,16 @@ sub make_complexity_section_html {
     my $standard_deviation = $analysis->summary_stats()->{$key}->{standard_deviation} || '0.00';
     my $median             = $analysis->summary_stats()->{$key}->{median}             || '0.00';
 
-    $complexity_section_html .= '<td class="w200">min</td><td class="w100 right ' . get_class_by_count($min) . '">';
-    $complexity_section_html .= $min;
-    $complexity_section_html .= '</td></tr>';
+    $complexity_section .= '<td class="w200">min</td><td class="w100 right ' . get_class_by_count($min) . '">';
+    $complexity_section .= $min;
+    $complexity_section .= '</td></tr>';
 
-    $complexity_section_html .= make_tr( 'max',            $max,                get_class_by_count($max) );
-    $complexity_section_html .= make_tr( 'mean',           $mean,               get_class_by_count($mean) );
-    $complexity_section_html .= make_tr( 'std. deviation', $standard_deviation, get_class_by_count($standard_deviation) );
-    $complexity_section_html .= make_tr( 'median',         $median,             get_class_by_count($median) );
+    $complexity_section .= make_tr( 'max',            $max,                get_class_by_count($max) );
+    $complexity_section .= make_tr( 'mean',           $mean,               get_class_by_count($mean) );
+    $complexity_section .= make_tr( 'std. deviation', $standard_deviation, get_class_by_count($standard_deviation) );
+    $complexity_section .= make_tr( 'median',         $median,             get_class_by_count($median) );
 
-    return $complexity_section_html;
+    return $complexity_section;
 }
 
 sub make_list_of_subs_tr {
@@ -210,24 +210,20 @@ sub make_list_of_subs_tr {
     return $list_of_subs_tr;
 }
 
-sub make_list_of_subs_html {
+sub make_list_of_subs {
     my ($self) = @_;
 
-    my $analysis = $self->analysis();
+    my $sorted_subs = $self->SUPER::make_list_of_subs()->[1];
 
-    my @main_from_each_file
-        = map { $_->{main_stats} } @{ $analysis->file_stats() };
-    my @sorted_subs = sort { $b->{'mccabe_complexity'} <=> $a->{'mccabe_complexity'} } ( @{ $analysis->subs() }, @main_from_each_file );
+    my $list_of_subs = '<table><tr><th colspan="4">List of subroutines, with most complex at top</th></tr>' . '<tr><td class="w100">complexity</td><td>sub</td><td>path</td><td class="w100">size</td><tr>';
 
-    my $list_of_subs_html = '<table><tr><th colspan="4">List of subroutines, with most complex at top</th></tr>' . '<tr><td class="w100">complexity</td><td>sub</td><td>path</td><td class="w100">size</td><tr>';
-
-    foreach my $sub (@sorted_subs) {
-        $list_of_subs_html .= make_list_of_subs_tr($sub);
+    foreach my $sub (@$sorted_subs) {
+        $list_of_subs .= make_list_of_subs_tr($sub);
     }
 
-    $list_of_subs_html .= '</table>';
+    $list_of_subs .= '</table>';
 
-    return $list_of_subs_html;
+    return $list_of_subs;
 }
 
 sub make_complexity_levels {

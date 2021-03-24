@@ -1,6 +1,6 @@
 package Perl::Metrics::Simple::Output::HTML;
 
-our $VERSION = '0.19';
+our $VERSION = 'v0.19.1';
 
 use strict;
 use warnings;

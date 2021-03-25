@@ -1,6 +1,6 @@
 package Perl::Metrics::Simple::Output::PlainText;
 
-our $VERSION = 'v0.19.1';
+our $VERSION = 'v1.0.0';
 
 use strict;
 use warnings;

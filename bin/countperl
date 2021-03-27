@@ -82,7 +82,7 @@ __END__
 
 =head1 NAME
 
-countperl - count lines, packages, subs and complexity of Perl files.
+countperl - count lines, packages, subs, and complexity of Perl files.
 
 =head1 USAGE
 

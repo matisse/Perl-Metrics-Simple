@@ -399,7 +399,7 @@ http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Metrics-Simple
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2006-2009 by Eigenstate Consulting, LLC.
+Copyright (c) 2006-2021 by Eigenstate Consulting, LLC.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

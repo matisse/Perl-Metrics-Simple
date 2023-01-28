@@ -9,7 +9,7 @@ use Statistics::Basic::StdDev;
 use Statistics::Basic::Mean;
 use Statistics::Basic::Median;
 
-our $VERSION = 'v1.0.1';
+our $VERSION = 'v1.0.2';
 
 my %_ANALYSIS_DATA = ();
 my %_FILES         = ();

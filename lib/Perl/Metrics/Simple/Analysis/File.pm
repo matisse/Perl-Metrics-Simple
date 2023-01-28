@@ -10,7 +10,7 @@ use PPI 1.113;
 use PPI::Document;
 use Readonly;
 
-our $VERSION = 'v1.0.1';
+our $VERSION = 'v1.0.2';
 
 Readonly::Scalar my $ALL_NEWLINES_REGEX =>
     qr/ ( \Q$INPUT_RECORD_SEPARATOR\E ) /sxm;
@@ -429,7 +429,14 @@ sub _rewrite_moose_method_modifiers {
 
     for (@method_modifiers) {
         my ($old_stmt, @children) = @$_;
-        my $name = '_' . $children[0]->literal . '_' . $children[1]->literal;
+        my $name = '_' . $children[0]->literal . '_';
+        if ( $children[1]->can('literal') ) {
+            $name .= $children[1]->literal;
+        }
+        else {
+            my $string = $children[1]->string;
+            $name .= $string;
+        }
         my $new_stmt = PPI::Statement::Sub->new();
         $new_stmt->add_element(PPI::Token::Word->new('sub'));
         $new_stmt->add_element(PPI::Token::Whitespace->new(' '));

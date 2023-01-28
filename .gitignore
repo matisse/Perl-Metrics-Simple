@@ -1,6 +1,7 @@
 *.bak
 Build
 MYMETA.*
+Makefile
 Perl-Metrics-Simple-*
 _build
 blib

@@ -675,7 +675,7 @@ Arrayref of unique packages found in the file.
 =head2 path
 
 Either the path to the file, or a scalar ref if that was supplied
-instaed of a path.
+instead of a path.
 
 =head2 subs
 
@@ -701,7 +701,7 @@ for example C<foo> and C<bar> are hash keys in the following:
 
   { foo => 123, bar => $a }
  
-Copied and somehwat simplified from
+Copied and somewhat simplified from
 http://search.cpan.org/src/THALJEF/Perl-Critic-0.19/lib/Perl/Critic/Utils.pm
 See L<Perl::Critic::Utils|Perl::Critic::Utils>.
 

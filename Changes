@@ -8,6 +8,8 @@ v1.0.2 - July 2023
     `literal` method and use `string` instead if it does not.
     Changes based on contribution by https://github.com/jwrightecs
 
+  - Fix typos in File.pm (thank you Florian Schlichting, fschlich)
+
 v1.0.1 - March 2021
   Fix https://github.com/matisse/Perl-Metrics-Simple/issues/9
     

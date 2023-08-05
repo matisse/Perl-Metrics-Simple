@@ -4,13 +4,13 @@ use strict;
 use warnings;
 
 use Getopt::Long;
-use Perl::Metrics::Simple qw(0.13);
+use Perl::Metrics::Simple 0.13;
 use Perl::Metrics::Simple::Output::HTML;
 use Perl::Metrics::Simple::Output::JSON;
 use Perl::Metrics::Simple::Output::PlainText;
 use Pod::Usage qw(pod2usage);
 
-our $VERSION = 'v1.0.2';
+our $VERSION = 'v1.0.3';
 
 exit main() if not caller;
 

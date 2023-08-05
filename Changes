@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Metrics::Simple
 
+v1.0.3 - August 2023
+  Fix https://github.com/matisse/Perl-Metrics-Simple/issues/16
+
+  - Change an import in `countperl` to use a version number literal.
+  - Fix various issues found by Test::Perl::Critic
+
 v1.0.2 - July 2023
   Fix https://github.com/matisse/Perl-Metrics-Simple/issues/12
 

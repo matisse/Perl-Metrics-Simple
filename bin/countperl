@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Carp qw(croak);
 use Getopt::Long;
 use Perl::Metrics::Simple 0.13;
 use Perl::Metrics::Simple::Output::HTML;
@@ -25,22 +26,22 @@ sub main {
 
     if ( my $modifiers = $options->{'method-modifiers'} ) {
         push @Perl::Metrics::Simple::Analysis::File::METHOD_MODIFIERS,
-            split( /,/, $modifiers );
+            split /,/sxm, $modifiers;
     }
 
     my $analysis = Perl::Metrics::Simple->new()->analyze_files(@files);
 
     if ( $options->{'html'} ) {
         my $html = Perl::Metrics::Simple::Output::HTML->new($analysis);
-        print $html->make_report();
+        print $html->make_report() or croak 'Failed to print!';
     }
     elsif ( $options->{'json'} ) {
         my $json = Perl::Metrics::Simple::Output::JSON->new($analysis);
-        print $json->make_report();
+        print $json->make_report() or croak 'Failed to print!';
     }
     else {
         my $plain = Perl::Metrics::Simple::Output::PlainText->new($analysis);
-        print $plain->make_report();
+        print $plain->make_report() or croak 'Failed to print!';
     }
 
     return 0;
